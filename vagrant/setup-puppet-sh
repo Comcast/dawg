@@ -1,0 +1,20 @@
+#! /bin/bash
+
+nexus_dst="$1"
+vagrant_dst="$2"
+host="$3"
+
+if [ -z "$host" ]; then
+    host="puppet"
+fi
+
+set -o xtrace
+
+#configure yum/nexus
+vagrant ssh "$host" -c "echo -e \"[nexus]\nname=Nexus YUM Repository\nbaseurl=${nexus_dst}\ngpgcheck=0\" > /etc/yum.repos.d/nexus.repo"
+
+#configure yum/vagrant
+vagrant ssh "$host" -c "echo -e \"[vagrant-host]\nname=Vagrant Host YUM Repo\nbaseurl=${vagrant_dst}\ngpgcheck=0\" > /etc/yum.repos.d/vagrant-host.repo"
+
+#configure install the rpm
+vagrant ssh "$host" -c "rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm"

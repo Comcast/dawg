@@ -1,0 +1,95 @@
+/**
+ * Copyright 2010 Comcast Cable Communications Management, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.tagCloud {
+	display: inline-block;
+	max-width: 60%;
+	max-height: 200px;
+	overflow: auto;
+	background-color: #369;
+	padding: 10px;
+	border: 3px solid black;
+	border-radius: 10px;
+	vertical-align: middle;
+	margin: 10px;
+}
+
+.tag {
+	border-width: 3px;
+	border-style: solid;
+	border-radius: 10px;
+	text-align:center;
+	padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+	display: inline-block;
+	background-color: white;
+}
+
+.tagAllDevices {
+	background-color: #1e3c59;
+	color: white;
+}
+
+.tagSomeDevices {
+	background-color: #809fc0;
+	color: black;
+}
+
+.tagNoDevices {
+	background-color: white;
+	color: black;
+}
+
+.tagActive {
+	border-color: black;
+	cursor: pointer;
+}
+
+.tagDisabled {
+	border-color: gray;
+	color: gray;
+}
+
+.tagText {
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 11px;
+}
+
+.tagContainer {
+	border-radius: 10px;
+	display: inline-block;
+	padding: 2px;
+	margin: 1px;
+}
+
+.tagContainerSelected {
+	background-color: yellow;
+}
+
+.tagContainerUnselected {
+	background-color: transparent;
+}
+
+.tagDelete {
+	background: url('../images/delete.png');
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 4px 4px 4px 10px;
+	vertical-align: middle;
+}

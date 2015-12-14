@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_17" class="java.beans.XMLDecoder">
+    <object class="com.tvworks.cats.core.imagecompare.ImageRegionInfo">
+        <void property="imagePath">
+            <string>parentalChallenge.jpg</string>
+        </void>
+        <void property="ocrRegionInfoList">
+            <void method="add">
+                <object class="com.comcast.neto.image.OCRRegionInfo">
+                    <void property="expectedResult">
+                        <string>LOCKED</string>
+                    </void>
+                    <void property="height">
+                        <int>29</int>
+                    </void>
+                    <void property="name">
+                        <string>parentalChallenge</string>
+                    </void>
+                    <void property="successTolerance">
+                        <int>75</int>
+                    </void>
+                    <void property="width">
+                        <int>92</int>
+                    </void>
+                    <void property="x">
+                        <int>294</int>
+                    </void>
+                    <void property="y">
+                        <int>188</int>
+                    </void>
+                </object>
+            </void>
+        </void>
+    </object>
+</java>

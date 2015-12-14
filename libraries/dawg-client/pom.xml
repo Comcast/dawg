@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>libraries</artifactId>
+        <groupId>com.comcast.video.dawg</groupId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>dawg-client</artifactId>
+
+    <name>(Comcast) ${project.artifactId}</name>
+    <description>REST client for interfacing with the CATS servers</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.comcast.video.dawg</groupId>
+            <artifactId>dawg-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.compile.version}</source>
+                    <target>${java.compile.version}</target>
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

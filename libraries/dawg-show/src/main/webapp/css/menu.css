@@ -1,0 +1,255 @@
+/**
+ * Copyright 2010 Comcast Cable Communications Management, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.menu table {
+	border: 2px solid black;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.menu table,td,th {
+	border: 2px solid black;
+	width: 100%;
+	border-spacing: 0;
+}
+
+.menu th {
+	background-color: #8596a4;
+	color: black;
+}
+
+.menu td {
+	background-color: white;
+	color: black;
+	text-align: center;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+.menu tr:hover td {
+	background-color: black;
+	color: white;
+	text-align: center;
+	font-size: 20px;
+}
+
+.menuContainer {
+	height: 125px;
+	width: 15%;
+	display: none;
+	position: fixed;
+	background-color: #d8dadc;
+	z-index: 1000;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+}
+
+.loadComparisonPrompt {
+	position: fixed;
+	left: 25%;
+	top: 50%;
+	text-align: center;
+	z-index: 401;
+	display: none;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+}
+
+.multi-snap-button {
+	width: 15%;
+	cursor: pointer;
+	margin-left: 100%;
+	margin-top: 10%;
+}
+
+select.fpsSelector {
+	width: 100%;
+	cursor: pointer;
+	border-radius: 7px;
+}
+
+.selectAllDevicesCheckbox {
+	width: 15%;
+	cursor: pointer;
+	margin-right: 100%;
+	margin-top: 5%;
+	position: static;
+}
+
+.changeRemoteButton {
+	margin-left: 102%;
+	width: 8%;
+	height: 5%;
+	margin-top: 10%;
+	cursor: pointer;
+}
+
+div.verticalAlign {
+  	transform: rotate(-90deg);
+  	transform-origin: left top 0;
+  	position: absolute;
+  	top: 80%;
+}
+
+div.serialHexAlign {
+  	transform: rotate(-90deg);
+  	transform-origin: left top 0;
+  	position: absolute;
+  	top: 50%;
+	display:flex;
+}
+
+div.directTuneDiv {
+	display: none;
+	width: 150px;
+	height: 13%;
+	right: 100%;
+	position: absolute;
+	z-index: 20;
+	border-style: solid;
+	border-width: 2px;
+	top: 70%;
+	border-radius: 8px;
+}
+
+div.fpsDiv {
+	display: none;
+	width: 150px;
+	height: 13%;
+	right: 100%;
+	position: absolute;
+	z-index: 20;
+	border-style: solid;
+	border-width: 2px;
+	top: 70%;
+	border-radius: 8px;
+}
+
+.goButton {
+	width: 13%;
+	height: 100%;
+	float: right;
+}
+
+div.hoverButtons {
+	top: 50%;
+	position: absolute;
+	right: 0%;
+	z-index: 20;
+}
+
+input.channelNumTextBox {
+	width: 82%;
+	height: 69%;
+	text-align: center;
+	border-radius: 5px;
+}
+
+.remoteTypeSelectorDiv {
+	display: none;
+	margin-top: 10px;
+}
+
+.remoteTypeSelector {
+	margin-top: 1px;
+	width: 80%;
+	margin-left: 0px;
+	height: 22px;
+	position: absolute;
+}
+
+.remoteTypeTextBox {
+	margin-left: 0px;
+	margin-top: 0%;
+	width: 74%;
+	height: 18 px;
+	position: absolute;
+}
+
+.ui-widget {
+	font-size: 15px !important;
+}
+
+div.serialCmdDiv {
+	display: none;
+	width: 150px;
+	height: 32%;
+	right: 100%;
+	position: absolute;
+	z-index: 20;
+	border-style: solid;
+	border-width: 2px;
+	top: 35%;
+	border-radius: 8px;
+	background-color: darkgray;
+}
+div.fpsDiv {
+	display: none;
+	width: 100px;
+	height: 13%;
+	right: 100%;
+	position: absolute;
+	z-index: 20;
+	border-style: solid;
+	border-width: 2px;
+	top: 25%;
+	border-radius: 8px;
+	background-color: darkgray;
+}
+
+input.serialCmdTextBox {
+	width: 49%;
+	text-align: center;
+	border-radius: 5px;
+}
+
+img.sendButton {
+	width: 13%;
+	height: 100%;
+	float: right;
+}
+
+div.directTunePanel, div.serialCommandPanel, div.fpsPanel {
+  	width: 20px;
+  	height: 70px;
+  	background-color: #ECECEC;
+  	border: 1px solid #232428;
+  	border-top-left-radius: 10px;
+  	border-bottom-left-radius: 10px;
+}
+
+div.tuneButton:hover, div.serialCommandSendButton:hover, div.fpsButton:hover {
+    color: red;
+    text-shadow: 0 1px black, 0 0 20px rgba(white, .5);
+}
+
+div.fpsButton {
+	top: 35%;
+}
+
+div.tuneButton {
+	top: 87%;
+}
+
+div.absolutePosition{
+	position: absolute;
+}
+
+.pointerCursor div,img{
+	cursor: pointer;
+}

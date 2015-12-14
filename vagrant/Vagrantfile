@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant::Config.run do |config|
+
+  config.vm.define :puppet do |puppet_config|
+    puppet_config.vm.host_name = "dawg-puppet.test.domain"
+    puppet_config.vm.box = "centos63-xtream"
+    puppet_config.vm.network :hostonly, "127.0.0.1"
+    puppet_config.ssh.username = "root"
+  end
+
+  config.vm.define :house do |house_config|
+    house_config.vm.host_name = "dawg-house.test.domain"
+    house_config.vm.box = "centos63-xtream"
+    house_config.vm.network :hostonly, "127.0.0.1"
+    house_config.ssh.username = "root"
+  end
+
+  config.vm.define :pound do |pound_config|
+    pound_config.vm.host_name = "dawg-pound.test.domain"
+    pound_config.vm.box = "centos63-xtream"
+    pound_config.vm.network :hostonly, "127.0.0.1"
+    pound_config.ssh.username = "root"
+  end
+
+  config.vm.define :show do |show_config|
+    show_config.vm.host_name = "dawg-show.test.domain"
+    show_config.vm.box = "centos63-xtream"
+    show_config.vm.network :hostonly, "127.0.0.1"
+    show_config.ssh.username = "root"
+  end
+
+  config.vm.define :db do |db_config|
+    db_config.vm.host_name = "dawg-db.test.domain"
+    db_config.vm.box = "centos63-xtream"
+    db_config.vm.network :hostonly, "127.0.0.1"
+    db_config.ssh.username = "root"
+  end
+  
+end

@@ -1,0 +1,382 @@
+/**
+ * Copyright 2010 Comcast Cable Communications Management, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.StbInfo table {
+	border: 2px solid black;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.StbInfo table,td,th {
+	border: 2px solid black;
+	width: 100%;
+	border-spacing: 0;
+}
+
+.StbInfo th {
+	background-color: #8596a4;
+	color: black;
+}
+
+.StbInfo td {
+	background-color: white;
+	color: black;
+	text-align: center;
+}
+
+.showBody {
+	background-color: #5a5d5f;
+	height: 100%;
+}
+
+.promptFade {
+	display: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	margin-left: 0%;
+	margin-right: 0%;
+	z-index: 40;
+	background-image: url('../images/fade.png');
+}
+
+.powerPrompt {
+	position: fixed;
+	left: 25%;
+	top: 50%;
+	text-align: center;
+	z-index: 401;
+	display: none;
+	border: black solid 2px;
+}
+
+.mainDiv {
+	height: 95%;
+	width: 100%;
+	display: block;
+}
+
+.videoAndTrace {
+	width: 75%;
+	height: 60%;
+	border: black solid 2px;
+	float: left;
+}
+
+.allvideos {
+	height: 65%;
+	padding: 7px;
+	background-color: black;
+}
+
+.videoDiv {
+	position: relative;
+	background-color: black;
+	width: 75%;
+	height: 100%;
+	float: left;
+	outline-style: solid;
+	outline-color: black;
+	outline-width: 2px;
+}
+
+.videoHeader {
+	width: 100%;
+	background-color: #CDC9C9;
+	border: black solid 2px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	text-align: center;
+	font-size: 14px;
+}
+
+.metaDiv {
+	width: 25%;
+	height: 100%;
+	float: right;
+	background-color: white;
+	outline-style: solid;
+	outline-color: black;
+	outline-width: 2px;
+	overflow: auto;
+}
+
+.cbStb {
+	display: inline-block;
+}
+
+.stbHeaderText {
+	display: inline-block;
+}
+
+.standardRemoteDiv {
+	width: 20%;
+	height: 100%;
+	float: left;
+	text-align: center;
+	padding-left: 20px;
+	position: relative;
+	z-index:20;
+}
+
+.showSkipFwd {
+	display: block !important; 
+}
+
+.resizeMotorolaPauseButton {
+	width: 25% !important;
+	height: 25% !important;
+	left: 23% !important;
+}
+
+.resizeXR2PlayButton {
+	width: 25% !important;
+	height: 38% !important;
+	left: 24% !important;
+}
+
+.showGenericRemoteKey {
+    visibility: visible !important;
+}
+
+.remoteContainer {
+	width: 100%;
+	height: 100%;
+	z-index: 19;
+	position: absolute;
+	left: 0%;
+}
+
+.stdRemoteNotAvailableOverlay {
+	width: 100%;
+	height: 100%;
+	z-index: 21;
+	position: absolute;
+	left: 0%;
+}
+
+.toolbar {
+	height: 15%;
+	width: 100%;
+}
+
+.singleMainDiv {
+	height: 85%;
+	width: 100%;
+	display: block;
+}
+
+.video {
+	width: 100%;
+	height: 100%;
+	z-index: 20;
+	position: absolute;
+	left: 0%;
+}
+
+.keymap_panel {
+	z-index: 20;
+	position: fixed;
+	display: none;
+	bottom: 0px;
+	right: 10px;
+}
+
+.hold_panel {
+	z-index: 21;
+	position: absolute;
+	display: none;
+	font-weight: bold;
+	background: yellow;
+	border: 1px solid #FFFF001;
+	border-radius: 25px;
+	padding: 1px 5px;
+}
+
+.traceDiv {
+	width: 100%;
+	height: 35%;
+	background-color: white;
+	position: relative;
+	display: none;
+}
+
+.notAvailableOverlay {
+	width: 100%;
+	height: 100%;
+	z-index: 20;
+	position: absolute;
+	left: 0%;
+}
+
+.multiVisionLoadComparison,
+.multiVisionSnap,
+.traceToggle {
+	border: 2px solid black;
+	width: 25px;
+	height: 20px;
+	margin: 3px;
+	text-align: center;
+	vertical-align: middle;
+	display: inline-block;
+	cursor: pointer;
+	line-height: 20px;
+}
+
+
+.multiVisionLoadComparison,
+.multiVisionSnap {
+	background-color: white;
+}
+
+.miniRemoteComp {
+	width: 100%;
+	height: 35%;
+	float: left;
+	text-align: center;
+	position: relative";
+}
+
+.miniRemoteAndAnyKey {
+	width: 100%;
+	height: 100%;
+	z-index: 19;
+	position: absolute;
+	left: 0%;
+}
+
+.miniRemoteContainer {
+	height: 70%;
+	margin-left: 0%;
+	margin-top: 0%;
+	position: relative;
+}
+
+.remoteMini {
+	width: 100%;
+	height: 100%;
+	z-index: 19;
+	position: absolute;
+	left: 0%;
+}
+
+.miniRemoteNotAvailableOverlay {
+	width: 100%;
+	height: 100%;
+	z-index: 20;
+	position: absolute;
+	left: 0%;
+}
+
+.vmt {
+	width: 75%;
+	height: 60%;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+	float: left;
+}
+
+.vm {
+	height: 65%;
+}
+
+.anyKeyDiv {
+	width: 100%;
+	height: 30px;
+}
+
+.keySelection {
+	width: 49%;
+}
+
+.btnSendKey {
+	width: 49%;
+}
+
+.traceToggleSelected {
+	background-color: #EDCB62;
+	font-weight: bold;
+}
+
+.traceToggleUnselected {
+	background-color: white;
+}
+
+.serialBtnHideOverlay{
+	width: 100%;
+	height: 100%;
+	z-index: 20;
+	position: absolute;
+	left: 50%;
+}
+
+td.genericRemoteButtonStyle a {
+	background-color: #DDEAF2;
+	border: none;
+	display: inline-block;
+	font-family: arial;
+	font-size: 10px;
+	font-weight: bold;
+	width: 94%;
+	height: 100%;
+	text-decoration: none;
+	text-shadow: 0px 0px 0px #000;
+	text-align: center;
+	margin-left: 1px;
+	margin-top: 1px;
+	border-style: solid;
+	border-width: 1px;
+	padding-top: 4px;
+	cursor: pointer;
+	visibility: hidden;
+}
+
+a.numberPadStyle {
+	background-color: #89FCD9;
+}
+
+table.genericRemoteKeyTable {
+	width: 100%;
+	display: table;
+	table-layout: fixed;
+}
+
+td.genericRemoteKeyCol {
+	width: 33%;
+	border: none;
+}
+
+tr.genericRemoteKeyRow {
+	width: 100%;
+}
+
+.blinkButton {
+	background-color: white !important;
+}
+
+a.skeyMapHelp {
+	visibility: visible !important;
+	cursor:auto!important;
+	background-color:#CFCFCF!important;
+	border:none!important;	
+}
+
+img.skeyHelp {
+	width: 30%;
+	height: 30%
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.comcast.video.dawg</groupId>
+        <artifactId>libraries</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>dawg-common</artifactId>
+
+    <name>(Comcast) ${project.artifactId}</name>
+    <description>Common classes for the DAWG library</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.comcast.video</groupId>
+            <artifactId>stb-io-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

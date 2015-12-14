@@ -1,0 +1,87 @@
+/**
+ * Copyright 2010 Comcast Cable Communications Management, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/* ===========================================================================
+Swatch Colors
+-------------
+B2B2B2 - Dark Gray
+1919FF - Navy Blue
+365f91 - Dark Blue + Gray
+FFFFFF - White
+D3DFEE - Light Gray
+ff0000 - Dark Red
+===========================================================================*/
+ 
+/* Generic styling for the table  */
+.keymap {
+	border-collapse:collapse;
+    bottom: 0px;  
+	display: block;
+	max-width:32%;
+	min-width:30%;
+	position: fixed;
+	right: 2%; 	
+	z-index: 19;
+}
+
+
+/* Table header styling */
+.keymap .table-header {
+	background: #B2B2B2;
+	color: #1919FF;
+	font-weight:bold;
+	text-align: center;
+}
+
+/* Styling for close button in the table header*/
+.keymap .close-button {
+	display:block;
+	float:right;
+	height:17px;
+	width:19px;
+	z-index:19;
+}
+
+/* Styling for <keyboard,remote > caption row.*/
+.keymap .heading-row {
+	color: #365f91;
+	font-weight:bold;
+	text-align: center;
+}
+
+/* Alternate white background */
+.keymap tr:nth-child(even) {
+	background: #FFFFFF;
+}
+
+/* Alternate light blue background*/
+.keymap tr:nth-child(odd) { 
+	background: #D3DFEE;
+}
+
+/* Table cell styling */
+.keymap td {
+	border:none;
+	outline:none;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 7px;
+	padding-top: 5px;
+}
+
+/* Draw red right border to table cell with the rule 4n+2, where n=0,1,2 etc. */
+.keymap td:nth-child(4n+2) { 
+	border-right:thick double #ff0000;
+}

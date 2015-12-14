@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.comcast.video.dawg</groupId>
+        <artifactId>libraries</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>dawg-docker</artifactId>
+    <packaging>jar</packaging>
+
+    <name>(Comcast) ${project.artifactId}</name>
+    <description>DAWG docker</description>
+
+    <properties>
+        <alias-base>dawg-base</alias-base>
+        <alias-house>dawg-house</alias-house>
+        <alias-pound>dawg-pound</alias-pound>
+        <alias-show>dawg-show</alias-show>
+        <alias-db>dawg-db</alias-db>
+
+        <image-name-base>comcast/${alias-base}</image-name-base>
+        <image-name-house>comcast/${alias-house}</image-name-house>
+        <image-name-pound>comcast/${alias-pound}</image-name-pound>
+        <image-name-show>comcast/${alias-show}</image-name-show>
+        <image-name-db>comcast/${alias-db}</image-name-db>
+
+        <dawg-core-dir>base-files</dawg-core-dir>
+        <dawg-house-dir>dawg-house-rpms</dawg-house-dir>
+        <dawg-pound-dir>dawg-pound-rpms</dawg-pound-dir>
+        <dawg-show-dir>dawg-show-rpms</dawg-show-dir>
+        <dawg-db-dir>dawg-db-config</dawg-db-dir>
+
+        <ini-address-house>http://${alias-house}:8080</ini-address-house>
+        <ini-address-show>http://${alias-show}:8080</ini-address-show>
+        <ini-address-pound>http://${alias-pound}:8080</ini-address-pound>
+        <ini-address-db>${alias-db}</ini-address-db>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jolokia</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.13.6</version>
+
+                <configuration>
+                    <images>
+                        <image>
+                            <name>${image-name-base}</name>
+
+                            <build>
+                                <from>centos:6</from>
+                                <maintainer>trent_schmidt@cable.comcast.com</maintainer>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+
+                                <cmd>
+                                    <shell>service tomcat start &amp;&amp; tail -f /var/log/tomcat/catalina.out</shell>
+                                </cmd>
+                                <ports>
+                                    <port>8080</port>
+                                </ports>
+
+                                <assembly>
+                                    <inline>
+                                        <dependencySet>
+                                            <includes>
+                                                <include>${project.groupId}:dawg-config:rpm</include>
+                                            </includes>
+                                            <outputDirectory>${dawg-core-dir}</outputDirectory>
+                                        </dependencySet>
+                                        <fileSet>
+                                            <directory>${project.basedir}/src/main/resources</directory>
+                                            <includes>
+                                                <include>*.rpm</include>
+                                                <include>tomcat-users.xml</include>
+                                            </includes>
+                                            <outputDirectory>${dawg-core-dir}</outputDirectory>
+                                        </fileSet>
+                                    </inline>
+                                </assembly>
+
+                                <runCmds>
+                                    <runCmd>rpm -Uvh /maven/${dawg-core-dir}/*.rpm</runCmd>
+                                    <runCmd>sed -i "s/mirrorlist=https/mirrorlist=http/" /etc/yum.repos.d/epel.repo</runCmd>
+                                    <runCmd>yum -y update</runCmd>
+                                    <runCmd>yum -y install tomcat tomcat-* java-1.7.0-openjdk</runCmd>
+                                    <runCmd>cp /maven/${dawg-core-dir}/tomcat-users.xml /usr/share/tomcat/conf/tomcat-users.xml</runCmd>
+
+                                    <runCmd>sed -i "s|http://localhost:8080/dawg-house|${ini-address-house}/dawg-house|g" /etc/dawg/dawg.ini</runCmd>
+                                    <runCmd>sed -i "s|http://localhost:8080/dawg-show|${ini-address-show}/dawg-show|g" /etc/dawg/dawg.ini</runCmd>
+                                    <runCmd>sed -i "s|http://localhost:8080/dawg-pound|${ini-address-pound}/dawg-pound|g" /etc/dawg/dawg.ini</runCmd>
+                                    <runCmd>sed -i "s|dawg-db.test.domain|${ini-address-db}|g" /etc/dawg/dawg.ini</runCmd>
+                                </runCmds>
+                            </build>
+                        </image>
+                        <image>
+                            <alias>${alias-house}</alias>
+                            <name>${image-name-house}</name>
+
+                            <build>
+                                <from>${image-name-base}</from>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${poject.version}</tag>
+                                </tags>
+
+                                <assembly>
+                                    <inline>
+                                        <dependencySet>
+                                            <includes>
+                                                <include>${project.groupId}:dawg-house:rpm</include>
+                                            </includes>
+                                            <outputDirectory>${dawg-house-dir}</outputDirectory>
+                                        </dependencySet>
+                                    </inline>
+                                </assembly>
+
+                                <runCmds>
+                                    <runCmd>rpm -Uvh /maven/${dawg-house-dir}/*</runCmd>
+                                </runCmds>
+                            </build>
+
+                            <run>
+                                <ports>
+                                    <port>9000:8080</port>
+                                </ports>
+                                <log>
+                                    <color>blue</color>
+                                </log>
+                                <links>
+                                    <link>${alias-pound}</link>
+                                    <link>${alias-show}</link>
+                                    <link>${alias-db}</link>
+                                </links>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>${alias-pound}</alias>
+                            <name>${image-name-pound}</name>
+
+                            <build>
+                                <from>${image-name-base}</from>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${poject.version}</tag>
+                                </tags>
+
+                                <assembly>
+                                    <inline>
+                                        <dependencySet>
+                                            <includes>
+                                                <include>${project.groupId}:dawg-pound:rpm</include>
+                                            </includes>
+                                            <outputDirectory>${dawg-pound-dir}</outputDirectory>
+                                        </dependencySet>
+                                    </inline>
+                                </assembly>
+
+                                <runCmds>
+                                    <runCmd>rpm -Uvh /maven/${dawg-pound-dir}/*</runCmd>
+                                </runCmds>
+                            </build>
+
+                            <run>
+                                <ports>
+                                    <port>9001:8080</port>
+                                </ports>
+                                <log>
+                                    <color>magenta</color>
+                                </log>
+                                <links>
+                                    <link>${alias-show}</link>
+                                    <link>${alias-db}</link>
+                                </links>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>${alias-show}</alias>
+                            <name>${image-name-show}</name>
+
+                            <build>
+                                <from>${image-name-base}</from>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${poject.version}</tag>
+                                </tags>
+
+                                <assembly>
+                                    <inline>
+                                        <dependencySet>
+                                            <includes>
+                                                <include>${project.groupId}:dawg-show:rpm</include>
+                                            </includes>
+                                            <outputDirectory>${dawg-show-dir}</outputDirectory>
+                                        </dependencySet>
+                                    </inline>
+                                </assembly>
+
+                                <runCmds>
+                                    <runCmd>rpm -Uvh /maven/${dawg-show-dir}/*</runCmd>
+                                </runCmds>
+                            </build>
+
+                            <run>
+                                <ports>
+                                    <port>9002:8080</port>
+                                </ports>
+                                <log>
+                                    <color>yellow</color>
+                                </log>
+                                <links>
+                                    <link>${alias-db}</link>
+                                </links>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>${alias-db}</alias>
+                            <name>${image-name-db}</name>
+
+                            <build>
+                                <from>mongo:3.2-rc</from>
+                                <maintainer>trent_schmidt@cable.comcast.com</maintainer>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                            </build>
+
+                            <run>
+                                <log>
+                                    <color>red</color>
+                                </log>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dawg-config</artifactId>
+            <version>${project.version}</version>
+            <type>rpm</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dawg-house</artifactId>
+            <version>${project.version}</version>
+            <type>rpm</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dawg-pound</artifactId>
+            <version>${project.version}</version>
+            <type>rpm</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dawg-show</artifactId>
+            <version>${project.version}</version>
+            <type>rpm</type>
+        </dependency>
+    </dependencies>
+
+</project>

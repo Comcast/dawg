@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>libraries</artifactId>
+        <groupId>com.comcast.video.dawg</groupId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>dawg-show</artifactId>
+    <packaging>war</packaging>
+
+    <name>(Comcast) ${project.artifactId}</name>
+    <description>The webserver for DAWG Show. Provides a webpage for viewing video, reading trace, and sending keys to an stb.</description>
+
+    <properties>
+        <stb.tools.version>1.0.14</stb.tools.version>
+        <stb.tools.dev.version>1.0-SNAPSHOT</stb.tools.dev.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                <version>2.1.4</version>
+                <executions>
+                    <execution>
+                        <id>generate-rpm</id>
+                        <goals>
+                            <goal>attached-rpm</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <license>Apache-2.0</license>
+                    <group>Applications/Databases</group>
+                    <packager>Comcast</packager>
+                    <prefix>/usr/local</prefix>
+                    <requires>
+                        <require>tomcat</require>
+                        <require>dawg-config</require>
+                    </requires>
+                    <targetOS>linux</targetOS>
+                    <mappings>
+                        <mapping>
+                            <directory>/var/lib/tomcat/webapps/${project.artifactId}-${project.version}</directory>
+                            <filemode>755</filemode>
+                            <username>root</username>
+                            <groupname>tomcat</groupname>
+                            <sources>
+                                <source>
+                                    <location>target/${project.artifactId}-${project.version}.war</location>
+                                </source>
+                                <softlinkSource>
+                                    <destination>../${project.artifactId}.war</destination>
+                                    <location>${project.artifactId}-${project.version}/${project.artifactId}-${project.version}.war</location>
+                                </softlinkSource>
+                            </sources>
+                        </mapping>
+                    </mappings>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.comcast.video.dawg</groupId>
+            <artifactId>dawg-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.comcast.video.dawg</groupId>
+            <artifactId>dawg-server-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>
