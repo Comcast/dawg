@@ -36,9 +36,9 @@
         <dawg-db-dir>dawg-db-config</dawg-db-dir>
         <dawg-combo-dir>dawg-combo</dawg-combo-dir>
 
-        <ini-address-house>http://${alias-house}:8080</ini-address-house>
-        <ini-address-show>http://${alias-show}:8080</ini-address-show>
-        <ini-address-pound>http://${alias-pound}:8080</ini-address-pound>
+        <ini-address-house>http://${alias-combo}:8080</ini-address-house>
+        <ini-address-show>http://${alias-combo}:8080</ini-address-show>
+        <ini-address-pound>http://${alias-combo}:8080</ini-address-pound>
         <ini-address-db>${alias-db}</ini-address-db>
     </properties>
 
