@@ -6,6 +6,8 @@ Dawg
 ##Summary
 Dawg is a device library, which allows for device viewing and device reservation
 
+![Dawg](http://comcast.github.io/dawg/images/dawg-shield.png)
+
 
 ##More Information
 For more information see [dawg wiki](https://github.com/Comcast/dawg/wiki)
