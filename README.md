@@ -1,5 +1,17 @@
-# Dawg
+Dawg
+====
 
-Read more about DAWG here - https://github.com/pages/CPT/dawg
+[http://comcast.github.io/dawg/](http://comcast.github.io/dawg)
 
-Last Team City Build Status
+##Summary
+Dawg is a device library, which allows for device viewing and device reservation
+
+![Dawg](http://comcast.github.io/dawg/images/dawg-shield.png)
+
+
+##More Information
+For more information see [dawg wiki](https://github.com/Comcast/dawg/wiki)
+
+##Submitting issues
+Please file a github issue for any problems or feature requests (or better yet, submit a pull request!)
+
