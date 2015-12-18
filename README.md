@@ -12,6 +12,6 @@ Dawg is a device library, which allows for device viewing and device reservation
 ##More Information
 For more information see [dawg wiki](https://github.com/Comcast/dawg/wiki)
 
-##Submitting issues
+##Submitting Issues
 Please file a github issue for any problems or feature requests (or better yet, submit a pull request!)
 
