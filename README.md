@@ -1,5 +1,6 @@
 Dawg
 ====
+[![Build Status](https://travis-ci.org/Comcast/dawg.svg)](https://travis-ci.org/Comcast/dawg)
 
 [http://comcast.github.io/dawg/](http://comcast.github.io/dawg)
 
