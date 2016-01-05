@@ -15,20 +15,13 @@
  */
 package com.comcast.video.dawg.show.comparison;
 
-import java.beans.XMLEncoder;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.comcast.cats.image.ImageCompareRegionInfo;
-import com.comcast.cats.image.OCRRegionInfo;
 import com.comcast.cats.image.RegionInfo;
 
 /**

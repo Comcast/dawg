@@ -16,14 +16,11 @@
 package com.comcast.video.dawg.show.cache;
 
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpSession;
 
 import com.comcast.video.dawg.show.video.Compare;
-import com.comcast.video.dawg.show.video.FrameUpdater;
 
 /**
  * Caches some objects specific to the client's HttpSession
@@ -36,7 +33,6 @@ public class ClientCache {
 
     private UniqueIndexedCache<Compare> compareCache = new UniqueIndexedCache<Compare>();
     private UniqueIndexedCache<BufferedImage> imgCache = new UniqueIndexedCache<BufferedImage>();
-    private Map<String, FrameUpdater> frameUpdaters = new HashMap<String, FrameUpdater>();
 
     /**
      * Gets the cache that holds to current comparisons
@@ -60,14 +56,6 @@ public class ClientCache {
 
     public void setImgCache(UniqueIndexedCache<BufferedImage> imgCache) {
         this.imgCache = imgCache;
-    }
-
-    public FrameUpdater getFrameUpdater(String deviceId) {
-        return frameUpdaters.get(deviceId);
-    }
-
-    public FrameUpdater storeFrameUpdater(String deviceId, FrameUpdater frameUpdater) {
-        return frameUpdaters.put(deviceId, frameUpdater);
     }
 
     /**
