@@ -19,7 +19,6 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 
-import com.comcast.cats.video.service.VideoController;
 import com.comcast.video.stbio.VideoOutput;
 import com.comcast.video.stbio.meta.VideoMeta;
 
@@ -29,9 +28,6 @@ import com.comcast.video.stbio.meta.VideoMeta;
  *
  */
 public class DawgVideoOutput implements VideoOutput {
-
-    private VideoController videoController;
-    private DawgEventDispatcher dispatcher;
 
     /**
      * Creates a DawgVideoOutput
@@ -49,8 +45,6 @@ public class DawgVideoOutput implements VideoOutput {
     public DawgVideoOutput(String videoSourceUrl, String videoCamera) {
         try {
             URI videoUri = new URI(generateVideoUrl(videoSourceUrl, videoCamera));
-            this.dispatcher = new DawgEventDispatcher();
-            this.videoController = new VideoController(dispatcher, videoUri);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -61,15 +55,8 @@ public class DawgVideoOutput implements VideoOutput {
      */
     @Override
     public BufferedImage captureScreen() {
-        return this.videoController.getImage();
-    }
-
-    public VideoController getVideoController() {
-        return videoController;
-    }
-
-    public DawgEventDispatcher getDispatcher() {
-        return dispatcher;
+        /* TODO: Add video to image capture */
+        return null;
     }
 
     /**
@@ -87,6 +74,6 @@ public class DawgVideoOutput implements VideoOutput {
      */
     @Override
     public void setDimension(Dimension dm) {
-        this.videoController.setVideoDimension(dm);
+        /* TODO: When image capture is implemented, this will likely need to be added */
     }
 }
