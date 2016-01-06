@@ -94,10 +94,10 @@
         <version.reflections>0.9.9-RC2</version.reflections>
 
         <!-- Dawg Dependencies -->
-        <version.dawg-client>${project.version}</version.dawg-client>
-        <version.dawg-common>${project.version}</version.dawg-common>
-        <version.dawg-server-common>${project.version}</version.dawg-server-common>
-        <version.stb-io-api>${project.version}</version.stb-io-api>
+        <version.dawg-client>2.0.1</version.dawg-client>
+        <version.dawg-common>2.0.1</version.dawg-common>
+        <version.dawg-server-common>2.0.1</version.dawg-server-common>
+        <version.stb-io-api>2.0.1</version.stb-io-api>
 
         <!-- Github Info -->
         <git.url>github.com</git.url>
