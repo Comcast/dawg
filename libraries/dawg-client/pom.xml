@@ -17,7 +17,6 @@
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

@@ -14,11 +14,6 @@
     <name>(Comcast) ${project.artifactId}</name>
     <description>The webserver for DAWG Show. Provides a webpage for viewing video, reading trace, and sending keys to an stb.</description>
 
-    <properties>
-        <stb.tools.version>1.0.14</stb.tools.version>
-        <stb.tools.dev.version>1.0-SNAPSHOT</stb.tools.dev.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
@@ -69,12 +64,10 @@
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-client</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-server-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

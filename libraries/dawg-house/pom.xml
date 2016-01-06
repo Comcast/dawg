@@ -13,18 +13,15 @@
     <dependencies>
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
+            <artifactId>dawg-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-server-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.comcast.video.dawg</groupId>
-            <artifactId>dawg-client</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <build>

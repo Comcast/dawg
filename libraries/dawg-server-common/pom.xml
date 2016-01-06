@@ -11,10 +11,6 @@
     <name>(Comcast) ${project.artifactId}</name>
     <description>Dawg server common is a library of common classes used solely by the server components of dawg.  Anything that should be shared across server/client should be in dawg-common</description>
 
-    <properties>
-        <dawg.common.version>${project.version}</dawg.common.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -24,7 +20,6 @@
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-common</artifactId>
-            <version>${dawg.common.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
