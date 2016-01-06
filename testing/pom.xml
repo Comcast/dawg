@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.comcast.video.dawg</groupId>
         <artifactId>dawg</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>2.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>testing</artifactId>
@@ -16,6 +16,7 @@
 
     <properties>
         <package>com/comcast/dawg/selenium/chromedriver</package>
+        <dawg.client.version>${project.version}</dawg.client.version>
     </properties>
 
     <build>
@@ -143,7 +144,7 @@
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-client</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>${dawg.client.version}</version>
         </dependency>
     </dependencies>
 </project>
