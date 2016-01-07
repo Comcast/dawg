@@ -93,7 +93,7 @@
         <version.reflections>0.9.9-RC2</version.reflections>
 
         <!-- Dawg Dependencies -->
-        <version.project>${project.version}</version.project>
+        <version.project>2.0.2-SNAPSHOT</version.project>
         <version.dawg-client>${version.project}</version.dawg-client>
         <version.dawg-common>${version.project}</version.dawg-common>
         <version.dawg-server-common>${version.project}</version.dawg-server-common>
