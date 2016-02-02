@@ -29,12 +29,12 @@ pageEncoding="UTF-8"%>
         <jsp:include page="/views/globalVars.jsp" />
         <jsp:include page="/views/configFileTypeSelector.jsp" />
         <script type="text/javascript" src="<c:url value="/js/jquery-1.7.2.min.js" />"></script>
-        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <script type="text/javascript" src="<c:url value="/js/ImageWorkspace.js" />"></script>
         <script type="text/javascript" src="<c:url value="/js/RegionManager.js" />"></script>
         <script type="text/javascript" src="<c:url value="/js/HTMLUtil.js" />"></script>
         <link rel="stylesheet" type="text/css" href='<c:url value="/css/operations.css" />'>
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" href='<c:url value="/css/regionManager.css" />'>
         <link rel="stylesheet" type="text/css" href='<c:url value="/css/regionDisplay.css" />'>
     </head>

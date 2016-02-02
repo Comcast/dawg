@@ -50,9 +50,9 @@ String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_RE
         <link rel="stylesheet" type="text/css" href='<c:url value="/css/keymap.css" />'>
         <link rel="stylesheet" type="text/css" href='<c:url value="/css/trace.css" />'>
 
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
-        <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
-        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
+        <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
         <script type="text/javascript" src='<c:url value="/js/jquery.gracefulWebSocket.js" />'></script>
         <script type="text/javascript" src='<c:url value="/js/jquery.alphanum.js" />'></script>
         <script type="text/javascript" src='<c:url value="/js/image-util.js" />'></script>

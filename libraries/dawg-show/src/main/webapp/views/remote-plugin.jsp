@@ -26,7 +26,7 @@ pageEncoding="UTF-8"%>
 <html>
     <head>
         <jsp:include page="/views/globalVars.jsp" />
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href='<c:url value="/css/plugin.css" />'>
         <script type="text/javascript" src='<c:url value="/js/jquery-1.7.2.min.js" />'></script>
         <script type="text/javascript" src='<c:url value="/js/jquery-ui-1.11.4.min.js" />'></script>
