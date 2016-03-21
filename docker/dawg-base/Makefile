@@ -9,7 +9,7 @@ _NAME_VERSION=$(NAME):$(VERSION)
 
 build: copy-dependencies
 	@echo "Building $(_NAME_VERSION)"
-	$(QUIET)docker build -t "$(_NAME_VERSION)" -p 8080
+	$(QUIET)docker build -t "$(_NAME_VERSION)"
 
 run:
 	@echo "Running $(_NAME_VERSION)"
