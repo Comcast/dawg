@@ -154,7 +154,7 @@ String fullAudioUrlOGGExtension = "http://" + audioUrl + ":8080/play1.ogg";
                             <img id="video" class="video"
                                             src="<%= fullVideoUrl%>"
                                             alt=""></img>
-                            <audio autoplay>
+                            <audio id="audio" autoplay>
                             		<source src=fullAudioUrlOGGExtension type="audio/ogg">
                             		<source src=fullAudioUrlMP3Extension type="audio/mpeg">
                             </audio>
@@ -181,6 +181,7 @@ String fullAudioUrlOGGExtension = "http://" + audioUrl + ":8080/play1.ogg";
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
                 <% } %>
             </div>
+            <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="top:20%;position:absolute"/>
             <div id="hold_panel" class="hold_panel"></div>
             <div id="hoverButtons" class="hoverButtons">
                 <div id="fpsPanel" class="fpsPanel">
@@ -237,6 +238,15 @@ String fullAudioUrlOGGExtension = "http://" + audioUrl + ":8080/play1.ogg";
             StandardRemote.bind('<%= remoteName %>');
             FrameRateOperator.bind($('.fpsButton'), $('.fpsDiv'), $('.fpsSelector'));
             HoverManager.bind([$('.directTunePanel'), $('.fpsPanel')]);
+            
+            var audio = document.getElementById('audio');
+            document.getElementById('mute').addEventListener('click', function (e)
+            {
+            	e = e || window.event;
+            	audio.muted = !audio.muted;
+            	e.preventDefault();
+            },false);
+            
         </script>
     </body>
 </html>
