@@ -12,4 +12,10 @@ public interface AudioMeta {
      * @return
      */
     String getAudioUrl();
+    
+    /**
+     * The port number for Audio-out
+     * @return
+     */
+    String getAudioPort();
 }

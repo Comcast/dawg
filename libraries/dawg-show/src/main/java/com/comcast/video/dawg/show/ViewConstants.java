@@ -55,7 +55,7 @@ public interface ViewConstants {
     public static final String TRACE_HOST = "traceHost";
     public static final String SUPPORTED = "supported";
     public static final String AUDIO_URL = "audioUrl";
-    
+    public static final String AUDIO_PORT = "audioPort";
     /** Represent generic remote keys */
     public static final String GENERIC_REMOTE_KEYS = "genericRemoteKeys";
     /** Represent map of image id with corresponding snapshot id */
