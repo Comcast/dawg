@@ -38,6 +38,7 @@ String traceHost = (String) request.getAttribute(ViewConstants.TRACE_HOST);
 String videoUrl = (String) request.getAttribute(ViewConstants.VIDEO_URL);
 String videoCamera = (String) request.getAttribute(ViewConstants.VIDEO_CAMERA);
 String hdVideoUrl = (String) request.getAttribute(ViewConstants.HD_VIDEO_URL);
+String audioUrl = (String) request.getAttribute(ViewConstants.AUDIO_URL);
 boolean videoAvail = (Boolean) request.getAttribute(ViewConstants.VIDEO_AVAILABLE);
 boolean traceAvail = (Boolean) request.getAttribute(ViewConstants.TRACE_AVAILABLE);
 boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
@@ -47,6 +48,8 @@ String stdRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/standard
 String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
 String fullVideoUrl = "http://" + videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
+String fullAudioUrlMP3Extension = "http://" + audioUrl + ":8080/play1.mp3";
+String fullAudioUrlOGGExtension = "http://" + audioUrl + ":8080/play1.ogg";
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -151,6 +154,11 @@ String fullVideoUrl = "http://" + videoUrl + "/axis-cgi/mjpg/video.cgi"
                             <img id="video" class="video"
                                             src="<%= fullVideoUrl%>"
                                             alt=""></img>
+                            <audio autoplay>
+                            		<source src=fullAudioUrlOGGExtension type="audio/ogg">
+                            		<source src=fullAudioUrlMP3Extension type="audio/mpeg">
+                            </audio>
+                            
                             <% if (!videoAvail)  {%>
                                 <canvas id="videoNotAvailableOverlay" class="videoNotAvailableOverlay"></canvas>
                             <% } %>
