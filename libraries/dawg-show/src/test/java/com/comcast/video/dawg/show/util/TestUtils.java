@@ -80,6 +80,7 @@ public class TestUtils {
     public static final String SERIALURL = "10.253.84.75";
     public static final String VIDEOURL = "10.253.85.25";
     public static final String VIDEOCAMERA = "2";
+    public static final String AUDIOURL = "10.172.46.121";
 
     public static MetaStb createGenericMetaStb() {
         MetaStb stb = new MetaStb();
@@ -104,6 +105,7 @@ public class TestUtils {
         stb.setSerialHost(SERIALURL);
         stb.setVideoSourceUrl(VIDEOURL);
         stb.setVideoCamera(VIDEOCAMERA);
+        stb.setAudioUrl(AUDIOURL);
 
         return stb;
     }
