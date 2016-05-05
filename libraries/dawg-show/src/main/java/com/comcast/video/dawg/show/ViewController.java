@@ -142,6 +142,9 @@ public class ViewController implements ViewConstants {
             mav.addObject(IR_AVAILABLE, validUrl(stb.getIrServiceUrl()) && validUrl(stb.getIrServicePort()));
             mav.addObject(SUPPORTED, supported);
             mav.addObject(IPADDRESS, stb.getIpAddress().getHostName());
+            mav.addObject(AUDIO_URL, stb.getAudioUrl());
+            mav.addObject(AUDIO_PORT, stb.getAudioPort());
+            
             String modelName = null;
             Model stbModel = stb.getModel();
             if (null != stbModel) {
