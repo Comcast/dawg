@@ -156,8 +156,8 @@ String fullAudioUrlOGGExtension = "http://" + audioUrl + ":" + audioPort + "/pla
                                             src="<%= fullVideoUrl%>"
                                             alt=""></img>
                             <audio id="audio" autoplay>
-                            		<source src=fullAudioUrlOGGExtension type="audio/ogg">
-                            		<source src=fullAudioUrlMP3Extension type="audio/mpeg">
+                            	<source src="<%=fullAudioUrlOGGExtension%>" type="audio/ogg">
+  								<source src="<%=fullAudioUrlMP3Extension%>" type="audio/mpeg">
                             </audio>
                             
                             <% if (!videoAvail)  {%>
