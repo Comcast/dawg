@@ -92,7 +92,7 @@ public class ViewControllerTest {
         Assert.assertEquals(remote.getName(), actualRemote);
     }
     
-    @Test(dataProvider="testStbECPViewData")
+    @Test(dataProvider="testStbSimplifiedViewData")
     public void testStbECPView(String remoteType, String actualRemote, String mobileParam,
             String ua, boolean isMobile, String traceUrl, boolean traceAvailable) throws IOException {
         MetaStb stb = TestUtils.createGenericMetaStb();
@@ -107,7 +107,7 @@ public class ViewControllerTest {
         Wiring.autowire(controller, cache);
         Wiring.autowire(controller, remoteMan);
 
-        ModelAndView mav = controller.stbECPView(TestUtils.ID, mobileParam, null, null, ua);
+        ModelAndView mav = controller.stbSimplifiedView(TestUtils.ID, mobileParam, null, null, ua);
 
         Assert.assertEquals(mav.getModel().get(ViewConstants.MOBILE), isMobile);
         Assert.assertEquals(mav.getModel().get(ViewConstants.TRACE_AVAILABLE), traceAvailable);

@@ -93,12 +93,12 @@ public class ViewController implements ViewConstants {
     	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
     
-    @RequestMapping(method = { RequestMethod.GET }, value = "/ecp/stb")
-    public ModelAndView stbECPView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
+    @RequestMapping(method = { RequestMethod.GET }, value = "/simplified")
+    public ModelAndView stbSimplifiedView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
             @RequestParam(required = false) String refresh,
             @RequestHeader("User-Agent") String uaStr) {
-    	String stbViewType = ECPSTB;
+    	String stbViewType = SIMPLIFIEDVIEW;
     	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
     

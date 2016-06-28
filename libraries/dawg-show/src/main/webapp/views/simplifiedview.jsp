@@ -16,7 +16,7 @@
 
 --%>
 <!--
-The main page for viewing stb contents without metadata. This is for ECP use. 
+The main page for viewing stb contents without metadata. This is for a more generic/ external use. 
 -->
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -45,7 +45,7 @@ boolean traceAvail = (Boolean) request.getAttribute(ViewConstants.TRACE_AVAILABL
 boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
 String deviceId = (String) request.getAttribute(ViewConstants.DEVICE_ID);
 boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
-String stdRemotePage = "/views/remotes/ECPxr2/standard/standardremote.jsp";
+String stdRemotePage = "/views/remotes/simplifiedxr2/standard/standardremote.jsp";
 String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
 String fullVideoUrl = "http://" + videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
