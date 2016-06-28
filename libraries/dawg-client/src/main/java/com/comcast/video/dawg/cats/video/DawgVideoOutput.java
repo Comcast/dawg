@@ -69,7 +69,8 @@ public class DawgVideoOutput implements VideoOutput {
         String cam = camera == null ? "1" : camera;
         if (    null != videoHost
              && !(    videoHost.startsWith("http://")
-                   || videoHost.startsWith("https://"))) {
+                   || videoHost.startsWith("https://")))
+        {
             videoHost = "http://"+videoHost;
         }
         return videoHost + "/axis-cgi/mjpg/video.cgi?camera=" + cam + "&resolution=4CIF&fps=10";
