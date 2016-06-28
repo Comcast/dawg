@@ -105,6 +105,13 @@ public class ViewController implements ViewConstants {
             boolean supported = BrowserSupport.isBrowserSupported(uaStr);
             String videoUrl = stb.getVideoSourceUrl();
 
+            if (    null != videoUrl
+                 && !(    videoUrl.startsWith("http://")
+                       || videoUrl.startsWith("https://")))
+           {
+               videoUrl = "http://" + videoUrl;
+           }
+
             Boolean mob = false;
 
             if (mobile == null) {
