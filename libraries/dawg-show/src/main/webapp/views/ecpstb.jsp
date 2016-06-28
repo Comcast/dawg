@@ -103,10 +103,7 @@ String fullAudioUrlOGGExtension = "http://" + audioUrl + ":" + audioPort + "/pla
     <body class="showBody" onresize="LayoutDelegator.draw()">
 
         <!-- prompt divs -->
-        <div id="faded" class="promptFade"></div>
-        <div id="powerPrompt" class="powerPrompt">
-            <jsp:include page="/views/powerPrompt.jsp" />
-        </div>
+
         <div id="loadComparisonPrompt" class="loadComparisonPrompt">
             <jsp:include page="/views/loadComparisonPrompt.jsp" />
         </div>
