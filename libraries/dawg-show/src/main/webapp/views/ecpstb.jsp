@@ -16,7 +16,7 @@
 
 --%>
 <!--
-The main page for viewing the stb metadata, trace, remote, and video.
+The main page for viewing stb contents without metadata. This is for ECP use. 
 -->
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"

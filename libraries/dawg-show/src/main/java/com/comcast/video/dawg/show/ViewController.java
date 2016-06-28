@@ -25,9 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,7 +43,6 @@ import com.comcast.video.dawg.show.key.RemoteManager;
 import com.comcast.video.dawg.show.video.VideoSnap;
 import com.comcast.video.dawg.util.DawgUtil;
 import com.comcast.video.stbio.meta.Model;
-import com.google.common.base.Optional;
 
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -87,11 +84,6 @@ public class ViewController implements ViewConstants {
      * @return
      */
     
-//    
-//    public ModelAndView getStbView(String deviceId, String mobile, String remoteType, String refresh, String uaStr, String stbView){}
-//    public ModelAndView getStbView(String stbViewType, @PathVariableString stbUrl){}
-    
-    
     @RequestMapping(method = { RequestMethod.GET }, value = "/stb")
     public ModelAndView stbView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
@@ -111,11 +103,6 @@ public class ViewController implements ViewConstants {
     }
     
     public ModelAndView getStbView(String deviceId, String mobile, String remoteType, String refresh, String uaStr, String stbViewType){
-//    public ModelAndView getStbView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
-//		    @RequestParam(required = false) String remoteType,
-//		    @RequestParam(required = false) String refresh,
-//		    @RequestHeader("User-Agent") String uaStr,
-//		    String stbViewType){
         MetaStb stb = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
         try {
