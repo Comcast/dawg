@@ -45,7 +45,7 @@ boolean traceAvail = (Boolean) request.getAttribute(ViewConstants.TRACE_AVAILABL
 boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
 String deviceId = (String) request.getAttribute(ViewConstants.DEVICE_ID);
 boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
-String stdRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/standard/standardremote.jsp";
+String stdRemotePage = "/views/remotes/ECPxr2/standard/standardremote.jsp";
 String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
 String fullVideoUrl = "http://" + videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
@@ -142,7 +142,6 @@ String fullAudioUrlOGGExtension = "http://" + audioUrl + ":" + audioPort + "/pla
             </div>
             <div id="standardRemoteDiv" class="standardRemoteDiv" style="width: 20%">
                 <div id="remote" class="remoteContainer">
-                    <img alt="remote" src="/dawg-show/images/remote.png" title="Click to change the remote type" class="changeRemoteButton"><br>
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>
                 <% if (!irAvail)  {%>
