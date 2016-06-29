@@ -115,7 +115,7 @@ String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_RE
                         <div class="videoBody">
                             <c:choose>
                             <c:when test="${empty stb.hdVideoUrl}">
-                            <img id="video" class="video" src="http://${stb.videoSourceUrl}/axis-cgi/mjpg/video.cgi?camera=${stb.videoCamera}" alt=""></img>
+                            <img id="video" class="video" src="${stb.videoSourceUrl}/axis-cgi/mjpg/video.cgi?camera=${stb.videoCamera}" alt=""></img>
                             </c:when>
                             <c:otherwise>
                             <canvas id="video" class="video" data-videourl="${stb.hdVideoUrl}"></canvas>
