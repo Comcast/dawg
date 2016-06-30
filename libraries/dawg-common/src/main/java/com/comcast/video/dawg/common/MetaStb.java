@@ -79,7 +79,6 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     public static final String ENVIRONMENT_ID        = "environmentId";
     public static final String HARDWARE_REVISION     = "hardwareRevision";
     public static final String AUDIOSOURCEURL        = "audioSourceUrl";
-    public static final String AUDIOPORT			 = "audioPort";
 
     private Map<String, Object> data;
 
@@ -313,15 +312,6 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     	data.put(MetaStb.AUDIOSOURCEURL, audioSourceUrl);
     }
     
-    public String getAudioPort(){
-    	return (String) data.get(AUDIOPORT);
-
-    }
-    
-    public void setAudioPort(String audioPort){
-    	data.put(MetaStb.AUDIOPORT, audioPort);
-    }
-
     /**
      * {@inheritDoc}
      */
