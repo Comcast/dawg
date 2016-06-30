@@ -83,7 +83,7 @@ public class ViewController implements ViewConstants {
      * @param uaStr The user agents string defining what browser and system the user is using
      * @return
      */
-    
+
     @RequestMapping(method = { RequestMethod.GET }, value = "/stb")
     public ModelAndView stbView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
@@ -92,7 +92,7 @@ public class ViewController implements ViewConstants {
     	String stbViewType = STB;
     	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
-    
+
     @RequestMapping(method = { RequestMethod.GET }, value = "/simplified")
     public ModelAndView stbSimplifiedView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
@@ -101,7 +101,7 @@ public class ViewController implements ViewConstants {
     	String stbViewType = SIMPLIFIEDVIEW;
     	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
-    
+
     public ModelAndView getStbView(String deviceId, String mobile, String remoteType, String refresh, String uaStr, String stbViewType){
         MetaStb stb = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
@@ -117,14 +117,8 @@ public class ViewController implements ViewConstants {
             mav.addObject(DEVICE_ID, deviceId);
         } else {
             boolean supported = BrowserSupport.isBrowserSupported(uaStr);
-            String videoUrl = stb.getVideoSourceUrl();
-
-            if (    null != videoUrl
-                 && !(    videoUrl.startsWith("http://")
-                       || videoUrl.startsWith("https://")))
-           {
-               videoUrl = "http://" + videoUrl;
-           }
+            String videoUrl = prependMissingProtocol(stb.getVideoSourceUrl(), "http://");
+            String audioUrl = prependMissingProtocol(stb.getAudioUrl(), "http://");
 
             Boolean mob = false;
 
@@ -164,9 +158,8 @@ public class ViewController implements ViewConstants {
             mav.addObject(IR_AVAILABLE, validUrl(stb.getIrServiceUrl()) && validUrl(stb.getIrServicePort()));
             mav.addObject(SUPPORTED, supported);
             mav.addObject(IPADDRESS, stb.getIpAddress().getHostName());
-            mav.addObject(AUDIO_URL, stb.getAudioUrl());
-            mav.addObject(AUDIO_PORT, stb.getAudioPort());
-            
+            mav.addObject(AUDIO_URL, audioUrl);
+
             String modelName = null;
             Model stbModel = stb.getModel();
             if (null != stbModel) {
@@ -174,6 +167,23 @@ public class ViewController implements ViewConstants {
             }
         }
         return mav;
+    }
+
+    /**
+     * Check to see if the url has http:// or https:// as the protocol.  If not specifies, use the default
+     *
+     * @param url to make have https:// or http:// if it doesn't already exist
+     * @param defaultProtocol string to prepend if http:// or https:// is not found
+     */
+    private String prependMissingProtocol(String url, String defaultProtocol) {
+        String rv = url;
+        if (    null != url
+             && !(    url.startsWith("http://")
+                   || url.startsWith("https://")))
+       {
+           rv = defaultProtocol + url;
+       }
+        return rv;
     }
 
     /**

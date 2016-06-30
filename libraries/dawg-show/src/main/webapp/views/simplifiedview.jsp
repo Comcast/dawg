@@ -39,7 +39,6 @@ String videoUrl = (String) request.getAttribute(ViewConstants.VIDEO_URL);
 String videoCamera = (String) request.getAttribute(ViewConstants.VIDEO_CAMERA);
 String hdVideoUrl = (String) request.getAttribute(ViewConstants.HD_VIDEO_URL);
 String audioUrl = (String) request.getAttribute(ViewConstants.AUDIO_URL);
-String audioPort = (String) request.getAttribute(ViewConstants.AUDIO_PORT);
 boolean videoAvail = (Boolean) request.getAttribute(ViewConstants.VIDEO_AVAILABLE);
 boolean traceAvail = (Boolean) request.getAttribute(ViewConstants.TRACE_AVAILABLE);
 boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
@@ -49,8 +48,8 @@ String stdRemotePage = "/views/remotes/simplifiedxr2/standard/standardremote.jsp
 String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
 String fullVideoUrl = "http://" + videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
-String fullAudioUrlMP3Extension = "http://" + audioUrl + ":" + audioPort + "/play1.mp3";
-String fullAudioUrlOGGExtension = "http://" + audioUrl + ":" + audioPort + "/play1.ogg";
+String fullAudioUrlMP3Extension = audioUrl + "/play1.mp3";
+String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
