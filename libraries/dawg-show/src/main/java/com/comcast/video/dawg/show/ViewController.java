@@ -98,7 +98,7 @@ public class ViewController implements ViewConstants {
             @RequestParam(required = false) String remoteType,
             @RequestParam(required = false) String refresh,
             @RequestHeader("User-Agent") String uaStr) {
-    	String stbViewType = SIMPLIFIEDVIEW;
+    	String stbViewType = SIMPLIFIED;
     	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
 
