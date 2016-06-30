@@ -83,12 +83,26 @@ public class ViewController implements ViewConstants {
      * @param uaStr The user agents string defining what browser and system the user is using
      * @return
      */
+    
     @RequestMapping(method = { RequestMethod.GET }, value = "/stb")
     public ModelAndView stbView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
             @RequestParam(required = false) String refresh,
             @RequestHeader("User-Agent") String uaStr) {
-
+    	String stbViewType = STB;
+    	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
+    }
+    
+    @RequestMapping(method = { RequestMethod.GET }, value = "/simplified")
+    public ModelAndView stbSimplifiedView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
+            @RequestParam(required = false) String remoteType,
+            @RequestParam(required = false) String refresh,
+            @RequestHeader("User-Agent") String uaStr) {
+    	String stbViewType = SIMPLIFIEDVIEW;
+    	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
+    }
+    
+    public ModelAndView getStbView(String deviceId, String mobile, String remoteType, String refresh, String uaStr, String stbViewType){
         MetaStb stb = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
         try {
@@ -128,7 +142,8 @@ public class ViewController implements ViewConstants {
             Remote remote = getRemote(remoteType);
 
             Set <String> remoteTypes = remoteManager.getRemoteTypes();
-            mav = new ModelAndView(STB);
+            mav = new ModelAndView(stbViewType);
+
             mav.addObject(DEVICE_ID, DawgUtil.toLowerAlphaNumeric(deviceId));
             try {
                 mav.addObject(REMOTE_TYPES, jsonEngine.writeToString(remoteTypes, Set.class));

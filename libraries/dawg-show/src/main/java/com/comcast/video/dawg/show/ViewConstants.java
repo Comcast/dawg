@@ -25,6 +25,7 @@ public interface ViewConstants {
     /** View Names */
     public static final String VIEWS = "views/";
     public static final String STB = VIEWS + "stb";
+    public static final String SIMPLIFIEDVIEW = VIEWS + "simplifiedview";
     public static final String MULTI = VIEWS + "multi";
     public static final String NOSTB = VIEWS + "nostb";
     public static final String COMPARE_NOT_FOUND = VIEWS + "compareNotFound";

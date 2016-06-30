@@ -91,4 +91,27 @@ public class ViewControllerTest {
         Remote remote = (Remote) mav.getModel().get(ViewConstants.REMOTE);
         Assert.assertEquals(remote.getName(), actualRemote);
     }
+    
+    @Test(dataProvider="testStbSimplifiedViewData")
+    public void testStbECPView(String remoteType, String actualRemote, String mobileParam,
+            String ua, boolean isMobile, String traceUrl, boolean traceAvailable) throws IOException {
+        MetaStb stb = TestUtils.createGenericMetaStb();
+        stb.setRemoteType(remoteType);
+        stb.setSerialHost(traceUrl);
+
+        MockMetaStbCache cache = new MockMetaStbCache();
+        cache.cache.put(TestUtils.ID, stb);
+        RemoteManager remoteMan = new RemoteManager();
+        remoteMan.load();
+        ViewController controller = new ViewController();
+        Wiring.autowire(controller, cache);
+        Wiring.autowire(controller, remoteMan);
+
+        ModelAndView mav = controller.stbSimplifiedView(TestUtils.ID, mobileParam, null, null, ua);
+
+        Assert.assertEquals(mav.getModel().get(ViewConstants.MOBILE), isMobile);
+        Assert.assertEquals(mav.getModel().get(ViewConstants.TRACE_AVAILABLE), traceAvailable);
+        Remote remote = (Remote) mav.getModel().get(ViewConstants.REMOTE);
+        Assert.assertEquals(remote.getName(), actualRemote);
+    }
 }
