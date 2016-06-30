@@ -46,7 +46,7 @@ String deviceId = (String) request.getAttribute(ViewConstants.DEVICE_ID);
 boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
 String stdRemotePage = "/views/remotes/simplifiedxr2/standard/standardremote.jsp";
 String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
-String fullVideoUrl = "http://" + videoUrl + "/axis-cgi/mjpg/video.cgi"
+String fullVideoUrl = videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
 String fullAudioUrlMP3Extension = audioUrl + "/play1.mp3";
 String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";

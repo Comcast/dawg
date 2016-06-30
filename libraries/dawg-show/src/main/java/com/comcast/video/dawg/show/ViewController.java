@@ -194,7 +194,7 @@ public class ViewController implements ViewConstants {
      *            cache.
      *
      */
-    @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET }, value = "/stb/refreshCache")
+    @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET }, value = {"/stb/refreshCache", "/simplified/refreshCache"})
     @ResponseBody
     public void refreshStbCache(@RequestParam String deviceIds[]) {
         for (String deviceId : deviceIds) {
