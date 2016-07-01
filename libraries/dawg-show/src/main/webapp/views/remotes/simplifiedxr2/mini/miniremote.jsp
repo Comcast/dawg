@@ -26,18 +26,18 @@ The mini remote image
         var MINI_REMOTE_ASPECT_RATIO = 2.18;
     </script>
 
-    <img id="bg" src='<c:url value="/images/remotes/xr2/minibg.png" />' alt="" style="width:100%;height:100%;left:0%;top:0%;position:absolute"/>
-    <div style="left:5%;top:5%;width:90%;height:85%;position:absolute">
-        <div id="numberpad" style="left:0%;top:0%;width:38.7%;height:100%;position:absolute">
+    <img id="bg" src='<c:url value="/images/remotes/xr2/minibg.png" />' alt="" style="width:0%;height:0%;left:0%;top:0%;position:absolute"/>
+    <div style="left:0%;top:0%;width:0%;height:0%;position:absolute">
+        <div id="numberpad" style="left:0%;top:0%;width:0%;height:0%;position:absolute">
             <jsp:include page="/views/remotes/xr2/mini/numberpad.jsp"></jsp:include>
         </div>
         <% request.setAttribute("rem", "m"); %>
-        <div id="guidenav" style="left:42.6%;top:3%;width:42.6%;height:96%;position:absolute">
+        <div id="guidenav" style="left:0%;top:0%;width:0%;height:0%;position:absolute">
             <jsp:include page="/views/remotes/xr2/guidenav.jsp"></jsp:include>
         </div>
-        <img id="mpower" src='<c:url value="/images/remotes/xr2/keys/power.png" />' onmousedown="clickRemoteButton(event,'POWER', true)" onmouseup="clickRemoteButton(event,'POWER', false)" alt="" style="width:8.5%;left:89%;top:4.5%;position:absolute"/>
-        <img id="mch" src='<c:url value="/images/remotes/xr2/keys/ch.png" />' alt="" style="width:9.5%;left:89%;top:28.5%;position:absolute"/>
-        <img id="mmenu" src='<c:url value="/images/remotes/xr2/keys/xfinity.png" />' onmousedown="clickRemoteButton(event,'MENU', true)" onmouseup="clickRemoteButton(event,'MENU', false)" alt="" style="width:12%;left:87.5%;top:76%;position:absolute"/>
+        <img id="mpower" src='<c:url value="/images/remotes/xr2/keys/power.png" />' onmousedown="clickRemoteButton(event,'POWER', true)" onmouseup="clickRemoteButton(event,'POWER', false)" alt="" style="width:0%;left:0%;top:0%;position:absolute"/>
+        <img id="mch" src='<c:url value="/images/remotes/xr2/keys/ch.png" />' alt="" style="width:0%;left:0%;top:0%;position:absolute"/>
+        <img id="mmenu" src='<c:url value="/images/remotes/xr2/keys/xfinity.png" />' onmousedown="clickRemoteButton(event,'MENU', true)" onmouseup="clickRemoteButton(event,'MENU', false)" alt="" style="width:0%;left:0%;top:0%;position:absolute"/>
     </div>
 
     <script type="text/javascript">
