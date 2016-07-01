@@ -146,14 +146,15 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                 </div>
             </div>
             <div id="standardRemoteDiv" class="standardRemoteDiv">
-                <div id="remote" class="remoteContainer">
+                <div id="remote" class="remoteContainer" style="width=90%;">
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>
+                <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="right:0%; top:0%; position:absolute"/>
                 <% if (!irAvail)  {%>
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
                 <% } %>
             </div>
-            <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="top:20%;position:absolute"/>
+            
             <div id="hold_panel" class="hold_panel"></div>
         </div>
 
