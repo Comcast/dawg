@@ -16,7 +16,7 @@
 
 --%>
 <!--
-The main page for viewing stb contents without metadata. This is for a more generic/ external use. 
+The main page for viewing the stb metadata, trace, remote, and video.
 -->
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -45,7 +45,7 @@ boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
 String deviceId = (String) request.getAttribute(ViewConstants.DEVICE_ID);
 boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
 String stdRemotePage = "/views/remotes/simplifiedxr2/standard/standardremote.jsp";
-String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
+String miniRemotePage = "/views/remotes/simplifiedxr2/mini/miniremote.jsp";
 String fullVideoUrl = videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
 String fullAudioUrlMP3Extension = audioUrl + "/play1.mp3";
@@ -100,9 +100,6 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
 
     </head>
     <body class="showBody" onresize="LayoutDelegator.draw()">
-
-        <!-- prompt divs -->
-
         <div id="loadComparisonPrompt" class="loadComparisonPrompt">
             <jsp:include page="/views/loadComparisonPrompt.jsp" />
         </div>
@@ -112,19 +109,28 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                 <jsp:include page="/views/bns-bar.jsp" />
             </div>
         <% } %>
+        <div id="toolbar" class="toolbar">
+            <jsp:include page="/views/componentToolbarSimplified.jsp" />
+        </div>
         <div id="menu" class="menuContainer solid">
         </div>
 
-        <div id="mainDiv" class="singleMainDiv" style="height: 100%;">
-            <div id="vmt" class="vmt" style="height: 90%;">
+        <div id="mainDiv" class="singleMainDiv" style="height: 100%">
+            <!-- Video, metadata, trace div -->
+            <div id="miniRemoteComp" class="miniRemoteComp" style="height: 0%;width: 0%">
+                <div id="remoteMini" class="remoteMini" >
+                    <jsp:include page="<%=miniRemotePage %>" />
+                </div>
+            </div>
+            <div id="vmt" class="vmt" style="height: 100%">
 
                 <!-- Video, metadata div -->
-                <div id="vm" class="vm" style="height: 100%; width=100%;">
-                    <div id="videoDiv" class="videoDiv" style="width: 100%;">
+                <div id="vm" class="vm" style="height: 100%; width: 100%;">
+                    <div id="videoDiv" class="videoDiv" style="height: 100%; width: 100%;">
                         <% if (hdVideoUrl != null) { %>
-                            <canvas id="video" class="video" style="height: 100%; width=100%;" data-videourl="<%=hdVideoUrl%>"></canvas>
+                            <canvas id="video" class="video" style="height: 100%; width: 100%;" data-videourl="<%=hdVideoUrl%>"></canvas>
                         <% } else { %>
-                            <img id="video" class="video" style="height: 100%; width=100%;"
+                            <img id="video" class="video" style="height: 100%; width: 100%;"
                                             src="<%= fullVideoUrl%>"
                                             alt=""></img>
                             <audio id="audio" autoplay>
@@ -133,40 +139,23 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                             </audio>
                             
                             <% if (!videoAvail)  {%>
-                                <canvas id="videoNotAvailableOverlay" class="videoNotAvailableOverlay"></canvas>
+                                <canvas id="videoNotAvailableOverlay" class="videoNotAvailableOverlay" style="height: 100%; width: 100%; position: initial;"></canvas>
                             <% } %>
                         <% } %>
                     </div>
                 </div>
             </div>
-            <div id="standardRemoteDiv" class="standardRemoteDiv" style="width: 20%">
-                <div id="remote" class="remoteContainer">
+            <div id="standardRemoteDiv" class="standardRemoteDiv">
+                <div id="remote" class="remoteContainer" style="width=90%;">
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>
+                <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
                 <% if (!irAvail)  {%>
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
                 <% } %>
             </div>
-            <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="top:20%;position:absolute"/>
+            
             <div id="hold_panel" class="hold_panel"></div>
-            <div id="hoverButtons" class="hoverButtons">
-                <div id="fpsPanel" class="fpsPanel">
-                    <div class="verticalAlign fpsButton pointerCursor">fps</div>
-                    <div id="fpsDiv" class="fpsDiv">
-                        <select class="fpsSelector"></select>
-                    </div>
-                </div>
-                <% if (irAvail) {%>
-                <div id="directTunePanel" class="directTunePanel">
-                    <div class="verticalAlign tuneButton pointerCursor">Tune</div>
-                    <div id="directTuneDiv" class="directTuneDiv">
-                        <input type="text" id="channelNumTextBox" class="channelNumTextBox"
-                                                                  name="channelNum" autofocus="autofocus"/>
-                        <img alt="tune" src="/dawg-show/images/go.png" title="Tune to channel" class="goButton">
-                    </div>
-                </div>
-                <% } %>
-            </div>
         </div>
 
         <script type="text/javascript">
@@ -179,24 +168,15 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                 <% } %>
                 <% if (!irAvail) { %>
             LayoutDelegator.addOverlay(new TextOverlay(document.getElementById('stdRemoteNotAvailableOverlay'), 'IR Unavailable'));
-            LayoutDelegator.addOverlay(new TextOverlay(document.getElementById('miniRemoteNotAvailableOverlay'), 'IR Unavailable'));
+ 
             <% } %>
 
-            SingleLayoutManager.draw();
-            toolbar.onclick(document.getElementById('videoBox'));
-            <% if (mobile) { %>
-            toolbar.onclick(document.getElementById('remoteMiniBox'));
-            <% } else { %>
-            toolbar.onclick(document.getElementById('traceBox'));
-            toolbar.onclick(document.getElementById('remoteStdBox'));
-            toolbar.onclick(document.getElementById('metadataBox'));
-            <% } %>
 
             DropDownMenu.bind($('#menu'), $('#menuBox'), $('#loadComparisonPrompt'), $('#faded'), '<%=deviceId%>');
             SerialManager.bind();
             VideoRenderer.bind($('#video'), '<%=deviceId%>');
             VideoRenderer.startVideo();
-            RemoteSelector.bind('.changeRemoteButton','singleView');
+
             RemoteSelector.show(${remoteTypes}, '<%= remoteName %>');
             <% if (irAvail)  {%>
             DirectTune.bind($('.tuneButton'),$('.directTuneDiv'));

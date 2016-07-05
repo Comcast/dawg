@@ -177,11 +177,11 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                     <img alt="remote" src="images/remote.png" title="Click to change the remote type" class="changeRemoteButton"><br>
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>
+                <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="width:10%;right:0%; top:10%; position:absolute"/>
                 <% if (!irAvail)  {%>
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
                 <% } %>
             </div>
-            <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="top:20%;position:absolute"/>
             <div id="hold_panel" class="hold_panel"></div>
             <div id="hoverButtons" class="hoverButtons">
                 <div id="fpsPanel" class="fpsPanel">
