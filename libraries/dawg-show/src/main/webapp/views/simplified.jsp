@@ -100,6 +100,12 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
 
     </head>
     <body class="showBody" onresize="LayoutDelegator.draw()">
+
+        <!-- prompt divs -->
+        <div id="faded" class="promptFade"></div>
+        <div id="powerPrompt" class="powerPrompt">
+            <jsp:include page="/views/powerPrompt.jsp" />
+        </div>
         <div id="loadComparisonPrompt" class="loadComparisonPrompt">
             <jsp:include page="/views/loadComparisonPrompt.jsp" />
         </div>
@@ -144,12 +150,15 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                         <% } %>
                     </div>
                 </div>
+                <div id="traceDiv" class="traceDiv" data-deviceId="<%=deviceId%>" data-tracehost="<%=traceHost %>">
+                    <jsp:include page="traceWindow.jsp" />
+                </div>
             </div>
             <div id="standardRemoteDiv" class="standardRemoteDiv">
                 <div id="remote" class="remoteContainer" style="width=90%;">
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>
-                <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' onmousedown="clickRemoteButton(event,'MUTE', true)" onmouseup="clickRemoteButton(event,'MUTE', false)"  alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
+                <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
                 <% if (!irAvail)  {%>
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
                 <% } %>
