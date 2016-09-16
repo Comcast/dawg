@@ -45,41 +45,7 @@ String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_RE
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Dawg Show</title>
 
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/stb.css" />'>
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/menu.css" />'>
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/keymap.css" />'>
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/trace.css" />'>
-
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
-        <script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
-        <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
-        <script type="text/javascript" src='<c:url value="/js/jquery.gracefulWebSocket.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/jquery.alphanum.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/image-util.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/Date.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/Logger.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/StandardRemote.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/keys.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/ComparisonPrompt.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/VideoSnapper.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/LayoutUtil.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/MultiLayoutManager.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/LayoutDelegator.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/MultiView.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/VideoRenderer.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/SerialManager.js" />'></script>
-        <script type="text/javascript" src="<c:url value="/js/MultiSave.js" />"></script>
-        <script type="text/javascript" src='<c:url value="/js/TextOverlay.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/power.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/jsmpg.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/directTune.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/validateInput.js" />'></script>
-        <script type="text/javascript" src="<c:url value="/js/MultiCheckboxSelector.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/js/HoverManager.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/js/GenericRemote.js" />"></script>
-        <script type="text/javascript" src='<c:url value="/js/FrameRateOperator.js" />'></script>
-        <!-- Populate javascript variables. Will set the remote to the correct remote for this stb -->
-        <jsp:include page="/views/globalVars.jsp" />
+        <jsp:include page="/views/head_scripts.jsp" />
 
     </head>
     <body class="showBody" onresize="MultiLayoutManager.draw();">

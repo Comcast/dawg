@@ -123,7 +123,7 @@ public class DawgHouseClient extends DawgClient implements IDawgHouseClient<Meta
             }
             return list;
         } catch (Exception e) {
-            throw new HttpRuntimeException();
+            throw new HttpRuntimeException(e);
         }
     }
 

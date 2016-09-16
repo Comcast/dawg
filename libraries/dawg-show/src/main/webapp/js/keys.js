@@ -137,9 +137,9 @@ function isBlinkAllowed(keyName) {
     var remoteType = StandardRemote.getRemoteName();
     var isBlinkingKey = non_blinking_key_pattern.test(keyName) ? false : true;
     var status = isBlinkingKey;
-    if ('BCM-7437-1' == remoteType) {
+    if ('BCM-7437-1' === remoteType || 'XR11' === remoteType) {
         status = true;
-    } else if ('GENERIC' == remoteType) {
+    } else if ('GENERIC' === remoteType) {
         status = false;
     }
     return status;

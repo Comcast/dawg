@@ -79,6 +79,7 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     public static final String ENVIRONMENT_ID        = "environmentId";
     public static final String HARDWARE_REVISION     = "hardwareRevision";
     public static final String AUDIOSOURCEURL        = "audioSourceUrl";
+    public static final String CATSKEYSETMAPPING     = "catsKeySetMapping";
 
     private Map<String, Object> data;
 
@@ -298,7 +299,7 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     public void setVideoSourceUrl(String videoSourceUrl) {
         data.put(MetaStb.VIDEOSOURCEURL, videoSourceUrl);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -307,11 +308,11 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     	return (String) data.get(AUDIOSOURCEURL);
 
     }
-    
+
     public void setAudioUrl(String audioSourceUrl){
     	data.put(MetaStb.AUDIOSOURCEURL, audioSourceUrl);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -372,6 +373,13 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
         data.put(MetaStb.REMOTETYPE, remoteType);
     }
 
+    public void setCatsKeySetMapping(String catsKeySetMapping) {
+        data.put(MetaStb.CATSKEYSETMAPPING, catsKeySetMapping);
+    }
+
+    public String getCatsKeySetMapping() {
+        return (String) data.get(MetaStb.CATSKEYSETMAPPING);
+    }
     @Override
     public String getBlasterType() {
         return (String) data.get(MetaStb.IRBLASTERTYPE);

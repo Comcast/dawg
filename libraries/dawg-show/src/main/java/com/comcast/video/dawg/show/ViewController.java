@@ -159,12 +159,6 @@ public class ViewController implements ViewConstants {
             mav.addObject(SUPPORTED, supported);
             mav.addObject(IPADDRESS, stb.getIpAddress().getHostName());
             mav.addObject(AUDIO_URL, audioUrl);
-
-            String modelName = null;
-            Model stbModel = stb.getModel();
-            if (null != stbModel) {
-                modelName = stbModel.toString();
-            }
         }
         return mav;
     }
@@ -225,8 +219,8 @@ public class ViewController implements ViewConstants {
     /**
      * Serves up the view that displays dawg-show for multiple stbs at one time
      * @param deviceIds The ids of the devices to display dawg-show for
-     * @param mobile true if the device type is mobile.
      * @param refresh true if the cache holding the devices should be cleared
+     * @param isGenericRemote true if using a generic remote
      * @param uaStr The user agents string defining what browser and system the user is using
      * @return
      */

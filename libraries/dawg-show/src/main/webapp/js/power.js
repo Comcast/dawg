@@ -69,3 +69,8 @@ function dismissPrompt() {
     $('#powerPrompt').hide();
     $('#faded').hide();
 }
+
+function sendPowerKey() {
+    dismissPrompt();
+    sendKey('POWER');
+}

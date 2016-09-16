@@ -58,6 +58,7 @@ public class IrClient extends DawgClient implements KeyInput {
     private String irHost;
     private String port;
     private String remoteType;
+    private String catsKeySetMapping;
 
     /**
      * Creates a client for the stb with the given metadata
@@ -70,7 +71,7 @@ public class IrClient extends DawgClient implements KeyInput {
         this.irHost = irMeta.getIrServiceUrl();
         this.port = irMeta.getIrServicePort();
         this.remoteType = irMeta.getRemoteType();
-
+        this.catsKeySetMapping = irMeta.getCatsKeySetMapping();
     }
 
     /**
@@ -114,7 +115,7 @@ public class IrClient extends DawgClient implements KeyInput {
     /**
      * Sends a single key
      * @param key The key to send
-     * @throws IRKeyException
+     * @throws KeyException
      */
     @Override
     public void pressKey(Key key) throws KeyException {
@@ -138,7 +139,7 @@ public class IrClient extends DawgClient implements KeyInput {
     /**
      * Sends multiple keys with a default delay between the keys of 700 ms
      * @param keys The list of keys to send
-     * @throws IRKeyException
+     * @throws KeyException
      */
     @Override
     public void pressKeys(Key... keys) throws KeyException {
@@ -149,7 +150,7 @@ public class IrClient extends DawgClient implements KeyInput {
      * Sends multiple keys with a given delay between the keys
      * @param delay The amount of time to wait between keys in milliseconds
      * @param keys The keys to send
-     * @throws IRKeyException
+     * @throws KeyException
      */
     @Override
     public void pressKeys(long delay, Key... keys) throws KeyException {
@@ -178,7 +179,7 @@ public class IrClient extends DawgClient implements KeyInput {
      * Holds a single key for a given amount of time
      * @param key The key to hold
      * @param holdTime The time in milliseconds to hold the key
-     * @throws IRKeyException
+     * @throws KeyException
      */
     @Override
     public void holdKey(Key key, long holdTime) throws KeyException {
@@ -198,7 +199,7 @@ public class IrClient extends DawgClient implements KeyInput {
      * Actually sends the request through a rest client
      * @param url
      * @param keyStr
-     * @throws IRKeyException
+     * @throws KeyException
      */
     private void executeRequest(URL url, String keyStr) throws KeyException {
         try {
@@ -219,10 +220,17 @@ public class IrClient extends DawgClient implements KeyInput {
         URL url = new URL(formCatsServerBaseUrl(catsHost));
         url.addPath(IR_SERVICE).addPath(REST);
         url.addPath(blasterType).addPath(irHost).addPath("" + port).addPath(op.name());
-        if(StringUtils.isEmpty(overRiddenRemoteType)) {
-            url.addQuery(KEY_SET, remoteType);
-        } else {
-            url.addQuery(KEY_SET, overRiddenRemoteType);
+
+        if (StringUtils.isEmpty(this.catsKeySetMapping)) {
+            if (StringUtils.isEmpty(overRiddenRemoteType)) {
+                url.addQuery(KEY_SET, remoteType);
+            }
+            else {
+                url.addQuery(KEY_SET, overRiddenRemoteType);
+            }
+        }
+        else {
+            url.addQuery(KEY_SET, this.catsKeySetMapping);
         }
 
         for (String k : params.keySet()) {

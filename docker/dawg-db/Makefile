@@ -4,6 +4,7 @@ all: build run
 QUIET=@
 
 NAME=dawg-db
+PORT=27017
 FULLNAME=comcast/dawg-db
 VERSION=latest
 _NAME_VERSION=$(FULLNAME):$(VERSION)
@@ -14,7 +15,7 @@ build:
 
 run:
 	@echo "Running $(_NAME_VERSION)"
-	$(QUIET)docker run -d --name=$(NAME) $(_NAME_VERSION)
+	$(QUIET)docker run -d -p $(PORT):27017 --name=$(NAME) $(_NAME_VERSION)
 
 stop:
 	$(QUIET)docker stop $(NAME)
