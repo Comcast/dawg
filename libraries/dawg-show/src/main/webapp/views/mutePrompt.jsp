@@ -31,6 +31,6 @@ Prompt for giving different options concerning mute to an stb
     </div>
     <div style="padding:30px;background-color:#dedbdb">
         <input style="font-size:17px" type="button" value="Send MUTE Key" onclick="sendMuteCommand()" />
-        <input style="font-size:17px" type="button" value="Mute Sound Stream" onclick="muteAudio()"/>
+        <input style="font-size:17px" type="button" value="Mute Browser" onclick="muteAudio()"/>
     </div>
 </html>
