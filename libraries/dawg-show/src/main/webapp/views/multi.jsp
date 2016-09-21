@@ -38,6 +38,7 @@ boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
 String stdRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/standard/standardremote.jsp";
 String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
 String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_REMOTE_KEYS);
+Boolean isXR11 = "XR11".equalsIgnoreCase(remoteName);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html style="height:100%;width:100%;">
@@ -52,7 +53,11 @@ String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_RE
 
         <!-- prompt divs -->
         <div id="faded" class="promptFade"></div>
+        <div id="mutePrompt" class="mutePrompt">
+            <jsp:include page="/views/mutePrompt.jsp" />
+        </div>
         <div id="powerPrompt" class="powerPrompt">
+            <c:set var="isXR11" value="<%= isXR11 %>" scope="request" />
             <jsp:include page="/views/powerPrompt.jsp" />
         </div>
         <div id="loadComparisonPrompt" class="loadComparisonPrompt">

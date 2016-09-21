@@ -50,6 +50,7 @@ String fullVideoUrl = videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
 String fullAudioUrlMP3Extension = audioUrl + "/play1.mp3";
 String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
+Boolean isXR11 = "XR11".equalsIgnoreCase(remoteName);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -70,7 +71,11 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
 
         <!-- prompt divs -->
         <div id="faded" class="promptFade"></div>
+        <div id="mutePrompt" class="mutePrompt">
+            <jsp:include page="/views/mutePrompt.jsp" />
+        </div>
         <div id="powerPrompt" class="powerPrompt">
+            <c:set var="isXR11" value="<%= isXR11 %>" scope="request" />
             <jsp:include page="/views/powerPrompt.jsp" />
         </div>
         <div id="loadComparisonPrompt" class="loadComparisonPrompt">
@@ -125,7 +130,7 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                             	<source src="<%=fullAudioUrlOGGExtension%>" type="audio/ogg">
   								<source src="<%=fullAudioUrlMP3Extension%>" type="audio/mpeg">
                             </audio>
-                            
+
                             <% if (!videoAvail)  {%>
                                 <canvas id="videoNotAvailableOverlay" class="videoNotAvailableOverlay"></canvas>
                             <% } %>
@@ -144,7 +149,9 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                     <img alt="remote" src="images/remote.png" title="Click to change the remote type" class="changeRemoteButton"><br>
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>
+                <% if (!isXR11) { %>
                 <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:10%; position:absolute"/>
+                <% } %>
                 <% if (!irAvail)  {%>
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
                 <% } %>
@@ -205,7 +212,7 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
             StandardRemote.bind('<%= remoteName %>');
             FrameRateOperator.bind($('.fpsButton'), $('.fpsDiv'), $('.fpsSelector'));
             HoverManager.bind([$('.directTunePanel'), $('.fpsPanel')]);
-            
+
             var audio = document.getElementById('audio');
             document.getElementById('mute').addEventListener('click', function (e)
             {
@@ -213,7 +220,7 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
             	audio.muted = !audio.muted;
             	e.preventDefault();
             },false);
-            
+
         </script>
     </body>
 </html>
