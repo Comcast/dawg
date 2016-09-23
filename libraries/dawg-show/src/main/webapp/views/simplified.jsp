@@ -71,10 +71,6 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
         <!-- prompt divs -->
         <div id="faded" class="promptFade"></div>
 
-        <div id="mutePrompt" class="mutePrompt">
-            <jsp:include page="/views/mutePrompt.jsp" />
-        </div>
-
         <div id="loadComparisonPrompt" class="loadComparisonPrompt">
             <jsp:include page="/views/loadComparisonPrompt.jsp" />
         </div>
@@ -108,10 +104,16 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                             <img id="video" class="video" style="height: 100%; width: 100%;"
                                             src="<%= fullVideoUrl%>"
                                             alt=""></img>
-                            <audio id="audio" autoplay>
-                            	<source src="<%=fullAudioUrlOGGExtension%>" type="audio/ogg">
-  								<source src="<%=fullAudioUrlMP3Extension%>" type="audio/mpeg">
-                            </audio>
+                            <% if (audioUrl != null) { %>
+                                <div id="mutePrompt" class="mutePrompt">
+                                    <jsp:include page="/views/mutePrompt.jsp" />
+                                </div>
+
+                                <audio id="audio" autoplay>
+                                    <source src="<%=fullAudioUrlOGGExtension%>" type="audio/ogg">
+                                    <source src="<%=fullAudioUrlMP3Extension%>" type="audio/mpeg">
+                                </audio>
+                            <% } %>
 
                             <% if (!videoAvail)  {%>
                                 <canvas id="videoNotAvailableOverlay" class="videoNotAvailableOverlay" style="height: 100%; width: 100%; position: initial;"></canvas>
@@ -128,7 +130,7 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>1
                 <% if (!remote.getMergeWebControls()) { %>
-                <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
+                    <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
                 <% } %>
                 <% if (!irAvail)  {%>
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
@@ -166,13 +168,15 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
             HoverManager.bind([$('.directTunePanel'), $('.fpsPanel')]);
 
             var audio = document.getElementById('audio');
-            document.getElementById('mute').addEventListener('click', function (e)
-            {
-            	e = e || window.event;
-            	audio.muted = !audio.muted;
-            	e.preventDefault();
-            },false);
-
+            var mute = document.getElementById('mute');
+            if (mute) {
+                mute.addEventListener('click', function (e)
+                {
+                    e = e || window.event;
+                    audio.muted = !audio.muted;
+                    e.preventDefault();
+                },false);
+            }
         </script>
     </body>
 </html>

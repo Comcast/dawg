@@ -18,8 +18,14 @@
  */
 function clickMute(image) {
     blink(image);
-    $('#mutePrompt').show();
-    $('#faded').show();
+    var mutePrompt = $('#mutePrompt');
+    if (!mutePrompt || mutePrompt.length === 0) {
+        sendMuteCommand();
+    }
+    else {
+        $('#mutePrompt').show();
+        $('#faded').show();
+    }
 }
 
 /**
