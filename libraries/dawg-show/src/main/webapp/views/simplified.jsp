@@ -50,7 +50,6 @@ String fullVideoUrl = videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
 String fullAudioUrlMP3Extension = audioUrl + "/play1.mp3";
 String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
-Boolean isXR11 = "XR11".equalsIgnoreCase(remoteName);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -71,11 +70,6 @@ Boolean isXR11 = "XR11".equalsIgnoreCase(remoteName);
 
         <!-- prompt divs -->
         <div id="faded" class="promptFade"></div>
-
-        <div id="powerPrompt" class="powerPrompt">
-            <c:set var="isXR11" value="<%= isXR11 %>" scope="request" />
-            <jsp:include page="/views/powerPrompt.jsp" />
-        </div>
 
         <div id="mutePrompt" class="mutePrompt">
             <jsp:include page="/views/mutePrompt.jsp" />
@@ -132,8 +126,8 @@ Boolean isXR11 = "XR11".equalsIgnoreCase(remoteName);
             <div id="standardRemoteDiv" class="standardRemoteDiv">
                 <div id="remote" class="remoteContainer" style="width=90%;">
                     <jsp:include page="<%=stdRemotePage %>" />
-                </div>
-                <% if (!isXR11) { %>
+                </div>1
+                <% if (!remote.getMergeWebControls()) { %>
                 <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
                 <% } %>
                 <% if (!irAvail)  {%>

@@ -29,6 +29,7 @@ public class Remote {
     private String name;
     private KeySet keySet;
     private Set<String> remoteTypes = new HashSet<String>();
+    private boolean mergeControls;
 
     /**
      * Constructor
@@ -60,6 +61,14 @@ public class Remote {
 
     public void setKeySet(KeySet keySet) {
         this.keySet = keySet;
+    }
+
+    public void setMergeWebControls (boolean mergeControls) {
+        this.mergeControls = mergeControls;
+    }
+
+    public boolean getMergeWebControls () {
+        return this.mergeControls;
     }
 
     public Set<String> getRemoteTypes() {

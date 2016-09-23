@@ -18,8 +18,14 @@
  */
 function clickPower(image) {
     blink(image);
-    $('#powerPrompt').show();
-    $('#faded').show();
+    var powerPrompt = $('#powerPrompt');
+    if (!powerPrompt || powerPrompt.length === 0) {
+        sendPowerKey();
+    }
+    else {
+        $('#powerPrompt').show();
+        $('#faded').show();
+    }
 }
 
 /**

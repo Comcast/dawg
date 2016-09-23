@@ -15,11 +15,17 @@
     limitations under the License.
 
 --%>
-<!--
-The mini remote image
--->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<%@page import="com.comcast.video.dawg.show.ViewConstants"%>
+<%@page import="com.comcast.video.dawg.show.key.Remote"%>
+<%
+Remote remote = (Remote) request.getAttribute(ViewConstants.REMOTE);
+remote.setMergeWebControls(true);
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html style="width:100%; height:100%">
     <script type="text/javascript">
