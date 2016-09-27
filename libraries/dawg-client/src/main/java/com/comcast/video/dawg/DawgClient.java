@@ -76,8 +76,8 @@ public abstract class DawgClient implements Closeable {
     /**
      * Actually sends the request through a rest client
      * @param url
-     * @param keyStr
-     * @throws IRKeyException
+     * @param method
+     * @throws HttpException
      */
     protected void executeRequest(URL url, Method method) throws HttpException {
         int timeout = getRestSocketTimeOut(url);

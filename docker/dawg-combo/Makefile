@@ -4,6 +4,7 @@ all: build run copy-dependencies
 QUIET ?= @
 
 NAME=dawg-combo
+PORT=8080
 FULLNAME=comcast/$(NAME)
 VERSION=latest
 _NAME_VERSION=$(FULLNAME):$(VERSION)
@@ -14,7 +15,7 @@ build: copy-dependencies
 
 run:
 	@echo "Running $(_NAME_VERSION)"
-	$(QUIET)docker run -d --name=$(NAME) --link=dawg-db:dawg-db $(_NAME_VERSION)
+	$(QUIET)docker run -d -p $(PORT):8080 --name=$(NAME) --link=dawg-db:dawg-db $(_NAME_VERSION)
 
 # $1 - directory/artifact name...eg: dawg-house
 rpm-location-builder =  $(addsuffix *.rpm,../../libraries/$(1)/target/rpm/$(1)/RPMS/noarch/)

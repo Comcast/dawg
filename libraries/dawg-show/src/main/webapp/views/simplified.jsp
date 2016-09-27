@@ -44,8 +44,8 @@ boolean traceAvail = (Boolean) request.getAttribute(ViewConstants.TRACE_AVAILABL
 boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
 String deviceId = (String) request.getAttribute(ViewConstants.DEVICE_ID);
 boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
-String stdRemotePage = "/views/remotes/simplifiedxr2/standard/standardremote.jsp";
-String miniRemotePage = "/views/remotes/simplifiedxr2/mini/miniremote.jsp";
+String stdRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/standard/standardremote.jsp";
+String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
 String fullVideoUrl = videoUrl + "/axis-cgi/mjpg/video.cgi"
 + (videoCamera != null ? "?camera=" + videoCamera : "");
 String fullAudioUrlMP3Extension = audioUrl + "/play1.mp3";
@@ -58,41 +58,8 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Dawg Show</title>
 
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/stb.css" />'>
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/menu.css" />'>
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/keymap.css" />'>
-        <link rel="stylesheet" type="text/css" href='<c:url value="/css/trace.css" />'>
+        <jsp:include page="/views/head_scripts.jsp" />
 
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
-        <script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
-        <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
-
-        <script type="text/javascript" src='<c:url value="/js/jquery.gracefulWebSocket.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/jquery.alphanum.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/image-util.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/RemoteSelector.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/Date.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/Logger.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/StandardRemote.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/keys.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/ComparisonPrompt.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/VideoSnapper.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/SingleLayoutManager.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/LayoutDelegator.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/LayoutUtil.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/TextOverlay.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/DropDownMenu.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/VideoRenderer.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/SerialManager.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/directTune.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/validateInput.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/power.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/jsmpg.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/FrameRateOperator.js" />'></script>
-        <script type="text/javascript" src='<c:url value="/js/HoverManager.js" />'></script>
-
-        <!-- Populate javascript variables. Will set the remote to the correct remote for this stb -->
-       <jsp:include page="/views/globalVars.jsp" />
        <jsp:include page="/views/remoteTypeSelector.jsp" />
        <script type="text/javascript">
            var deviceId = '<%=deviceId %>';
@@ -103,9 +70,7 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
 
         <!-- prompt divs -->
         <div id="faded" class="promptFade"></div>
-        <div id="powerPrompt" class="powerPrompt">
-            <jsp:include page="/views/powerPrompt.jsp" />
-        </div>
+
         <div id="loadComparisonPrompt" class="loadComparisonPrompt">
             <jsp:include page="/views/loadComparisonPrompt.jsp" />
         </div>
@@ -139,11 +104,17 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                             <img id="video" class="video" style="height: 100%; width: 100%;"
                                             src="<%= fullVideoUrl%>"
                                             alt=""></img>
-                            <audio id="audio" autoplay>
-                            	<source src="<%=fullAudioUrlOGGExtension%>" type="audio/ogg">
-  								<source src="<%=fullAudioUrlMP3Extension%>" type="audio/mpeg">
-                            </audio>
-                            
+                            <% if (audioUrl != null) { %>
+                                <div id="mutePrompt" class="mutePrompt">
+                                    <jsp:include page="/views/mutePrompt.jsp" />
+                                </div>
+
+                                <audio id="audio" autoplay>
+                                    <source src="<%=fullAudioUrlOGGExtension%>" type="audio/ogg">
+                                    <source src="<%=fullAudioUrlMP3Extension%>" type="audio/mpeg">
+                                </audio>
+                            <% } %>
+
                             <% if (!videoAvail)  {%>
                                 <canvas id="videoNotAvailableOverlay" class="videoNotAvailableOverlay" style="height: 100%; width: 100%; position: initial;"></canvas>
                             <% } %>
@@ -157,13 +128,15 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
             <div id="standardRemoteDiv" class="standardRemoteDiv">
                 <div id="remote" class="remoteContainer" style="width=90%;">
                     <jsp:include page="<%=stdRemotePage %>" />
-                </div>
-                <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
+                </div>1
+                <% if (!remote.getMergeWebControls()) { %>
+                    <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
+                <% } %>
                 <% if (!irAvail)  {%>
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
                 <% } %>
             </div>
-            
+
             <div id="hold_panel" class="hold_panel"></div>
         </div>
 
@@ -177,7 +150,7 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                 <% } %>
                 <% if (!irAvail) { %>
             LayoutDelegator.addOverlay(new TextOverlay(document.getElementById('stdRemoteNotAvailableOverlay'), 'IR Unavailable'));
- 
+
             <% } %>
 
 
@@ -193,15 +166,17 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
             StandardRemote.bind('<%= remoteName %>');
             FrameRateOperator.bind($('.fpsButton'), $('.fpsDiv'), $('.fpsSelector'));
             HoverManager.bind([$('.directTunePanel'), $('.fpsPanel')]);
-            
+
             var audio = document.getElementById('audio');
-            document.getElementById('mute').addEventListener('click', function (e)
-            {
-            	e = e || window.event;
-            	audio.muted = !audio.muted;
-            	e.preventDefault();
-            },false);
-            
+            var mute = document.getElementById('mute');
+            if (mute) {
+                mute.addEventListener('click', function (e)
+                {
+                    e = e || window.event;
+                    audio.muted = !audio.muted;
+                    e.preventDefault();
+                },false);
+            }
         </script>
     </body>
 </html>

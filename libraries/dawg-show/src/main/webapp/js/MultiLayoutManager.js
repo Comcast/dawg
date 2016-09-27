@@ -76,6 +76,7 @@ var MultiLayoutManager = (function() {
             videoHeight = canvas.height();
         });
         LayoutUtil.centerInParent($("#powerPrompt"));
+        LayoutUtil.centerInParent($("#mutePrompt"));
         VideoRenderer.setResolutions(videoWidth, videoHeight);
 
         for (var i = 0; i < mlm.overlays.length; i++) {

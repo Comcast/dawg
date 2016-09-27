@@ -19,37 +19,46 @@
  * @param img The image to blink
  */
 function blink(img) {
-    if(img !== undefined && img !== null) {
-        blinkRegion(img, 0, 0, img.width, img.height);
-    }
+    blinkRegion(img, 0, 0, img.width, img.height);
 }
 
 function blinkRegion(img, x, y, w, h) {
-
-    if(img !== undefined && img !== null) {
-        var canvasJ = $('<canvas/>');
-        var canvas = canvasJ[0];
-        canvas.width = img.width;
-        canvas.height = img.height;
-        canvas.left = img.left;
-        canvas.top = img.top;
-        var context = canvas.getContext('2d');
-        context.drawImage(img, 0, 0, canvas.width, canvas.height);
-        var imgd = context.getImageData(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
-        var pix = imgd.data;
-        for (var i = 0, n = pix.length; i < n; i += 4) {
-            pix[i  ] = 255 - pix[i  ]; // red
-            pix[i+1] = 255 - pix[i+1]; // green
-            pix[i+2] = 255 - pix[i+2]; // blue
-        }
-
-        canvasJ.css('top', $(img).css('top'));
-        canvasJ.css('left', $(img).css('left'));
-        canvasJ.css('position', $(img).css('position'));
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.putImageData(imgd, x, y);
-        $(img).parent().append(canvas);
-
-        setTimeout(function() {canvasJ.remove();}, 200);
+    if (!img) {
+        console.warn("'img' is either null or undefined");
+        return;
     }
+
+    if (img instanceof HTMLImageElement) {
+        blinkImage(img, x, y, w, h);
+    }
+    else {
+        console.warn("img is neither HTMLImageElement nor HTMLAreaElement");
+    }
+}
+
+function blinkImage(img, x, y, w, h) {
+    var canvasJ = $('<canvas/>');
+    var canvas = canvasJ[0];
+    canvas.width = img.width;
+    canvas.height = img.height;
+    canvas.left = img.left;
+    canvas.top = img.top;
+    var context = canvas.getContext('2d');
+    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    var imgd = context.getImageData(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
+    var pix = imgd.data;
+    for (var i = 0, n = pix.length; i < n; i += 4) {
+        pix[i  ] = 255 - pix[i  ]; // red
+        pix[i+1] = 255 - pix[i+1]; // green
+        pix[i+2] = 255 - pix[i+2]; // blue
+    }
+
+    canvasJ.css('top', $(img).css('top'));
+    canvasJ.css('left', $(img).css('left'));
+    canvasJ.css('position', $(img).css('position'));
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.putImageData(imgd, x, y);
+    $(img).parent().append(canvas);
+
+    setTimeout(function() {canvasJ.remove();}, 200);
 }

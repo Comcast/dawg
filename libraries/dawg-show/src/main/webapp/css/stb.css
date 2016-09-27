@@ -63,6 +63,16 @@
 	border: black solid 2px;
 }
 
+.mutePrompt {
+	position: fixed;
+	left: 25%;
+	top: 50%;
+	text-align: center;
+	z-index: 401;
+	display: none;
+	border: black solid 2px;
+}
+
 .mainDiv {
 	height: 95%;
 	width: 100%;
@@ -134,7 +144,7 @@
 }
 
 .showSkipFwd {
-	display: block !important; 
+	display: block !important;
 }
 
 .resizeMotorolaPauseButton {
@@ -373,7 +383,7 @@ a.skeyMapHelp {
 	visibility: visible !important;
 	cursor:auto!important;
 	background-color:#CFCFCF!important;
-	border:none!important;	
+	border:none!important;
 }
 
 img.skeyHelp {

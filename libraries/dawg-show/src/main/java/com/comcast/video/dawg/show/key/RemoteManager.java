@@ -63,7 +63,7 @@ public class RemoteManager {
      */
     public void loadRemotes() throws IOException {
         InputStream is = null;
-        
+
         try {
             is = this.getClass().getResourceAsStream(REMOTES_FILE);
             loadRemotes(is);
@@ -71,14 +71,14 @@ public class RemoteManager {
             IOUtils.closeQuietly(is);
         }
     }
-    
+
     /**
      * Loads the keysets from keysets.txt
      * @throws IOException
      */
     public void loadKeySets() throws IOException {
         InputStream is = null;
-        
+
         try {
             is = this.getClass().getResourceAsStream(KEY_SETS_FILE);
             loadKeySets(is);
@@ -86,7 +86,7 @@ public class RemoteManager {
             IOUtils.closeQuietly(is);
         }
     }
-    
+
     /**
      * Loads the remotes from an input stream. The structure of the file is:
      * REMOTE_NAME1|KEYSET1,KEYSET2|REMOTETYPE1,REMOTETYPE2
@@ -105,28 +105,31 @@ public class RemoteManager {
         }
         String line = reader.readLine();
         while (line != null) {
-            String[] parts = line.split("\\|");
-            if (parts.length != 3) {
-                throw new RuntimeException("Invalid remotes file, must be NAME|KEYSET1,KEYSET2|REMOTETYPE1,REMOTETYPE2");
-            }
-            String name = parts[0];
-            String[] keySets = parts[1].split(",");
-            String[] remoteTypes = parts[2].split(",");
-            KeySet keySet = new KeySet("");
-            for (String ks : keySets) {
-                KeySet newKs = keysets.get(ks);
-                if (newKs == null) {
-                    throw new RuntimeException("No keyset named : " + ks);
-                }
-                keySet.union(newKs);
-            }
-            Remote remote = new Remote(name);
-            remote.setKeySet(keySet);
-            for (String type : remoteTypes) {
-                remote.addRemoteType(type);
-            }
-            remotes.put(name, remote);
+            // skip all lines that start with a '#'
+            if (!line.trim().startsWith("#")) {
 
+                String[] parts = line.split("\\|");
+                if (parts.length != 3) {
+                    throw new RuntimeException("Invalid remotes file, must be NAME|KEYSET1,KEYSET2|REMOTETYPE1,REMOTETYPE2");
+                }
+                String name = parts[0];
+                String[] keySets = parts[1].split(",");
+                String[] remoteTypes = parts[2].split(",");
+                KeySet keySet = new KeySet("");
+                for (String ks : keySets) {
+                    KeySet newKs = keysets.get(ks);
+                    if (newKs == null) {
+                        throw new RuntimeException("No keyset named : " + ks);
+                    }
+                    keySet.union(newKs);
+                }
+                Remote remote = new Remote(name);
+                remote.setKeySet(keySet);
+                for (String type : remoteTypes) {
+                    remote.addRemoteType(type);
+                }
+                remotes.put(name, remote);
+            }
             line = reader.readLine();
         }
     }

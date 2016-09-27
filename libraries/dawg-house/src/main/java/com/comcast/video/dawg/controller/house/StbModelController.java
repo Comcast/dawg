@@ -108,7 +108,7 @@ public class StbModelController {
 
     /**
      * REST api to delete a model
-     * @param modelName The name of the model to delete
+     * @param id The id of the model to delete
      * @return
      */
     @RequestMapping(value="models/{id}", method=RequestMethod.DELETE)

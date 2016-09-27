@@ -50,4 +50,10 @@ public interface IrMeta {
      * @return
      */
     String getRemoteType();
+
+    /**
+     * The type of cats keyset to use. e.g. XR2
+     * @return
+     */
+    String getCatsKeySetMapping();
 }
