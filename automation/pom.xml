@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.comcast.video.dawg</groupId>
+        <artifactId>dawg</artifactId>
+        <version>2.0.2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>dawg-automation</artifactId>
+    <version>2.0.2-SNAPSHOT</version>
+    <name>(${project.organization.name}) ${project.artifactId}</name>
+
+    <properties>
+        <rpm.name>${project.artifactId}</rpm.name>
+        <automationRoot>/etc/puppet/modules/dawg</automationRoot>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-rpm</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached-rpm</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <defaultDirmode>755</defaultDirmode>
+                    <defaultFilemode>644</defaultFilemode>
+                    <group>Comcast</group>
+                    <copyright>Comcast 2016</copyright>
+                    <autoRequires>false</autoRequires>
+                    <autoProvides>false</autoProvides>
+                    <defaultUsername>puppet</defaultUsername>
+                    <defaultGroupname>puppet</defaultGroupname>
+                    <prefix>/var</prefix>
+                    <mappings>
+                        <mapping>
+                            <directory>${automationRoot}</directory>
+                            <sources>
+                                <source>
+                                    <location>${project.build.directory}/classes/puppet</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                    </mappings>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
