@@ -9,6 +9,7 @@
 
     <groupId>com.comcast.video</groupId>
     <artifactId>stb-io-api</artifactId>
+    <version>2.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>(Comcast) ${project.artifactId}</name>
