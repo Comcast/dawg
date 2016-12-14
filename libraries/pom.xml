@@ -15,6 +15,7 @@
     <description>DAWG library</description>
 
     <modules>
+        <module>dawg-config</module>
         <module>dawg-common</module>
         <module>dawg-server-common</module>
         <module>dawg-client</module>
