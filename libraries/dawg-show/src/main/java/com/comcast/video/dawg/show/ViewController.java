@@ -284,11 +284,11 @@ public class ViewController implements ViewConstants {
         Map<String, Map<String, String>> urls = new HashMap<>();
         for (MetaStb stb : stbs) {
             Map<String, String> stbUrls = new HashMap<>();
-            stbUrls.put("video", getVideoUrl(stb));
-            stbUrls.put("audio", getAudioUrl(stb));
+            stbUrls.put(STB_URLS_VIDEO, getVideoUrl(stb));
+            stbUrls.put(STB_URLS_AUDIO, getAudioUrl(stb));
             urls.put(stb.getId(), stbUrls);
         }
-        mav.addObject("urls", urls);
+        mav.addObject(STB_URLS, urls);
 
         /* Map containing remote types with corresponding count */
         Map<String, Integer> allUsedRemoteCounts = getAllUsedRemotes(stbs);
