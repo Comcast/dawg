@@ -161,7 +161,7 @@ public class ViewController implements ViewConstants {
         return mav;
     }
 
-    public String getAudioUrl(final MetaStb meta) {
+    private String getAudioUrl(final MetaStb meta) {
         boolean enabled = meta.getRackProxyEnabled();
         String url = enabled ? meta.getRackProxyUrl() : meta.getAudioUrl();
         url =  (null == url || "".equals(url.trim())) ? "" : url.trim();
