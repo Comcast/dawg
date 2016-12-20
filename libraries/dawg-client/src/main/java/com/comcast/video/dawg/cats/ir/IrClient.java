@@ -18,6 +18,7 @@ package com.comcast.video.dawg.cats.ir;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.comcast.video.dawg.common.MetaStb;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -59,6 +60,7 @@ public class IrClient extends DawgClient implements KeyInput {
     private String port;
     private String remoteType;
     private String catsKeySetMapping;
+    private boolean proxyEnabled;
 
     /**
      * Creates a client for the stb with the given metadata
@@ -66,7 +68,10 @@ public class IrClient extends DawgClient implements KeyInput {
      */
     public IrClient(IrMeta irMeta) {
         Validate.notNull(irMeta);
-        this.catsHost = irMeta.getCatsServerHost();
+        MetaStb stb = (MetaStb) irMeta;
+        this.proxyEnabled = stb.getRackProxyEnabled();
+        String rackProxyUrl = stb.getRackProxyUrl();
+        this.catsHost = this.proxyEnabled && null != rackProxyUrl ? stb.getRackProxyUrl() + "/ir/" + stb.getId() : irMeta.getCatsServerHost();
         this.blasterType = getIrBlasterType(irMeta);
         this.irHost = irMeta.getIrServiceUrl();
         this.port = irMeta.getIrServicePort();
@@ -218,8 +223,11 @@ public class IrClient extends DawgClient implements KeyInput {
      */
     private URL formKeyUrl(IrOperation op, Map<String, Object> params, String overRiddenRemoteType) {
         URL url = new URL(formCatsServerBaseUrl(catsHost));
-        url.addPath(IR_SERVICE).addPath(REST);
-        url.addPath(blasterType).addPath(irHost).addPath("" + port).addPath(op.name());
+        if (!this.proxyEnabled) {
+            url.addPath(IR_SERVICE).addPath(REST);
+            url.addPath(blasterType).addPath(irHost).addPath("" + port);
+        }
+        url.addPath(op.name());
 
         if (StringUtils.isEmpty(this.catsKeySetMapping)) {
             if (StringUtils.isEmpty(overRiddenRemoteType)) {

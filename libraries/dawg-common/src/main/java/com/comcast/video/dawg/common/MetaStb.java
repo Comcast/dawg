@@ -80,6 +80,8 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     public static final String HARDWARE_REVISION     = "hardwareRevision";
     public static final String AUDIOSOURCEURL        = "audioSourceUrl";
     public static final String CATSKEYSETMAPPING     = "catsKeySetMapping";
+    public static final String RACK_PROXY_URL        = "rackProxyUrl";
+    public static final String RACK_PROXY_ENABLED    = "rackProxyEnabled";
 
     private Map<String, Object> data;
 
@@ -537,6 +539,38 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
      */
     public void setRackName(String rackName){
         data.put(MetaStb.RACK_NAME, rackName);
+    }
+
+    /**
+     * Get url of ack proxy
+     * @return url of rack proxy
+     */
+    public String getRackProxyUrl() {
+        return (String) data.get(MetaStb.RACK_PROXY_URL);
+    }
+
+    /**
+     * Sets url of rack proxy
+     * @param rackProxyUrl url of rack proxy
+     */
+    public void setRackProxyUrl(String rackProxyUrl) {
+        data.put(MetaStb.RACK_PROXY_URL, rackProxyUrl);
+    }
+
+    /**
+     * Get whether or not rack proxy is enabled
+     * @return True if enabled; False otherwise
+     */
+    public Boolean getRackProxyEnabled() {
+        return Boolean.parseBoolean((String) data.get(MetaStb.RACK_PROXY_ENABLED));
+    }
+
+    /**
+     * Sets whether or not rack proxy is enabled
+     * @param rackProxyEnabled True if enabled; False otherwise
+     */
+    public void setRackProxyUrl(Boolean rackProxyEnabled) {
+        data.put(MetaStb.RACK_PROXY_ENABLED, rackProxyEnabled);
     }
 
     /**
