@@ -71,7 +71,7 @@
         <version.logback>1.1.2</version.logback>
         <version.testng>6.5.2</version.testng>
         <version.easymock>3.1</version.easymock>
-        <version.javax.servlet>2.5</version.javax.servlet>
+        <version.javax.servlet>3.0.1</version.javax.servlet>
         <version.javax.jsp-api>2.1</version.javax.jsp-api>
         <version.javax.inject>1</version.javax.inject>
         <version.jstl>1.2</version.jstl>
@@ -339,8 +339,9 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
             <version>${version.javax.servlet}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -426,6 +427,10 @@
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>
                     <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
