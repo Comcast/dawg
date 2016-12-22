@@ -71,7 +71,7 @@
         <version.logback>1.1.2</version.logback>
         <version.testng>6.5.2</version.testng>
         <version.easymock>3.1</version.easymock>
-        <version.javax.servlet>2.5</version.javax.servlet>
+        <version.javax.servlet>3.0.1</version.javax.servlet>
         <version.javax.jsp-api>2.1</version.javax.jsp-api>
         <version.javax.inject>1</version.javax.inject>
         <version.jstl>1.2</version.jstl>
@@ -91,13 +91,6 @@
         <version.useragentutils>1.18</version.useragentutils>
         <version.jetty-all>7.6.7.v20120910</version.jetty-all>
         <version.reflections>0.9.9-RC2</version.reflections>
-
-        <!-- Dawg Dependencies -->
-        <version.project>2.0.2-SNAPSHOT</version.project>
-        <version.dawg-client>${version.project}</version.dawg-client>
-        <version.dawg-common>${version.project}</version.dawg-common>
-        <version.dawg-server-common>${version.project}</version.dawg-server-common>
-        <version.stb-io-api>${version.project}</version.stb-io-api>
 
         <!-- Github Info -->
         <git.url>github.com</git.url>
@@ -252,6 +245,7 @@
             </activation>
             <modules>
                 <module>libraries</module>
+                <module>automation</module>
             </modules>
         </profile>
         <profile>
@@ -345,8 +339,9 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
             <version>${version.javax.servlet}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -433,6 +428,10 @@
                     <groupId>ch.qos.logback</groupId>
                     <artifactId>logback-classic</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -515,28 +514,6 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
                 <version>${version.apache.http}</version>
-            </dependency>
-
-            <!-- Dawg components -->
-            <dependency>
-                <groupId>com.comcast.video.dawg</groupId>
-                <artifactId>dawg-client</artifactId>
-                <version>${version.dawg-client}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.comcast.video.dawg</groupId>
-                <artifactId>dawg-common</artifactId>
-                <version>${version.dawg-common}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.comcast.video.dawg</groupId>
-                <artifactId>dawg-server-common</artifactId>
-                <version>${version.dawg-server-common}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.comcast.video</groupId>
-                <artifactId>stb-io-api</artifactId>
-                <version>${version.stb-io-api}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
