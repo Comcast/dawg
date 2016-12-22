@@ -42,7 +42,6 @@ import com.comcast.video.dawg.show.key.Remote;
 import com.comcast.video.dawg.show.key.RemoteManager;
 import com.comcast.video.dawg.show.video.VideoSnap;
 import com.comcast.video.dawg.util.DawgUtil;
-import com.comcast.video.stbio.meta.Model;
 
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -117,8 +116,8 @@ public class ViewController implements ViewConstants {
             mav.addObject(DEVICE_ID, deviceId);
         } else {
             boolean supported = BrowserSupport.isBrowserSupported(uaStr);
-            String videoUrl = prependMissingProtocol(stb.getVideoSourceUrl(), "http://");
-            String audioUrl = prependMissingProtocol(stb.getAudioUrl(), "http://");
+            String videoUrl = getVideoUrl(stb);
+            String audioUrl = getAudioUrl(stb);
 
             Boolean mob = false;
 
@@ -150,7 +149,6 @@ public class ViewController implements ViewConstants {
             mav.addObject(SELECTED_REMOTE_TYPE, remoteType);
             mav.addObject(MOBILE, mob);
             mav.addObject(VIDEO_URL, videoUrl);
-            mav.addObject(VIDEO_CAMERA, stb.getVideoCamera());
             mav.addObject(VIDEO_AVAILABLE, validUrl(videoUrl) || validUrl(stb.getHdVideoUrl()));
             mav.addObject(HD_VIDEO_URL, stb.getHdVideoUrl());
             mav.addObject(TRACE_AVAILABLE, validUrl(stb.getSerialHost()));
@@ -163,6 +161,33 @@ public class ViewController implements ViewConstants {
         return mav;
     }
 
+    private String getAudioUrl(MetaStb meta) {
+        boolean enabled = meta.getRackProxyEnabled();
+        String url = enabled ? meta.getRackProxyUrl() : meta.getAudioUrl();
+        url = prependMissingProtocol(url, "http://");
+
+        if (enabled && !"".equals(url)) {
+            return url + "/audio/" + meta.getId();
+        }
+
+        return url + "/play1";
+
+    }
+
+    private String getVideoUrl(MetaStb meta) {
+        boolean enabled = meta.getRackProxyEnabled();
+        String url = enabled ? meta.getRackProxyUrl() : meta.getVideoSourceUrl();
+        url = prependMissingProtocol(url, "http://");
+
+        if (enabled && !"".equals(url)) {
+            return url + "/video/" + meta.getId();
+        }
+
+        String camera = meta.getVideoCamera();
+        String path = "/axis-cgi/mjpg/video.cgi" + (null == camera ? "" : "?camera=" + camera);
+        return url + path;
+    }
+
     /**
      * Check to see if the url has http:// or https:// as the protocol.  If not specifies, use the default
      *
@@ -172,12 +197,12 @@ public class ViewController implements ViewConstants {
     private String prependMissingProtocol(String url, String defaultProtocol) {
         String rv = url;
         if (    null != url
-             && !(    url.startsWith("http://")
-                   || url.startsWith("https://")))
+             && !(    url.toLowerCase().startsWith("http://")
+                   || url.toLowerCase().startsWith("https://")))
        {
            rv = defaultProtocol + url;
        }
-        return rv;
+        return rv != null && rv.endsWith("/") ? rv.substring(0, rv.length() - 1) : rv;
     }
 
     /**
@@ -250,6 +275,14 @@ public class ViewController implements ViewConstants {
 
         ModelAndView mav = new ModelAndView(MULTI);
         mav.addObject(STBS, stbs);
+        Map<String, Map<String, String>> urls = new HashMap<>();
+        for (MetaStb stb : stbs) {
+            Map<String, String> stbUrls = new HashMap<>();
+            stbUrls.put(STB_URLS_VIDEO, getVideoUrl(stb));
+            stbUrls.put(STB_URLS_AUDIO, getAudioUrl(stb));
+            urls.put(stb.getId(), stbUrls);
+        }
+        mav.addObject(STB_URLS, urls);
 
         /* Map containing remote types with corresponding count */
         Map<String, Integer> allUsedRemoteCounts = getAllUsedRemotes(stbs);

@@ -20,7 +20,7 @@ package com.comcast.video.stbio.meta;
  * @author Kevin Pearson
  *
  */
-public interface IrMeta {
+public interface IrMeta extends ProxyMeta {
     /**
      * The server that forwards to the actual services
      * @return

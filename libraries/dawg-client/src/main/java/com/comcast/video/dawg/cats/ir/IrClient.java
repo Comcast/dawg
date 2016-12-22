@@ -59,6 +59,7 @@ public class IrClient extends DawgClient implements KeyInput {
     private String port;
     private String remoteType;
     private String catsKeySetMapping;
+    private boolean proxyEnabled;
 
     /**
      * Creates a client for the stb with the given metadata
@@ -66,7 +67,9 @@ public class IrClient extends DawgClient implements KeyInput {
      */
     public IrClient(IrMeta irMeta) {
         Validate.notNull(irMeta);
-        this.catsHost = irMeta.getCatsServerHost();
+        this.proxyEnabled = irMeta.getRackProxyEnabled();
+        String rackProxyUrl = irMeta.getRackProxyUrl();
+        this.catsHost = this.proxyEnabled && null != rackProxyUrl ? irMeta.getRackProxyUrl() + "/ir/" + irMeta.getId() : irMeta.getCatsServerHost();
         this.blasterType = getIrBlasterType(irMeta);
         this.irHost = irMeta.getIrServiceUrl();
         this.port = irMeta.getIrServicePort();
@@ -218,8 +221,11 @@ public class IrClient extends DawgClient implements KeyInput {
      */
     private URL formKeyUrl(IrOperation op, Map<String, Object> params, String overRiddenRemoteType) {
         URL url = new URL(formCatsServerBaseUrl(catsHost));
-        url.addPath(IR_SERVICE).addPath(REST);
-        url.addPath(blasterType).addPath(irHost).addPath("" + port).addPath(op.name());
+        if (!this.proxyEnabled) {
+            url.addPath(IR_SERVICE).addPath(REST);
+            url.addPath(blasterType).addPath(irHost).addPath("" + port);
+        }
+        url.addPath(op.name());
 
         if (StringUtils.isEmpty(this.catsKeySetMapping)) {
             if (StringUtils.isEmpty(overRiddenRemoteType)) {

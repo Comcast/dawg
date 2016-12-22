@@ -21,36 +21,15 @@ The main page for viewing the stb metadata, trace, remote, and video.
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-<%@page import="com.comcast.video.dawg.common.MetaStb"%>
 <%@page import="com.comcast.video.stbio.Key"%>
 <%@page import="com.comcast.video.dawg.show.ViewConstants"%>
-<%@page import="com.comcast.video.dawg.show.key.Remote"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page isELIgnored="false" %>
 
-<%
-Remote remote = (Remote) request.getAttribute(ViewConstants.REMOTE);
-Boolean mobile = (Boolean) request.getAttribute(ViewConstants.MOBILE);
-MetaStb stb = (MetaStb) request.getAttribute(ViewConstants.STB_PARAM);
-String remoteName = (String) request.getAttribute(ViewConstants.SELECTED_REMOTE_TYPE);
-String traceHost = (String) request.getAttribute(ViewConstants.TRACE_HOST);
-String videoUrl = (String) request.getAttribute(ViewConstants.VIDEO_URL);
-String videoCamera = (String) request.getAttribute(ViewConstants.VIDEO_CAMERA);
-String hdVideoUrl = (String) request.getAttribute(ViewConstants.HD_VIDEO_URL);
-String audioUrl = (String) request.getAttribute(ViewConstants.AUDIO_URL);
-boolean videoAvail = (Boolean) request.getAttribute(ViewConstants.VIDEO_AVAILABLE);
-boolean traceAvail = (Boolean) request.getAttribute(ViewConstants.TRACE_AVAILABLE);
-boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
-String deviceId = (String) request.getAttribute(ViewConstants.DEVICE_ID);
-boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
-String stdRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/standard/standardremote.jsp";
-String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
-String fullVideoUrl = videoUrl + "/axis-cgi/mjpg/video.cgi"
-+ (videoCamera != null ? "?camera=" + videoCamera : "");
-String fullAudioUrlMP3Extension = audioUrl + "/play1.mp3";
-String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
-%>
+<%@include file="/views/stb_vars.jsp" %>
+
+<c:set var="deviceId" value="${stb.id}" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html style="height:100%;width:100%;">
@@ -62,7 +41,7 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
 
        <jsp:include page="/views/remoteTypeSelector.jsp" />
        <script type="text/javascript">
-           var deviceId = '<%=deviceId %>';
+           var deviceId = '${deviceId}';
        </script>
 
     </head>
@@ -75,11 +54,11 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
             <jsp:include page="/views/loadComparisonPrompt.jsp" />
         </div>
 
-        <% if (!supported)  { %>
+        <c:if test="${!supported}">
             <div id="notsupported">
                 <jsp:include page="/views/bns-bar.jsp" />
             </div>
-        <% } %>
+        </c:if>
         <div id="toolbar" class="toolbar">
             <jsp:include page="/views/componentToolbarSimplified.jsp" />
         </div>
@@ -98,30 +77,33 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                 <!-- Video, metadata div -->
                 <div id="vm" class="vm" style="height: 100%; width: 100%;">
                     <div id="videoDiv" class="videoDiv" style="height: 100%; width: 100%;">
-                        <% if (hdVideoUrl != null) { %>
-                            <canvas id="video" class="video" style="height: 100%; width: 100%;" data-videourl="<%=hdVideoUrl%>"></canvas>
-                        <% } else { %>
+                        <c:choose>
+                        <c:when test="${hdVideoUrl != null}">
+                            <canvas id="video" class="video" style="height: 100%; width: 100%;" data-videourl="${hdVideoUrl}"></canvas>
+                        </c:when>
+                        <c:otherwise>
                             <img id="video" class="video" style="height: 100%; width: 100%;"
-                                            src="<%= fullVideoUrl%>"
+                                            src="${videoUrl}"
                                             alt=""></img>
-                            <% if (audioUrl != null) { %>
+                            <c:if test="${audioUrl != null}" >
                                 <div id="mutePrompt" class="mutePrompt">
                                     <jsp:include page="/views/mutePrompt.jsp" />
                                 </div>
 
                                 <audio id="audio" autoplay>
-                                    <source src="<%=fullAudioUrlOGGExtension%>" type="audio/ogg">
-                                    <source src="<%=fullAudioUrlMP3Extension%>" type="audio/mpeg">
+                                    <source src="${audioUrl}.ogg" type="audio/ogg">
+                                    <source src="${audioUrl}.mp3" type="audio/mpeg">
                                 </audio>
-                            <% } %>
+                            </c:if>
 
-                            <% if (!videoAvail)  {%>
+                            <c:if test="${!videoAvailable}" >
                                 <canvas id="videoNotAvailableOverlay" class="videoNotAvailableOverlay" style="height: 100%; width: 100%; position: initial;"></canvas>
-                            <% } %>
-                        <% } %>
+                            </c:if>
+                        </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
-                <div id="traceDiv" class="traceDiv" data-deviceId="<%=deviceId%>" data-tracehost="<%=traceHost %>">
+                <div id="traceDiv" class="traceDiv" data-deviceId="${deviceId}" data-tracehost="${traceHost}">
                     <jsp:include page="traceWindow.jsp" />
                 </div>
             </div>
@@ -129,12 +111,12 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
                 <div id="remote" class="remoteContainer" style="width=90%;">
                     <jsp:include page="<%=stdRemotePage %>" />
                 </div>1
-                <% if (!remote.getMergeWebControls()) { %>
+                <% if (!remote.getMergeWebControls()) {%>
                     <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
                 <% } %>
-                <% if (!irAvail)  {%>
+                <c:if test="${!irAvailable}">
                     <canvas id="stdRemoteNotAvailableOverlay" class="stdRemoteNotAvailableOverlay"></canvas>
-                <% } %>
+                </c:if>
             </div>
 
             <div id="hold_panel" class="hold_panel"></div>
@@ -144,26 +126,23 @@ String fullAudioUrlOGGExtension = audioUrl + "/play1.ogg";
             LayoutDelegator.bind(SingleLayoutManager);
             toolbar.handler = SingleLayoutManager;
             hw.callback = SingleLayoutManager;
-            <% if (!videoAvail) { %>
+            <c:if test="${!videoAvailable}">
             LayoutDelegator.addOverlay(new TextOverlay(document.getElementById('videoNotAvailableOverlay'), 'Video Unavailable'));
-            <% } else {%>
-                <% } %>
-                <% if (!irAvail) { %>
+            </c:if>
+            <c:if test="${!irAvailable}">
             LayoutDelegator.addOverlay(new TextOverlay(document.getElementById('stdRemoteNotAvailableOverlay'), 'IR Unavailable'));
+            </c:if>
 
-            <% } %>
-
-
-            DropDownMenu.bind($('#menu'), $('#menuBox'), $('#loadComparisonPrompt'), $('#faded'), '<%=deviceId%>');
+            DropDownMenu.bind($('#menu'), $('#menuBox'), $('#loadComparisonPrompt'), $('#faded'), '${deviceId}');
             SerialManager.bind();
-            VideoRenderer.bind($('#video'), '<%=deviceId%>');
+            VideoRenderer.bind($('#video'), '${deviceId}');
             VideoRenderer.startVideo();
 
-            RemoteSelector.show(${remoteTypes}, '<%= remoteName %>');
-            <% if (irAvail)  {%>
+            RemoteSelector.show(${remoteTypes}, '${remoteName}');
+            <c:if test="${!irAvailable}">
             DirectTune.bind($('.tuneButton'),$('.directTuneDiv'));
-            <% } %>
-            StandardRemote.bind('<%= remoteName %>');
+            </c:if>
+            StandardRemote.bind('${remoteName}');
             FrameRateOperator.bind($('.fpsButton'), $('.fpsDiv'), $('.fpsSelector'));
             HoverManager.bind([$('.directTunePanel'), $('.fpsPanel')]);
 
