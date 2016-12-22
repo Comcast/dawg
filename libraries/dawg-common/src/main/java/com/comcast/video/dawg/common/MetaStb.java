@@ -80,6 +80,8 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     public static final String HARDWARE_REVISION     = "hardwareRevision";
     public static final String AUDIOSOURCEURL        = "audioSourceUrl";
     public static final String CATSKEYSETMAPPING     = "catsKeySetMapping";
+    public static final String RACK_PROXY_URL        = "rackProxyUrl";
+    public static final String RACK_PROXY_ENABLED    = "rackProxyEnabled";
 
     private Map<String, Object> data;
 
@@ -537,6 +539,34 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
      */
     public void setRackName(String rackName){
         data.put(MetaStb.RACK_NAME, rackName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getRackProxyUrl() {
+        return (String) data.get(MetaStb.RACK_PROXY_URL);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setRackProxyUrl(String rackProxyUrl) {
+        data.put(MetaStb.RACK_PROXY_URL, rackProxyUrl);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Boolean getRackProxyEnabled() {
+        return Boolean.parseBoolean((String) data.get(MetaStb.RACK_PROXY_ENABLED));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setRackProxyUrl(Boolean rackProxyEnabled) {
+        data.put(MetaStb.RACK_PROXY_ENABLED, rackProxyEnabled);
     }
 
     /**

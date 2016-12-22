@@ -39,6 +39,7 @@ public class PowerClient extends DawgClient implements PowerInput, PowerOutput {
     private String powerHost;
     private String outlet;
     private String powerType;
+    private boolean rackProxyEnabled;
 
     /**
      * Creates a client for the stb with the given metadata
@@ -47,7 +48,9 @@ public class PowerClient extends DawgClient implements PowerInput, PowerOutput {
      */
     public PowerClient(MetaStb stb) {
         Validate.notNull(stb);
-        this.catsHost = stb.getCatsServerHost();
+        this.rackProxyEnabled = stb.getRackProxyEnabled();
+        String rackProxyUrl = stb.getRackProxyUrl();
+        this.catsHost = this.rackProxyEnabled && null != rackProxyUrl ? rackProxyUrl + "/power/" + stb.getId() : stb.getCatsServerHost();
         this.powerHost = stb.getPowerServiceUrl();
         this.outlet = stb.getPowerOutlet();
         this.powerType = stb.getPowerType();
@@ -124,8 +127,11 @@ public class PowerClient extends DawgClient implements PowerInput, PowerOutput {
      */
     private URL formPowerUrl(PowerOperation op) {
         URL url = new URL(formCatsServerBaseUrl(catsHost));
-        url.addPath(POWER_SERVICE).addPath(REST);
-        url.addPath(powerType).addPath(powerHost).addPath("" + DEFAULT_PORT).addPath(outlet).addPath(op.name());
+        if (!this.rackProxyEnabled) {
+            url.addPath(POWER_SERVICE).addPath(REST);
+            url.addPath(powerType).addPath(powerHost).addPath("" + DEFAULT_PORT).addPath(outlet);
+        }
+        url.addPath(op.name());
         return url;
     }
 

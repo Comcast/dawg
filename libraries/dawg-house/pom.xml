@@ -7,6 +7,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dawg-house</artifactId>
+    <version>2.0.2-SNAPSHOT</version>
     <name>(Comcast) ${project.artifactId}</name>
     <packaging>war</packaging>
 
@@ -14,14 +15,17 @@
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-client</artifactId>
+            <version>2.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-common</artifactId>
+            <version>2.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-server-common</artifactId>
+            <version>2.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

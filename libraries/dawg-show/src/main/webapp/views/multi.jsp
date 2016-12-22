@@ -30,15 +30,8 @@ pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@page isELIgnored="false" %>
 
-<%
+<%@include file="/views/stb_vars.jsp" %>
 
-Remote remote = (Remote) request.getAttribute(ViewConstants.REMOTE);
-String remoteName = (String) remote.getName();
-boolean supported = (Boolean) request.getAttribute(ViewConstants.SUPPORTED);
-String stdRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/standard/standardremote.jsp";
-String miniRemotePage = "/views/remotes/" + remote.getImageSubpath() + "/mini/miniremote.jsp";
-String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_REMOTE_KEYS);
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html style="height:100%;width:100%;">
     <head>
@@ -46,6 +39,11 @@ String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_RE
         <title>Dawg Show</title>
 
         <jsp:include page="/views/head_scripts.jsp" />
+        <script type="text/javascript" src='<c:url value="/js/MultiLayoutManager.js" />'></script>
+        <script type="text/javascript" src='<c:url value="/js/MultiView.js" />'></script>
+        <script type="text/javascript" src='<c:url value="/js/MultiSave.js" />'></script>
+        <script type="text/javascript" src='<c:url value="/js/MultiCheckboxSelector.js" />'></script>
+        <script type="text/javascript" src='<c:url value="/js/GenericRemote.js" />'></script>
 
     </head>
     <body class="showBody" onresize="MultiLayoutManager.draw();">
@@ -84,7 +82,7 @@ String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_RE
                         <div class="videoBody">
                             <c:choose>
                             <c:when test="${empty stb.hdVideoUrl}">
-                            <img id="video" class="video" src="${stb.videoSourceUrl}/axis-cgi/mjpg/video.cgi?camera=${stb.videoCamera}" alt=""></img>
+                            <img id="video" class="video" src="${urls.get(stb.id).get('video')}" alt=""></img>
                             </c:when>
                             <c:otherwise>
                             <canvas id="video" class="video" data-videourl="${stb.hdVideoUrl}"></canvas>
@@ -139,9 +137,9 @@ String genericRemoteKeys = (String)request.getAttribute(ViewConstants.GENERIC_RE
                     MultiSave.bind('.multi-snap-button');
                     MultiCheckboxSelector.bind($('.selectAllDevicesCheckbox'), $('.cbStb'));
                     DirectTune.bind($('.tuneButton'),$('.directTuneDiv'));
-                    StandardRemote.bind('<%= remoteName %>');
+                    StandardRemote.bind('${remoteName}');
                     HoverManager.bind([$('.directTunePanel'), $('.serialCommandPanel'), $('.fpsPanel')]);
-                    GenericRemote.bind($('.changeRemoteButton'), '<%= remoteName %>', '<%= genericRemoteKeys %>');
+                    GenericRemote.bind($('.changeRemoteButton'), '${remoteName}', '${genericRemoteKeys}');
                     FrameRateOperator.bind($('.fpsButton'), $('.fpsDiv'), $('.fpsSelector'));
             </script>
     </body>

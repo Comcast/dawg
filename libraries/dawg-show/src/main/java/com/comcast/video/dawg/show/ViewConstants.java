@@ -60,6 +60,9 @@ public interface ViewConstants {
     public static final String GENERIC_REMOTE_KEYS = "genericRemoteKeys";
     /** Represent map of image id with corresponding snapshot id */
     public static final String DEVICEID_IMAGEID_MAP = "deviceIdImageIdMap";
+    public static final String STB_URLS = "urls";
+    public static final String STB_URLS_AUDIO = "audio";
+    public static final String STB_URLS_VIDEO = "video";
 
     public static final String IMAGE_CACHE = "imageCache";
 }
