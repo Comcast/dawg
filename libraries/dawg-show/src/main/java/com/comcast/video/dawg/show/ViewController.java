@@ -161,16 +161,13 @@ public class ViewController implements ViewConstants {
         return mav;
     }
 
-    private String getAudioUrl(final MetaStb meta) {
+    private String getAudioUrl(MetaStb meta) {
         boolean enabled = meta.getRackProxyEnabled();
         String url = enabled ? meta.getRackProxyUrl() : meta.getAudioUrl();
-        url =  (null == url || "".equals(url.trim())) ? "" : url.trim();
-        String proto = url.toLowerCase().startsWith("http") ? "" : "http://";
-        String pathSep = url.endsWith("/") ? "" : "/";
-        url = proto + url + pathSep;
+        url = prependMissingProtocol(url, "http://");
 
-        if (enabled && !"".equals(null)) {
-            return url + "video/" + meta.getId();
+        if (enabled && !"".equals(url)) {
+            return url + "/audio/" + meta.getId();
         }
 
         return url + "/play1";
@@ -180,13 +177,10 @@ public class ViewController implements ViewConstants {
     private String getVideoUrl(MetaStb meta) {
         boolean enabled = meta.getRackProxyEnabled();
         String url = enabled ? meta.getRackProxyUrl() : meta.getVideoSourceUrl();
-        url =  (null == url || "".equals(url.trim())) ? "" : url.trim();
-        String proto = url.toLowerCase().startsWith("http") ? "" : "http://";
-        String pathSep = url.endsWith("/") ? "" : "/";
-        url = proto + url + pathSep;
+        url = prependMissingProtocol(url, "http://");
 
-        if (enabled && !"".equals(null)) {
-            return url + "video/" + meta.getId();
+        if (enabled && !"".equals(url)) {
+            return url + "/video/" + meta.getId();
         }
 
         String camera = meta.getVideoCamera();
@@ -208,7 +202,7 @@ public class ViewController implements ViewConstants {
        {
            rv = defaultProtocol + url;
        }
-        return rv.endsWith("/") ? rv.substring(0, rv.length() - 1) : rv;
+        return rv != null && rv.endsWith("/") ? rv.substring(0, rv.length() - 1) : rv;
     }
 
     /**

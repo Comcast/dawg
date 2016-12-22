@@ -18,7 +18,6 @@ package com.comcast.video.dawg.cats.ir;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.comcast.video.dawg.common.MetaStb;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -68,10 +67,9 @@ public class IrClient extends DawgClient implements KeyInput {
      */
     public IrClient(IrMeta irMeta) {
         Validate.notNull(irMeta);
-        MetaStb stb = (MetaStb) irMeta;
-        this.proxyEnabled = stb.getRackProxyEnabled();
-        String rackProxyUrl = stb.getRackProxyUrl();
-        this.catsHost = this.proxyEnabled && null != rackProxyUrl ? stb.getRackProxyUrl() + "/ir/" + stb.getId() : irMeta.getCatsServerHost();
+        this.proxyEnabled = irMeta.getRackProxyEnabled();
+        String rackProxyUrl = irMeta.getRackProxyUrl();
+        this.catsHost = this.proxyEnabled && null != rackProxyUrl ? irMeta.getRackProxyUrl() + "/ir/" + irMeta.getId() : irMeta.getCatsServerHost();
         this.blasterType = getIrBlasterType(irMeta);
         this.irHost = irMeta.getIrServiceUrl();
         this.port = irMeta.getIrServicePort();

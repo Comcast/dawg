@@ -105,7 +105,7 @@ boolean irAvail = (Boolean) request.getAttribute(ViewConstants.IR_AVAILABLE);
                         </c:when>
                         <c:otherwise>
                             <img id="video" class="video"
-                                            src="${ideoUrl}"
+                                            src="${videoUrl}"
                                             alt=""></img>
                             <c:if test="${audioUrl != null}" >
                                 <div id="mutePrompt" class="mutePrompt">

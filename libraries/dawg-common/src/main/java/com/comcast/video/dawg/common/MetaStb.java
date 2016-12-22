@@ -542,32 +542,28 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
     }
 
     /**
-     * Get url of ack proxy
-     * @return url of rack proxy
+     * {@inheritDoc}
      */
     public String getRackProxyUrl() {
         return (String) data.get(MetaStb.RACK_PROXY_URL);
     }
 
     /**
-     * Sets url of rack proxy
-     * @param rackProxyUrl url of rack proxy
+     * {@inheritDoc}
      */
     public void setRackProxyUrl(String rackProxyUrl) {
         data.put(MetaStb.RACK_PROXY_URL, rackProxyUrl);
     }
 
     /**
-     * Get whether or not rack proxy is enabled
-     * @return True if enabled; False otherwise
+     * {@inheritDoc}
      */
     public Boolean getRackProxyEnabled() {
         return Boolean.parseBoolean((String) data.get(MetaStb.RACK_PROXY_ENABLED));
     }
 
     /**
-     * Sets whether or not rack proxy is enabled
-     * @param rackProxyEnabled True if enabled; False otherwise
+     * {@inheritDoc}
      */
     public void setRackProxyUrl(Boolean rackProxyEnabled) {
         data.put(MetaStb.RACK_PROXY_ENABLED, rackProxyEnabled);
