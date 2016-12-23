@@ -85,14 +85,14 @@ pageEncoding="UTF-8"%>
                             <img id="video" class="video" style="height: 100%; width: 100%;"
                                             src="${videoUrl}"
                                             alt=""></img>
-                            <c:if test="${audioUrl != null}" >
+                            <c:if test="${audioUrl_mpeg != null || audioUrl_ogg != null}" >
                                 <div id="mutePrompt" class="mutePrompt">
                                     <jsp:include page="/views/mutePrompt.jsp" />
                                 </div>
 
                                 <audio id="audio" autoplay>
-                                    <source src="${audioUrl}.ogg" type="audio/ogg">
-                                    <source src="${audioUrl}.mp3" type="audio/mpeg">
+                                    <source src="${audioUrl_ogg}" type="audio/ogg">
+                                    <source src="${audioUrl_mpeg}" type="audio/mpeg">
                                 </audio>
                             </c:if>
 
