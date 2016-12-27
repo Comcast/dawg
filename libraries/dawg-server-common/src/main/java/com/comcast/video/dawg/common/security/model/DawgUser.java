@@ -7,7 +7,19 @@ public class DawgUser {
 	private String mail;
 	private String password;
 	
-	public String getUid() {
+	public DawgUser() {
+	    
+	}
+	
+	public DawgUser(String uid, String firstName, String lastName, String mail, String password) {
+        this.uid = uid;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mail = mail;
+        this.password = password;
+    }
+
+    public String getUid() {
 		return uid;
 	}
 	
