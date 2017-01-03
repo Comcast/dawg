@@ -23,18 +23,17 @@ package com.comcast.video.dawg.show;
  */
 public interface ViewConstants {
     /** View Names */
-    public static final String VIEWS = "views/";
-    public static final String STB = VIEWS + "stb";
-    public static final String SIMPLIFIED = VIEWS + "simplified";
-    public static final String MULTI = VIEWS + "multi";
-    public static final String NOSTB = VIEWS + "nostb";
-    public static final String COMPARE_NOT_FOUND = VIEWS + "compareNotFound";
-    public static final String META = VIEWS + "meta";
-    public static final String BROWSERNOTSUPPORTED = VIEWS + "bns";
-    public static final String SNAPPEDIMAGE = VIEWS + "snappedImage";
-    public static final String SNAP_DOWNLOAD = VIEWS + "multiSnapDownloadManager";
-    public static final String REMOTE_PLUGIN = VIEWS + "remote-plugin";
-    public static final String PLUGIN_CONFIG = VIEWS + "plugin-config";
+    public static final String STB = "stb";
+    public static final String SIMPLIFIED = "simplified";
+    public static final String MULTI = "multi";
+    public static final String NOSTB = "nostb";
+    public static final String COMPARE_NOT_FOUND = "compareNotFound";
+    public static final String META = "meta";
+    public static final String BROWSERNOTSUPPORTED = "bns";
+    public static final String SNAPPEDIMAGE = "snappedImage";
+    public static final String SNAP_DOWNLOAD = "multiSnapDownloadManager";
+    public static final String REMOTE_PLUGIN = "remote-plugin";
+    public static final String PLUGIN_CONFIG = "plugin-config";
 
     /** View parameters */
     public static final String DEVICE_ID = "deviceId";
