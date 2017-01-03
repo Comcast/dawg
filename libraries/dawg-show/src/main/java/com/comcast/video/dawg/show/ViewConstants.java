@@ -54,13 +54,15 @@ public interface ViewConstants {
     public static final String TRACE_AVAILABLE = "traceAvailable";
     public static final String TRACE_HOST = "traceHost";
     public static final String SUPPORTED = "supported";
-    public static final String AUDIO_URL = "audioUrl";
+    public static final String AUDIO_URL_OGG = "audioUrl_ogg";
+    public static final String AUDIO_URL_MPEG = "audioUrl_mpeg";
     /** Represent generic remote keys */
     public static final String GENERIC_REMOTE_KEYS = "genericRemoteKeys";
     /** Represent map of image id with corresponding snapshot id */
     public static final String DEVICEID_IMAGEID_MAP = "deviceIdImageIdMap";
     public static final String STB_URLS = "urls";
-    public static final String STB_URLS_AUDIO = "audio";
+    public static final String STB_URLS_AUDIO_OGG = "audio_ogg";
+    public static final String STB_URLS_AUDIO_MPEG = "audio_mpeg";
     public static final String STB_URLS_VIDEO = "video";
 
     public static final String IMAGE_CACHE = "imageCache";
