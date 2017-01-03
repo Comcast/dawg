@@ -17,19 +17,19 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
+<%@ page isELIgnored="false"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Dawg House</title>
+  <title>Dawg Show</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href='<c:url value="/resources/styles/login.css" />'>
+  <link rel="stylesheet" type="text/css" href='<c:url value="/css/login.css" />'>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 </head>
 <body>
@@ -39,8 +39,8 @@
       <section class="login-form">
         <form method="post" action="#" role="login">
           <div class="form-title">
-            <img src='<c:url value="/resources/images/dawg-logo.png"/>' class="img-responsive" alt="">
-            Dawg House
+            <img src='<c:url value="/images/dawg-logo.png"/>' class="img-responsive" alt="">
+            Dawg Show
           </div>
           <input class="form-control input-lg" type="text" placeholder="User Name" required/>
           <input class="form-control input-lg" type="password" placeholder="Password" required/>

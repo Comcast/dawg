@@ -15,6 +15,7 @@
  */
 package com.comcast.video.dawg.show;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,6 +73,17 @@ public class ViewController implements ViewConstants {
     /** JSON engine. */
     private JsonCerealEngine jsonEngine = new JsonCerealEngine();
 
+    @RequestMapping(value="/login", method = { RequestMethod.GET })
+    public ModelAndView loginView(@RequestParam(required=false) String invalid) throws Exception {
+    ModelAndView mav = new ModelAndView(LOGIN);
+    if (invalid != null) {
+    	ArrayList<String> errors = new ArrayList<String>();
+    	errors.add("Invalid credentials");
+    	mav.addObject(LOGIN_ERRORS, errors);
+    	}
+    return mav;
+    }
+    
     /**
      * Serves up the standard view of the stb
      *

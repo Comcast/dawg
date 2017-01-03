@@ -35,6 +35,7 @@ public interface ViewConstants {
     public static final String SNAP_DOWNLOAD = VIEWS + "multiSnapDownloadManager";
     public static final String REMOTE_PLUGIN = VIEWS + "remote-plugin";
     public static final String PLUGIN_CONFIG = VIEWS + "plugin-config";
+    public static final String LOGIN = VIEWS + "login";
 
     /** View parameters */
     public static final String DEVICE_ID = "deviceId";
@@ -56,6 +57,8 @@ public interface ViewConstants {
     public static final String TRACE_HOST = "traceHost";
     public static final String SUPPORTED = "supported";
     public static final String AUDIO_URL = "audioUrl";
+    public static final String TITLE = "title";
+    public static final String LOGIN_ERRORS = "loginErrors";
     /** Represent generic remote keys */
     public static final String GENERIC_REMOTE_KEYS = "genericRemoteKeys";
     /** Represent map of image id with corresponding snapshot id */
