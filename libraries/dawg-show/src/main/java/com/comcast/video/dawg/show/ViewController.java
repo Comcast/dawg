@@ -71,6 +71,14 @@ public class ViewController implements ViewConstants {
 
     /** JSON engine. */
     private JsonCerealEngine jsonEngine = new JsonCerealEngine();
+    
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView login(
+        @RequestParam(value = "error", required = false) String error,
+        @RequestParam(value = "logout", required = false) String logout) {
+
+        return new ModelAndView("login-example");
+    }
 
     /**
      * Serves up the standard view of the stb

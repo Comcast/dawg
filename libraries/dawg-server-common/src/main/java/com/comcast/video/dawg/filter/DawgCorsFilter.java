@@ -16,6 +16,9 @@
 package com.comcast.video.dawg.filter;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Set;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,6 +26,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -39,14 +43,46 @@ import org.slf4j.LoggerFactory;
 public class DawgCorsFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DawgCorsFilter.class);
+    private Set<String> domainWhitelist;
+    
+    public DawgCorsFilter() {
+        this(null);
+    }
+    
+    public DawgCorsFilter(Set<String> domainWhitelist) {
+        this.domainWhitelist = domainWhitelist;
+    }
 
-    public void doFilter(ServletRequest req, ServletResponse res,FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         LOGGER.debug("Applying CORS headers to http response");
         HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods","PUT, POST, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "x-requested-with, Content-Type, Accept");
+        String allowOrigin = null;
+        if (this.domainWhitelist != null) {
+            HttpServletRequest request = (HttpServletRequest) req;
+            String origin = request.getHeader("Origin");
+            if (origin != null) {
+                try {
+                    String originHost = new URI(origin).getHost(); 
+                    for (String domain : domainWhitelist) {
+                        if (originHost.endsWith(domain)) {
+                            allowOrigin = origin;
+                            break;
+                        }
+                    }
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            allowOrigin = "*";
+        }
+        if (allowOrigin != null) {
+            response.setHeader("Access-Control-Allow-Origin", allowOrigin);
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Methods","PUT, POST, GET, OPTIONS, DELETE");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setHeader("Access-Control-Allow-Headers", "x-requested-with, Content-Type, Accept");
+        }
         chain.doFilter(req, res);
     }
 

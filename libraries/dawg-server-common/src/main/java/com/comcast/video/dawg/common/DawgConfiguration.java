@@ -17,10 +17,14 @@ package com.comcast.video.dawg.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.ini4j.Ini;
+import java.util.Set;
 
+import org.ini4j.Ini;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.comcast.video.dawg.common.security.AuthServerConfig;
+import com.google.common.collect.Sets;
 
 /**
  * The key value pairs of the dawg configuration.
@@ -30,6 +34,7 @@ import org.slf4j.LoggerFactory;
 public class DawgConfiguration {
 
     public static final String INI_SECTION = "dawg";
+    public static final String INI_AUTH_SECTION = "auth";
 
     public static final String DAWG_PATH_PARAM = "dawg.path";
     public static final String DEFAULT_DAWG_PATH = "/etc/dawg/";
@@ -37,10 +42,20 @@ public class DawgConfiguration {
     public static final String DAWG_SHOW_URL = "dawg-show-url";
     public static final String DAWG_HOUSE_URL = "dawg-house-url";
     public static final String DAWG_POUND_URL = "dawg-pound-url";
+    
+    public static final String LDAP_HOST = "ldapHost";
+    public static final String LDAP_PORT = "ldapPort";
+    public static final String LDAP_DOMAIN = "ldapDomain";
+    public static final String LDAP_BIND_CN = "ldapBindCn";
+    public static final String LDAP_BIND_PASSWORD = "ldapBindPassword";
+    public static final String ENABLED = "enabled";
+    public static final String JWT_SECRET = "jwtSecret";
+    public static final String CORS_DOMAINS = "corsDomains";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DawgConfiguration.class);
 
     private Ini ini;
+    private AuthServerConfig auth = null;
 
     public DawgConfiguration() {
         this.ini = new Ini();
@@ -70,6 +85,25 @@ public class DawgConfiguration {
      */
     public String getDawgPoundUrl() {
         return DawgConfiguration.slash(this.get(DAWG_POUND_URL));
+    }
+    
+    public AuthServerConfig getAuthConfig() {
+        if (this.auth == null) {
+            this.auth = new AuthServerConfig();
+            if (this.ini.containsKey(INI_AUTH_SECTION)) {
+                Ini.Section sec = this.ini.get(INI_AUTH_SECTION);
+                this.auth.setEnabled(sec.get(ENABLED, Boolean.class, this.auth.isEnabled()));
+                this.auth.setLdapBindCn(sec.get(LDAP_BIND_CN, this.auth.getLdapBindCn()));
+                this.auth.setLdapBindPassword(sec.get(LDAP_BIND_PASSWORD));
+                this.auth.setLdapDomain(sec.get(LDAP_DOMAIN, this.auth.getLdapDomain()));
+                this.auth.setLdapHost(sec.get(LDAP_HOST, this.auth.getLdapHost()));
+                this.auth.setLdapPort(sec.get(LDAP_PORT, Integer.class, this.auth.getLdapPort()));
+                this.auth.setJwtSecret(sec.get(JWT_SECRET));
+                Set<String> domains = sec.containsKey(CORS_DOMAINS) ? Sets.newHashSet(sec.get(CORS_DOMAINS).split(",")) : null;
+                this.auth.setCorsDomains(domains);
+            }
+        }
+        return this.auth;
     }
 
     public String get(String key) {

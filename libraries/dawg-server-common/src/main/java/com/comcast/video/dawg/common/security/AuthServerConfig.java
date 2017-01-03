@@ -1,5 +1,7 @@
 package com.comcast.video.dawg.common.security;
 
+import java.util.Set;
+
 public class AuthServerConfig {
 	private String ldapHost = "localhost";
 	private int ldapPort = 389;
@@ -7,6 +9,8 @@ public class AuthServerConfig {
 	private String ldapBindCn = "Manager";
 	private String ldapBindPassword;
 	private boolean enabled = false;
+	private String jwtSecret;
+	private Set<String> corsDomains = null;
 	
 	public String getLdapHost() {
 		return ldapHost;
@@ -55,5 +59,20 @@ public class AuthServerConfig {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-	
+
+    public String getJwtSecret() {
+        return jwtSecret;
+    }
+
+    public void setJwtSecret(String jwtSecret) {
+        this.jwtSecret = jwtSecret;
+    }
+
+    public Set<String> getCorsDomains() {
+        return corsDomains;
+    }
+
+    public void setCorsDomains(Set<String> corsDomains) {
+        this.corsDomains = corsDomains;
+    }
 }

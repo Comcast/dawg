@@ -23,6 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.comcast.cereal.CerealException;
 import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.drivethru.exception.HttpException;
@@ -30,15 +34,11 @@ import com.comcast.drivethru.utils.Method;
 import com.comcast.drivethru.utils.RestRequest;
 import com.comcast.drivethru.utils.RestResponse;
 import com.comcast.drivethru.utils.URL;
-
 import com.comcast.video.dawg.DawgClient;
 import com.comcast.video.dawg.common.Config;
 import com.comcast.video.dawg.common.DawgModel;
 import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.exception.HttpRuntimeException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DawgHouseClient extends DawgClient implements IDawgHouseClient<MetaStb> {
 
@@ -227,5 +227,9 @@ public class DawgHouseClient extends DawgClient implements IDawgHouseClient<Meta
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public void setJwt(String jwt) {
+        this.client.addDefaultHeader("Authorization", "Bearer " + new String(Base64.encodeBase64(jwt.getBytes(), false)));
     }
 }

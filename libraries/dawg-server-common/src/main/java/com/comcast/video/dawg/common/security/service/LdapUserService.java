@@ -18,6 +18,7 @@ import org.apache.directory.api.ldap.model.entry.Entry;
 import org.apache.directory.api.ldap.model.entry.Modification;
 import org.apache.directory.api.ldap.model.entry.ModificationOperation;
 import org.apache.directory.api.ldap.model.exception.LdapException;
+import org.apache.directory.api.ldap.model.exception.LdapNoSuchObjectException;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
@@ -68,7 +69,7 @@ public class LdapUserService implements UserService {
     private static Object[] toLdapElements(DawgUser user) {
         Map<String, String> person = toInetOrgPerson(user);
 
-        person.put("ObjectClass", "inetOrgPerson");
+        person.put("objectClass", "inetOrgPerson");
         person.put("ou", "people");
         Object[] eles = new Object[person.keySet().size()];
         int i = 0;
@@ -164,12 +165,15 @@ public class LdapUserService implements UserService {
     private void changeRoles(String userId, Set<String> roles, ModificationOperation op) throws UserException {
         try {
             checkConnection();
-
             if ((roles != null) && !roles.isEmpty()) {
                 String userdn = userDn(userId);
                 for (String role : roles) {
                     String dn = "cn=" + role + ",ou=group," + config.getLdapDomain();
-                    connection.modify(dn, new DefaultModification(op, new DefaultAttribute("member", userdn)));
+                    try {
+                        connection.modify(dn, new DefaultModification(op, new DefaultAttribute("member", userdn)));
+                    }  catch (LdapNoSuchObjectException e) {
+                        throw new UserException("Role '" + role + "' does not exist.", e);
+                    }  
                 }
             }
         } catch (LdapException e) {
@@ -184,7 +188,7 @@ public class LdapUserService implements UserService {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA");
             digest.update(password.getBytes());
-            base64 = Base64.encodeBase64String(digest.digest());
+            base64 = new String(Base64.encodeBase64(digest.digest(), false));
         }
         catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);

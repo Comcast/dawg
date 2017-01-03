@@ -79,7 +79,7 @@ var DAWGPOUND = (function() {
 
     dawgApi.reserve = function(element, deviceId, token, expiration) {
         var posturl = DAWG_POUND + "reservations/reserve/" + token + "/" + deviceId + "/" + expiration;
-        $.post(posturl, function(data) {
+    	dawgApi.changeReservation(posturl, function(data) {
             if (data) {
                 $(element).html('<i class="icon-lock"></i> ' + token + " - " + expiration);
                 $(element).data("locked",true);
@@ -92,14 +92,25 @@ var DAWGPOUND = (function() {
 
     dawgApi.unreserve = function(element, deviceId, token) {
         var posturl = DAWG_POUND + "reservations/unreserve/" + deviceId;
-        $.post(posturl, function(data) {
-            if (data) {
-                $(element).html('<i class="icon-unlock"></i> old reserver: ' + data);
-                $(element).data("locked",false);
-                console.log(data);
-            } else {
-                console.log(data + "\ncould not unreserve!");
-            }
+    	dawgApi.changeReservation(posturl, function(data) {
+	            if (data) {
+	                $(element).html('<i class="icon-unlock"></i> old reserver: ' + data);
+	                $(element).data("locked",false);
+	                console.log(data);
+	            } else {
+	                console.log(data + "\ncould not unreserve!");
+	            }
+        });
+    };
+
+    dawgApi.changeReservation = function(url, success) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: success
         });
     };
 
