@@ -40,7 +40,7 @@
         <form method="post" action="#" role="login">
           <div class="form-title">
             <img src='<c:url value="/images/dawg-logo.png"/>' class="img-responsive" alt="">
-            Dawg House
+            Dawg Show
           </div>
           <input class="form-control input-lg" type="text" placeholder="User Name" required/>
           <input class="form-control input-lg" type="password" placeholder="Password" required/>
