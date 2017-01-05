@@ -76,7 +76,7 @@ public class LdapUserService implements UserService {
         Map<String, String> person = toInetOrgPerson(user);
 
         person.put("objectClass", "inetOrgPerson");
-        person.put("ou", "people");
+        person.put("ou", config.getUsersOrganizationalUnit());
         Object[] eles = new Object[person.keySet().size()];
         int i = 0;
         for (String key : person.keySet()) {
@@ -86,7 +86,7 @@ public class LdapUserService implements UserService {
     }
 
     private String userDn(String uid) {
-        return "uid=" + uid + ",ou=people," + config.getDomain();
+        return config.getUserDnPatterns().replace("{0}", uid);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class LdapUserService implements UserService {
             if ((roles != null) && !roles.isEmpty()) {
                 String userdn = userDn(userId);
                 for (String role : roles) {
-                    String dn = "cn=" + role + ",ou=group," + config.getDomain();
+                    String dn = "cn=" + role + "," + config.getGroupSearchBase();
                     try {
                         connection.modify(dn, new DefaultModification(op, new DefaultAttribute("member", userdn)));
                     }  catch (LdapNoSuchObjectException e) {
@@ -191,7 +191,8 @@ public class LdapUserService implements UserService {
     public Set<String> getUserRoles(String userId) throws UserException {
         Set<String> roles = new HashSet<String>();
         try {
-            EntryCursor cursor = connection.search("ou=group," + config.getDomain(), "(member=" + userDn(userId) + ")", 
+            String filter = "(" + config.getGroupFilter().replace("{0}", userDn(userId)) + ")";
+            EntryCursor cursor = connection.search(config.getGroupSearchBase(), filter, 
                     SearchScope.SUBTREE);
 
             while(cursor.next()) {

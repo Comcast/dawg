@@ -21,6 +21,7 @@ public class AuthConfigFactory {
     public static final String LDAP_USERDN_PATTERNS = "ldap.userdn.patterns";
     public static final String LDAP_GROUP_SEARCH_BASE = "ldap.group.searchbase";
     public static final String LDAP_GROUP_FILTER = "ldap.group.filter";
+    public static final String LDAP_USERS_OU = "ldap.users.ou";
     public static final String AUTH_MODE = "mode";
     public static final String JWT_SECRET = "jwtSecret";
     public static final String CORS_DOMAINS = "corsDomains";
@@ -68,5 +69,6 @@ public class AuthConfigFactory {
         cfg.setUserDnPatterns(map.get(LDAP_USERDN_PATTERNS));
         cfg.setGroupSearchBase(map.get(LDAP_GROUP_SEARCH_BASE));
         cfg.setGroupFilter(map.get(LDAP_GROUP_FILTER, cfg.getGroupFilter()));
+        cfg.setUsersOrganizationalUnit(map.get(LDAP_USERS_OU, cfg.getUsersOrganizationalUnit()));
     }
 }

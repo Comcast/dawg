@@ -16,6 +16,7 @@ public class LdapAuthServerConfig extends AuthServerConfig {
     private String userDnPatterns = null;
     private String groupSearchBase = null;
     private String groupFilter = "member={0}";
+    private String usersOrganizationalUnit = "people";
     
     public LdapAuthServerConfig() {
         try {
@@ -68,7 +69,7 @@ public class LdapAuthServerConfig extends AuthServerConfig {
     }
 
     public String getUserDnPatterns() {
-        return userDnPatterns != null ? userDnPatterns : "uid={0},ou=people," + getDomain(); // default
+        return userDnPatterns != null ? userDnPatterns : "uid={0},ou=" + getUsersOrganizationalUnit() + "," + getDomain(); // default
     }
 
     public void setUserDnPatterns(String userDnPatterns) {
@@ -93,5 +94,13 @@ public class LdapAuthServerConfig extends AuthServerConfig {
     
     public String getBindDn() {
         return "cn=" + getBindCn() + "," + getDomain();
+    }
+
+    public String getUsersOrganizationalUnit() {
+        return usersOrganizationalUnit;
+    }
+
+    public void setUsersOrganizationalUnit(String usersOrganizationalUnit) {
+        this.usersOrganizationalUnit = usersOrganizationalUnit;
     }
 }
