@@ -2,6 +2,12 @@ package com.comcast.video.dawg.common.security.model;
 
 import java.util.Set;
 
+/**
+ * A request to modify roles that are assigned to a user.
+ * This allows adding or removing roles.
+ * @author Kevin Pearson
+ *
+ */
 public class ModifyRolesRequest {
     private Set<String> addRoles;
     private Set<String> removeRoles;

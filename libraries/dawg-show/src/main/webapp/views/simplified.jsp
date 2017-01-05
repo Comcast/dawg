@@ -108,9 +108,9 @@ pageEncoding="UTF-8"%>
                 </div>
             </div>
             <div id="standardRemoteDiv" class="standardRemoteDiv">
-                <div id="remote" class="remoteContainer" style="width=90%;">
+                <div id="remote" class="remoteContainer" style="width:90%;">
                     <jsp:include page="<%=stdRemotePage %>" />
-                </div>1
+                </div>
                 <% if (!remote.getMergeWebControls()) {%>
                     <img id="mute" src='<c:url value="/images/remotes/xr2/keys/mute.png" />' alt="" style="width:10%;right:0%; top:0%; position:absolute"/>
                 <% } %>
@@ -134,7 +134,7 @@ pageEncoding="UTF-8"%>
             </c:if>
 
             DropDownMenu.bind($('#menu'), $('#menuBox'), $('#loadComparisonPrompt'), $('#faded'), '${deviceId}');
-            SerialManager.bind();
+            LayoutDelegator.draw();
             VideoRenderer.bind($('#video'), '${deviceId}');
             VideoRenderer.startVideo();
 

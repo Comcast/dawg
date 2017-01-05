@@ -2,6 +2,11 @@ package com.comcast.video.dawg.common.security.model;
 
 import java.util.Set;
 
+/**
+ * Combines the dawg user with the roles that are assigned to it
+ * @author kpears201
+ *
+ */
 public class DawgUserAndRoles extends DawgUser {
 	private Set<String> roles;
 	

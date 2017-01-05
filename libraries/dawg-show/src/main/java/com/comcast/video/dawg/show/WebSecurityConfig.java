@@ -6,9 +6,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.comcast.video.dawg.common.security.AuthServerConfig;
+import com.comcast.video.dawg.common.security.DawgSpringLdapConfigurer;
 import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
 import com.comcast.video.dawg.common.security.jwt.JwtAuthenticationFilter;
 
@@ -35,27 +36,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/admin/**").hasAnyRole("ADMIN")
             .antMatchers("/**").hasAnyRole("ADMIN", "SHOW")
             .and()
-            .formLogin()
-                .loginPage("/login").failureUrl("/login?error")
-                .successHandler(successHandler)
-                .permitAll()
+                .formLogin()
+                    .loginPage("/login").failureUrl("/login?error")
+                    .successHandler(successHandler)
+                    .permitAll()
             .and()
-            .logout().logoutSuccessHandler(successHandler).permitAll()
+                .logout().logoutSuccessHandler(successHandler).permitAll()
             .and()
-            .exceptionHandling().accessDeniedPage("/login?unauthorized");
+                .exceptionHandling().accessDeniedPage("/login?unauthorized")
+            .and()
+                .headers().frameOptions().disable();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        AuthServerConfig authCfg = config.getAuthConfig();
-        auth
-            .ldapAuthentication()
-            .contextSource().url("ldap://" + authCfg.getLdapHost() + ":" + authCfg.getLdapPort())
-            .and()
-                .userDnPatterns("uid={0},ou=people," + authCfg.getLdapDomain())
-                .groupSearchBase("ou=group," + authCfg.getLdapDomain())
-                .groupSearchFilter("member={0}")
-            .and().eraseCredentials(false);
-        
+        DawgSpringLdapConfigurer.configureGlobal(auth, config, new BCryptPasswordEncoder());
     }
 }

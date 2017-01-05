@@ -48,7 +48,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     @Autowired
     public SecuritySwitchFilter securitySwitchFilter(DawgShowConfiguration config) {
-        return new SecuritySwitchFilter(config.getAuthConfig().isEnabled());
+        return new SecuritySwitchFilter(!"none".equals(config.getAuthConfig().getMode()));
     }
 
     @Override

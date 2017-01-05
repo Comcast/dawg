@@ -17,6 +17,11 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/**
+ * Encodes and decodes a java web token used to identify a dawg user
+ * @author Kevin Pearson
+ *
+ */
 public class DawgJwtEncoder {
     public static final String DEFAULT_ISSUER = "dawg";
     public static final long DEFAULT_TTL = TimeUnit.HOURS.toMillis(1);
@@ -28,16 +33,31 @@ public class DawgJwtEncoder {
     private long ttlMillis;
     private ObjectMapper mapper = new ObjectMapper();
 
+    /**
+     * Creates a DawgJetEncoder
+     * @param jwtSecret The secret used to sign the jwt
+     */
     public DawgJwtEncoder(String jwtSecret) {
         this(jwtSecret, DEFAULT_ISSUER, DEFAULT_TTL);
     }
-
+    
+    /**
+     * Creates a DawgJetEncoder
+     * @param jwtSecret The secret used to sign the jwt
+     * @param jwtIssuer The name of the entity that is issuing this jwt
+     * @param ttlMillis The time in milliseconds that the jwt will live
+     */
     public DawgJwtEncoder(String jwtSecret, String jwtIssuer, long ttlMillis) {
         this.jwtSecret = jwtSecret;
         this.jwtIssuer = jwtIssuer;
         this.ttlMillis = ttlMillis;
     }
 
+    /**
+     * Creates the jwt for the given dawg credentials
+     * @param dawgCreds The credentials to encode
+     * @return
+     */
     public String createUserJWT(DawgCreds dawgCreds) {
 
         long nowMillis = System.currentTimeMillis();
@@ -63,6 +83,11 @@ public class DawgJwtEncoder {
         return builder.compact();
     }
 
+    /**
+     * Decodes a java web token into the DawgJwt, which can be used to retrieve the {@link DawgCreds}
+     * @param jwt The jwt to decode
+     * @return
+     */
     public DawgJwt decodeJwt(String jwt) {
         Jws<Claims> token = Jwts.parser()         
                 .setSigningKey(jwtSecret.getBytes())

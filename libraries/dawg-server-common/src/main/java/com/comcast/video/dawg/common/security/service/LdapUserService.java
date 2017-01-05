@@ -1,13 +1,10 @@
 package com.comcast.video.dawg.common.security.service;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.directory.api.ldap.model.cursor.CursorException;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Attribute;
@@ -22,35 +19,44 @@ import org.apache.directory.api.ldap.model.exception.LdapNoSuchObjectException;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.comcast.video.dawg.common.exceptions.UserException;
-import com.comcast.video.dawg.common.security.AuthServerConfig;
+import com.comcast.video.dawg.common.security.LdapAuthServerConfig;
 import com.comcast.video.dawg.common.security.model.DawgUser;
 import com.comcast.video.dawg.common.security.model.DawgUserAndRoles;
 
 public class LdapUserService implements UserService {
 
-    private AuthServerConfig config;
+    private LdapAuthServerConfig config;
 
     private LdapConnection connection;
+    private PasswordEncoder passwordEncoder;
 
-    public LdapUserService(AuthServerConfig config) {
+    public LdapUserService(LdapAuthServerConfig config) {
+        this(config, new BCryptPasswordEncoder());
+    }
+
+    public LdapUserService(LdapAuthServerConfig config, PasswordEncoder passwordEncoder) {
         this.config = config;
+        this.passwordEncoder = passwordEncoder;
     }
 
     void checkConnection() throws LdapException {
         if ((this.connection == null) || !connection.isConnected()) {
-            connection = new LdapNetworkConnection( config.getLdapHost(), 389 );
-            this.connection.bind("cn=" + config.getLdapBindCn() + "," + config.getLdapDomain(), config.getLdapBindPassword());
+            connection = new LdapNetworkConnection(config.getLdapHost(), config.getLdapPort(), config.isLdapSsl());
+            this.connection.bind(config.getBindDn(), config.getBindPassword());
         }
     }
 
-    private static Map<String, String> toInetOrgPerson(DawgUser user) {
+    private Map<String, String> toInetOrgPerson(DawgUser user) {
         Map<String, String> person = new HashMap<String, String>();
         putIfNotNull(person, "cn", cn(user));
         putIfNotNull(person, "sn", user.getLastName());
         putIfNotNull(person, "givenName", user.getFirstName());
-        putIfNotNull(person, "userPassword", sha(user.getPassword()));
+        String encoded = passwordEncoder.encode(user.getPassword());
+        putIfNotNull(person, "userPassword", encoded);
         putIfNotNull(person, "mail", user.getMail());
         return person;
     }
@@ -66,7 +72,7 @@ public class LdapUserService implements UserService {
         if (val != null) map.put(key, val);
     }
 
-    private static Object[] toLdapElements(DawgUser user) {
+    private Object[] toLdapElements(DawgUser user) {
         Map<String, String> person = toInetOrgPerson(user);
 
         person.put("objectClass", "inetOrgPerson");
@@ -80,7 +86,7 @@ public class LdapUserService implements UserService {
     }
 
     private String userDn(String uid) {
-        return "uid=" + uid + ",ou=people," + config.getLdapDomain();
+        return "uid=" + uid + ",ou=people," + config.getDomain();
     }
 
     @Override
@@ -168,7 +174,7 @@ public class LdapUserService implements UserService {
             if ((roles != null) && !roles.isEmpty()) {
                 String userdn = userDn(userId);
                 for (String role : roles) {
-                    String dn = "cn=" + role + ",ou=group," + config.getLdapDomain();
+                    String dn = "cn=" + role + ",ou=group," + config.getDomain();
                     try {
                         connection.modify(dn, new DefaultModification(op, new DefaultAttribute("member", userdn)));
                     }  catch (LdapNoSuchObjectException e) {
@@ -181,26 +187,11 @@ public class LdapUserService implements UserService {
         }
     }
 
-    private static String sha(final String password) {
-        if (password == null) return null;
-        if (password.startsWith("{SHA}")) return password;
-        String base64;
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA");
-            digest.update(password.getBytes());
-            base64 = new String(Base64.encodeBase64(digest.digest(), false));
-        }
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        return "{SHA}" + base64;
-    }
-
     @Override
     public Set<String> getUserRoles(String userId) throws UserException {
         Set<String> roles = new HashSet<String>();
         try {
-            EntryCursor cursor = connection.search("ou=group," + config.getLdapDomain(), "(member=" + userDn(userId) + ")", 
+            EntryCursor cursor = connection.search("ou=group," + config.getDomain(), "(member=" + userDn(userId) + ")", 
                     SearchScope.SUBTREE);
 
             while(cursor.next()) {

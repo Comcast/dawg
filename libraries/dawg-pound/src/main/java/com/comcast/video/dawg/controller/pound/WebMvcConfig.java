@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.comcast.video.dawg.common.ServerUtils;
+import com.comcast.video.dawg.common.security.LdapAuthServerConfig;
 import com.comcast.video.dawg.common.security.SecuritySwitchFilter;
 import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
 import com.comcast.video.dawg.common.security.service.LdapUserService;
@@ -29,14 +32,21 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     
     @Bean
     @Autowired
-    public UserService userService(DawgPoundConfiguration config) {
-        return new LdapUserService(config.getAuthConfig());
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    @Autowired
+    public UserService userService(DawgPoundConfiguration config, PasswordEncoder passwordEncoder) {
+        LdapAuthServerConfig cfg = config.getLdapAuthConfig();
+        return cfg == null ? null : new LdapUserService(cfg, passwordEncoder);
     }
     
     @Bean
     @Autowired
     public SecuritySwitchFilter securitySwitchFilter(DawgPoundConfiguration config) {
-        return new SecuritySwitchFilter(config.getAuthConfig().isEnabled());
+        return new SecuritySwitchFilter(!"none".equals(config.getAuthConfig().getMode()));
     }
     
     @Bean

@@ -1,5 +1,10 @@
 package com.comcast.video.dawg.common.security.model;
 
+/**
+ * Represents a user that can log in to the dawg components
+ * @author Kevin Pearson
+ *
+ */
 public class DawgUser {
 	private String uid;
 	private String firstName;
