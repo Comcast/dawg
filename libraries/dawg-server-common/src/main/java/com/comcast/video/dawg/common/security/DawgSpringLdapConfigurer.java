@@ -3,12 +3,9 @@ package com.comcast.video.dawg.common.security;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.comcast.video.dawg.common.DawgConfiguration;
-
 public class DawgSpringLdapConfigurer {
     
-    public static void configureGlobal(AuthenticationManagerBuilder auth, DawgConfiguration config, PasswordEncoder passwordEncoder) throws Exception {
-        LdapAuthServerConfig authCfg = config.getLdapAuthConfig();
+    public static void configureGlobal(AuthenticationManagerBuilder auth, LdapAuthServerConfig authCfg, PasswordEncoder passwordEncoder) throws Exception {
         if (authCfg != null) {
             auth
                 .ldapAuthentication()

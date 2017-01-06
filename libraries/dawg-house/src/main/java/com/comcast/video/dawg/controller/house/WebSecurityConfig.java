@@ -48,6 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        DawgSpringLdapConfigurer.configureGlobal(auth, config, new BCryptPasswordEncoder());
+        DawgSpringLdapConfigurer.configureGlobal(auth, config.getLdapAuthConfig(), new BCryptPasswordEncoder());
     }
 }
