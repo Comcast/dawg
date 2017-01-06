@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 public class LdapAuthServerConfig extends AuthServerConfig {
     private URI ldapUrl;
     private String domain;
-    private String bindCn = "Manager";
+    private String bindDn = null;
     private String bindPassword;
     private String userDnPatterns = null;
     private String groupSearchBase = null;
@@ -52,14 +52,6 @@ public class LdapAuthServerConfig extends AuthServerConfig {
         this.domain = domain;
     }
 
-    public String getBindCn() {
-        return bindCn;
-    }
-
-    public void setBindCn(String bindCn) {
-        this.bindCn = bindCn;
-    }
-
     public String getBindPassword() {
         return bindPassword;
     }
@@ -93,7 +85,11 @@ public class LdapAuthServerConfig extends AuthServerConfig {
     }
     
     public String getBindDn() {
-        return "cn=" + getBindCn() + "," + getDomain();
+        return bindDn != null ? bindDn : "cn=Manager," + getDomain(); // default
+    }
+
+    public void setBindDn(String bindDn) {
+        this.bindDn = bindDn;
     }
 
     public String getUsersOrganizationalUnit() {

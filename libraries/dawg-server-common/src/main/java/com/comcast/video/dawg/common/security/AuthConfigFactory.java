@@ -16,7 +16,7 @@ public class AuthConfigFactory {
     
     public static final String LDAP_URL = "ldap.url";
     public static final String LDAP_DOMAIN = "ldap.domain";
-    public static final String LDAP_BIND_CN = "ldap.binddn";
+    public static final String LDAP_BIND_DN = "ldap.binddn";
     public static final String LDAP_BIND_PASSWORD = "ldap.bindpass";
     public static final String LDAP_USERDN_PATTERNS = "ldap.userdn.patterns";
     public static final String LDAP_GROUP_SEARCH_BASE = "ldap.group.searchbase";
@@ -58,7 +58,7 @@ public class AuthConfigFactory {
     
     private void setLdapConfig(LdapAuthServerConfig cfg, OptionMap map) {
         cfg.setMode(MODE_LDAP);
-        cfg.setBindCn(map.get(LDAP_BIND_CN, cfg.getBindCn()));
+        cfg.setBindDn(map.get(LDAP_BIND_DN));
         cfg.setBindPassword(map.get(LDAP_BIND_PASSWORD));
         cfg.setDomain(map.get(LDAP_DOMAIN));
         try {
