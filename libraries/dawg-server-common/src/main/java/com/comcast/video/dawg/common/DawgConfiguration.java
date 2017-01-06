@@ -17,10 +17,17 @@ package com.comcast.video.dawg.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.ini4j.Ini;
+import java.net.URISyntaxException;
+import java.util.Set;
 
+import org.ini4j.Ini;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.comcast.video.dawg.common.security.AuthConfigFactory;
+import com.comcast.video.dawg.common.security.AuthServerConfig;
+import com.comcast.video.dawg.common.security.LdapAuthServerConfig;
+import com.google.common.collect.Sets;
 
 /**
  * The key value pairs of the dawg configuration.
@@ -30,6 +37,7 @@ import org.slf4j.LoggerFactory;
 public class DawgConfiguration {
 
     public static final String INI_SECTION = "dawg";
+    public static final String INI_AUTH_SECTION = "auth";
 
     public static final String DAWG_PATH_PARAM = "dawg.path";
     public static final String DEFAULT_DAWG_PATH = "/etc/dawg/";
@@ -41,6 +49,8 @@ public class DawgConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(DawgConfiguration.class);
 
     private Ini ini;
+    private AuthServerConfig auth = null;
+    private AuthConfigFactory authConfigFactory = new AuthConfigFactory();
 
     public DawgConfiguration() {
         this.ini = new Ini();
@@ -70,6 +80,28 @@ public class DawgConfiguration {
      */
     public String getDawgPoundUrl() {
         return DawgConfiguration.slash(this.get(DAWG_POUND_URL));
+    }
+    
+    private void lazyAuthCfg() {
+        if (this.auth == null) {
+            if (this.ini.containsKey(INI_AUTH_SECTION)) {
+                Ini.Section sec = this.ini.get(INI_AUTH_SECTION);
+                this.auth = this.authConfigFactory.createConfig(sec);
+            } else {
+                /** If none given, just create an empty config */
+                this.auth = new AuthServerConfig();
+            }
+        }
+    }
+    
+    public AuthServerConfig getAuthConfig() {
+        lazyAuthCfg();
+        return this.auth;
+    }
+    
+    public LdapAuthServerConfig getLdapAuthConfig() {
+        lazyAuthCfg();
+        return (LdapAuthServerConfig) (this.auth instanceof LdapAuthServerConfig ? this.auth : null);
     }
 
     public String get(String key) {

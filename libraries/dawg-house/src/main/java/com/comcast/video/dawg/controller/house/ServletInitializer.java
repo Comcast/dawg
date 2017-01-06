@@ -3,6 +3,7 @@ package com.comcast.video.dawg.controller.house;
 import javax.servlet.Filter;
 import javax.servlet.ServletRegistration;
 
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.comcast.video.dawg.filter.DawgCorsFilter;
@@ -24,7 +25,10 @@ public class ServletInitializer extends AbstractAnnotationConfigDispatcherServle
 
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[] { new DawgCorsFilter() };
+        DelegatingFilterProxy filter = new DelegatingFilterProxy("securitySwitchFilter");
+        filter.setContextAttribute("org.springframework.web.servlet.FrameworkServlet.CONTEXT.dispatcher");
+        filter.setTargetFilterLifecycle(true);
+        return new Filter[] { filter, new DelegatingFilterProxy("dawgCorsFilter") };
     }
 
     @Override

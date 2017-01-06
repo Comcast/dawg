@@ -33,6 +33,8 @@ public class DawgShowConfiguration extends DawgConfiguration {
 
     public static final String OCR_URL = "ocr-url";
     public static final String PLUGINS_DIR = "plugins.dir";
+    public static final String HOUSE_USER = "house.user";
+    public static final String HOUSE_PASSWORD = "house.password";
     public static final String DEFAULT_PLUGINS_DIR = "/opt/dawg/plugins";
 
     /**
@@ -52,5 +54,13 @@ public class DawgShowConfiguration extends DawgConfiguration {
 
     public String getPluginDir() {
         return this.get(PLUGINS_DIR, DEFAULT_PLUGINS_DIR);
+    }
+
+    public String getDawgHouseUser() {
+        return this.get(HOUSE_USER);
+    }
+
+    public String getDawgHousePassword() {
+        return this.get(HOUSE_PASSWORD);
     }
 }

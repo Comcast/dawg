@@ -1,11 +1,12 @@
 package com.comcast.video.dawg.controller.house;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.video.dawg.common.ServerUtils;
+import com.comcast.video.dawg.common.security.SecuritySwitchFilter;
+import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
+import com.comcast.video.dawg.filter.DawgCorsFilter;
 
 @Configuration
 @EnableWebMvc
@@ -46,6 +50,24 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     public ServerUtils serverUtils() {
         return new ServerUtils();
+    }
+    
+    @Bean
+    @Autowired
+    public DawgJwtEncoder jwtEncoder(DawgHouseConfiguration config) {
+        return new DawgJwtEncoder(config.getAuthConfig().getJwtSecret(), "dawg-house", TimeUnit.HOURS.toMillis(1));
+    }
+    
+    @Bean
+    @Autowired
+    public SecuritySwitchFilter securitySwitchFilter(DawgHouseConfiguration config) {
+        return new SecuritySwitchFilter(!"none".equals(config.getAuthConfig().getMode()));
+    }
+    
+    @Bean
+    @Autowired
+    public DawgCorsFilter dawgCorsFilter(DawgHouseConfiguration config) {
+        return new DawgCorsFilter(config.getAuthConfig().getCorsDomains());
     }
 
     @Override
