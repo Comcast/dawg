@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .authorizeRequests()
             .antMatchers("/admin/**").hasAnyRole("ADMIN")
+            .antMatchers("/login**").permitAll()
             .antMatchers("/**").hasAnyRole("ADMIN", "HOUSE")
             .and()
             .formLogin()
@@ -43,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .logout().logoutSuccessHandler(successHandler).permitAll()
             .and()
-            .exceptionHandling().accessDeniedPage("/login?unauthorized");
+            .exceptionHandling().accessDeniedPage("/login?unauthorized=");
     }
 
     @Autowired
