@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import com.google.common.net.InternetDomainName;
+
 public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler implements LogoutSuccessHandler {
     
     protected DawgJwtEncoder jwtEncoder;
@@ -40,6 +42,9 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
         Cookie cookie = new Cookie(JwtAuthenticationFilter.COOKIE_NAME, jwt);
         cookie.setHttpOnly(false);
         cookie.setPath("/");
+        InternetDomainName dn = InternetDomainName.from(request.getServerName());
+        String privateDomain = dn.isUnderPublicSuffix() ? dn.topPrivateDomain().toString() : request.getServerName();
+        cookie.setDomain(privateDomain);
         response.addCookie(cookie);
     }
 
