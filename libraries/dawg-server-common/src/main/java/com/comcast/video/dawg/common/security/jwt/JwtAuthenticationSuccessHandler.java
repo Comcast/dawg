@@ -39,13 +39,7 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
         }
         String pass = authentication.getCredentials() == null ? null : authentication.getCredentials().toString();
         String jwt = jwtEncoder.createUserJWT(new DawgCreds(authentication.getName(), pass, roles));
-        Cookie cookie = new Cookie(JwtAuthenticationFilter.COOKIE_NAME, jwt);
-        cookie.setHttpOnly(false);
-        cookie.setPath("/");
-        InternetDomainName dn = InternetDomainName.from(request.getServerName());
-        String privateDomain = dn.isUnderPublicSuffix() ? dn.topPrivateDomain().toString() : request.getServerName();
-        cookie.setDomain(privateDomain);
-        response.addCookie(cookie);
+        response.addCookie(createCookie(jwt, -1, request));
     }
 
     /**
@@ -54,10 +48,17 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-        Cookie cookie = new Cookie(JwtAuthenticationFilter.COOKIE_NAME, null);
+        response.addCookie(createCookie(null, 0, request));
+    }
+    
+    private Cookie createCookie(String value, int maxAge, HttpServletRequest request) {
+        Cookie cookie = new Cookie(JwtAuthenticationFilter.COOKIE_NAME, value);
         cookie.setHttpOnly(false);
         cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        cookie.setMaxAge(maxAge);
+        InternetDomainName dn = InternetDomainName.from(request.getServerName());
+        String privateDomain = dn.isUnderPublicSuffix() ? dn.topPrivateDomain().toString() : request.getServerName();
+        cookie.setDomain(privateDomain);
+        return cookie;
     }
 }
