@@ -23,12 +23,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Dawg House</title>
+  <title>Dawg Show</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href='<c:url value="/resources/public/css/login.css" />'>
+  <link rel="stylesheet" type="text/css" href='<c:url value="/public/css/login.css" />'>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 </head>
 <body>
@@ -38,8 +38,8 @@
       <section class="login-form">
         <form name='loginForm' method="post" action="<c:url value='login' />" role="login">
           <div class="form-title">
-            <img src='<c:url value="/resources/public/images/dawg-logo.png"/>' class="img-responsive" alt="">
-            Dawg House
+            <img src='<c:url value="/public/images/dawg-logo.png"/>' class="img-responsive" alt="">
+            Dawg Show
           </div>
           <c:if test="${error}">
             <div class="alert alert-danger" role="alert">Invalid credentials</div>

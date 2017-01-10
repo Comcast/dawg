@@ -110,11 +110,22 @@ public class ParkController {
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(
-        @RequestParam(value = "error", required = false) String error,
-        @RequestParam(value = "logout", required = false) String logout) {
+    		@RequestParam(value = "error", required = false) String error,
+    		@RequestParam(value = "logout", required = false) String logout,
+    		@RequestParam(value = "unauthorized", required = false) String unauthorized) {
 
-        return new ModelAndView("login-example");
-    }
+        	ModelAndView mav = new ModelAndView("login");
+        	if(error != null) {
+        		mav.addObject("error", true);
+        	}
+        	if(logout != null) {
+        		mav.addObject("logout", true);
+        	}
+        	if (unauthorized != null) {
+        		mav.addObject("unauthorized", true);
+        	}
+        	return mav;
+        }
 
     @SuppressWarnings("unchecked")
     @RequestMapping("/{token}*")
