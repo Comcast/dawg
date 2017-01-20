@@ -61,7 +61,7 @@ public class PowerController implements ViewConstants {
     @RequestMapping(method = { RequestMethod.POST }, value = "/power")
     @ResponseBody
     public void power(@RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String command,
-            HttpServletRequest req, HttpServletResponse resp, @CookieValue(name="dawt", required=false) String dawt) throws PowerException {
+            HttpServletRequest req, HttpServletResponse resp, @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt) throws PowerException {
         accessValidator.validateUserHasAccessToDevices(req, resp, false, deviceIds);
         Cookie cookie = dawt == null ? null : cookieUtils.createApacheCookie(dawt, -1, req);
         PowerException exc = null;

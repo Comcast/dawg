@@ -60,7 +60,7 @@ public class KeyController implements ViewConstants {
     @ResponseBody
     public void sendKey(HttpServletRequest req, HttpServletResponse resp,
             @RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String key, @RequestParam(required = false) String remoteType,
-            @CookieValue(name="dawt", required=false) String dawt) throws KeyException, InterruptedException {
+            @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt) throws KeyException, InterruptedException {
         sendKey(req, resp, deviceIds, key, null, remoteType, dawt);
     }
 
@@ -69,7 +69,7 @@ public class KeyController implements ViewConstants {
     @ResponseBody
     public void holdKey(HttpServletRequest req, HttpServletResponse resp, 
             @RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String key, @RequestParam String holdTime, @RequestParam(required = false) String remoteType,
-            @CookieValue(name="dawt", required=false) String dawt) throws KeyException, InterruptedException {
+            @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt) throws KeyException, InterruptedException {
         sendKey(req, resp, deviceIds, key, holdTime, remoteType, dawt);
     }
 
@@ -142,7 +142,7 @@ public class KeyController implements ViewConstants {
             @RequestParam(value = "deviceIds[]") String[] deviceIds,
             @RequestParam String channelNum,
             @RequestParam(required = false) String remoteType,
-            @CookieValue(name="dawt", required=false) String dawt)
+            @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt)
         throws KeyException, InterruptedException {
         Key[] keys = Key.keysForChannel(channelNum);
         sendKeys(req, resp, deviceIds, keys, null, remoteType, dawt);
