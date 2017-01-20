@@ -8,11 +8,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,11 +21,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 public class JwtAuthenticationFilter extends GenericFilterBean {
-    public static final String COOKIE_NAME = "dawt";
     public static final Logger LOGGER = Logger.getLogger(JwtAuthenticationFilter.class);
     
     private DawgJwtEncoder encoder;
     private AuthenticationManager authenticationManager;
+    private DawgCookieUtils cookieUtils = new DawgCookieUtils();
     
     public JwtAuthenticationFilter(DawgJwtEncoder encoder, AuthenticationManager authenticationManager) {
         this.encoder = encoder;
@@ -45,23 +42,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
-        String jwt = null;
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(COOKIE_NAME)) {
-                    jwt = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if (jwt == null) {
-            String authHeader = request.getHeader("Authorization");
-            if ((authHeader != null) && (authHeader.startsWith("Bearer"))) {
-                jwt = new String(Base64.decodeBase64(authHeader.substring("Bearer ".length())));
-            }
-        }
+        String jwt = this.cookieUtils.extractJwt((HttpServletRequest) req);
         if (jwt != null) {
             DawgCreds dawgUser = null;
             try {
@@ -84,7 +65,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 }
             }
         }
-        chain.doFilter(request, response);
+        chain.doFilter(req, res);
         
     }
     

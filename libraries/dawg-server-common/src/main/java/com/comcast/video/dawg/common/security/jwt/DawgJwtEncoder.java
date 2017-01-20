@@ -82,6 +82,20 @@ public class DawgJwtEncoder {
 
         return builder.compact();
     }
+    
+    /**
+     * Turns an existing jwt object into a jwt string and signs it
+     * @param dawgJwt
+     * @return
+     */
+    public String createUserJWT(DawgJwt dawgJwt) {
+        Key signingKey = new SecretKeySpec(jwtSecret.getBytes(), SIGNATURE_ALG.getJcaName());
+        JwtBuilder builder = Jwts.builder()
+                .setClaims(dawgJwt)
+                .setId(UUID.randomUUID().toString())
+                .signWith(SIGNATURE_ALG, signingKey);
+        return builder.compact();
+    }
 
     /**
      * Decodes a java web token into the DawgJwt, which can be used to retrieve the {@link DawgCreds}

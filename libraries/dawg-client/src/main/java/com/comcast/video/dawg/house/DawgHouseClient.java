@@ -228,8 +228,4 @@ public class DawgHouseClient extends DawgClient implements IDawgHouseClient<Meta
         }
         return null;
     }
-    
-    public void setJwt(String jwt) {
-        this.client.addDefaultHeader("Authorization", "Bearer " + new String(Base64.encodeBase64(jwt.getBytes(), false)));
-    }
 }

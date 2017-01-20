@@ -15,6 +15,8 @@
  */
 package com.comcast.video.dawg.show.key;
 
+
+import org.apache.http.cookie.Cookie;
 import org.easymock.EasyMock;
 import org.springframework.util.Assert;
 import org.testng.annotations.DataProvider;
@@ -24,6 +26,7 @@ import com.comcast.pantry.test.TestList;
 import com.comcast.pantry.test.Wiring;
 import com.comcast.video.dawg.cats.ir.IrClient;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 import com.comcast.video.dawg.show.plugins.RemotePluginManager;
 import com.comcast.video.dawg.show.util.MockMetaStbCache;
 import com.comcast.video.dawg.show.util.TestUtils;
@@ -53,7 +56,7 @@ public class KeyControllerTest {
         EasyMock.replay(client);
 
         KeyController controller = new KeyController();
-        Assert.notNull(controller.createSendKeyThread(null, null, null, null, null)); // really just for code coverage
+        Assert.notNull(controller.createSendKeyThread(null, null, null, null, null, null)); // really just for code coverage
         RemotePluginManager rpm = new RemotePluginManager();
 
         /**
@@ -64,15 +67,16 @@ public class KeyControllerTest {
 
         Wiring.autowire(controller, cache);
         Wiring.autowire(controller, rpm);
+        Wiring.autowire(controller, rpm);
 
-        controller.sendKey(deviceIds, key, remoteType);
+        controller.sendKey(null, null, deviceIds, key, remoteType, null);
 
         EasyMock.verify(client);
     }
 
     private KeyController getKeyController(final MockMetaStbCache cache, final IrClient client, final RemotePluginManager rpm) {
         KeyController controller = new KeyController() {
-            protected SendKeyThread createSendKeyThread(String deviceId, Key[] key, String holdTime, RemotePluginManager rpm, String remoteType) {
+            protected SendKeyThread createSendKeyThread(String deviceId, Key[] key, String holdTime, RemotePluginManager rpm, String remoteType, Cookie cookie) {
                 SendKeyThread thread = new SendKeyThread(deviceId, key,
                         holdTime, cache, rpm, remoteType) {
                     @Override
@@ -83,6 +87,8 @@ public class KeyControllerTest {
                 return thread;
             }
         };
+        JwtDeviceAccessValidator validator = new JwtDeviceAccessValidator(null, null, false);
+        Wiring.autowire(controller, validator);
         return controller;
     }
 
@@ -116,7 +122,7 @@ public class KeyControllerTest {
         KeyController controller = getKeyController(cache, client, rpm);
         Wiring.autowire(controller, cache);
 
-        controller.directTune(deviceIds, channelNum, remoteType);
+        controller.directTune(null, null, deviceIds, channelNum, remoteType, null);
 
         EasyMock.verify(client);
     }
