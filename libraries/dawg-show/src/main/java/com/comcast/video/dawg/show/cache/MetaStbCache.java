@@ -19,7 +19,6 @@ import static com.comcast.video.dawg.util.DawgUtil.toLowerAlphaNumeric;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -28,12 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.comcast.video.dawg.common.MetaStb;
-import com.comcast.video.dawg.common.security.jwt.DawgJwt;
 import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
-import com.comcast.video.dawg.common.security.jwt.DawgCreds;
+import com.comcast.video.dawg.common.security.jwt.JwtSecurityProvider;
 import com.comcast.video.dawg.house.DawgHouseClient;
 import com.comcast.video.dawg.show.DawgShowConfiguration;
-import com.google.common.collect.Sets;
 
 /**
  * Cache that holds metadata for stbs
@@ -52,7 +49,6 @@ public class MetaStbCache {
 
     @Autowired
     private DawgJwtEncoder jwtEncoder;
-    private DawgJwt adminJwt = null;
 
     /**
      * Gets the metadata for the stb with the given deviceId. If there is no cached object then
@@ -125,19 +121,10 @@ public class MetaStbCache {
     protected DawgHouseClient getDawgHouseClient() {
         DawgHouseClient client = new DawgHouseClient(config.getDawgHouseUrl());
         if (config.getAuthConfig().getJwtSecret() != null) {
-            String jwt = jwtEncoder.createUserJWT(getAdminToken().getCreds());
-            client.setJwt(jwt);
+            JwtSecurityProvider sp = new JwtSecurityProvider(config.getDawgHouseUser(), config.getDawgHousePassword(), jwtEncoder);
+            client.getClient().setSecurityProvider(sp);
         }
         return client;
-    }
-    
-    private synchronized DawgJwt getAdminToken() {
-        Date exp = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1));
-        if ((adminJwt == null) || (exp.after(adminJwt.getExpiration()))) {
-            DawgCreds creds = new DawgCreds(config.getDawgHouseUser(), config.getDawgHousePassword(), Sets.newHashSet("ADMIN"));
-            adminJwt = jwtEncoder.decodeJwt(jwtEncoder.createUserJWT(creds));
-        }
-        return adminJwt;
     }
 
     /**

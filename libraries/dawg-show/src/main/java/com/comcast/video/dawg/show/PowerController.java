@@ -15,8 +15,13 @@
  */
 package com.comcast.video.dawg.show;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.comcast.video.dawg.cats.power.PowerClient;
 import com.comcast.video.dawg.cats.power.PowerOperation;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.DawgCookieUtils;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 import com.comcast.video.dawg.show.cache.MetaStbCache;
 import com.comcast.video.stbio.exceptions.PowerException;
 
@@ -39,6 +46,11 @@ public class PowerController implements ViewConstants {
     @Autowired
     private MetaStbCache metaStbCache;
 
+    @Autowired
+    private JwtDeviceAccessValidator accessValidator;
+    
+    private DawgCookieUtils cookieUtils = new DawgCookieUtils();
+
     /**
      * Sends the given power command
      * @param deviceId The id of the device to send the power command to
@@ -48,13 +60,16 @@ public class PowerController implements ViewConstants {
      */
     @RequestMapping(method = { RequestMethod.POST }, value = "/power")
     @ResponseBody
-    public void power(@RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String command) throws PowerException {
+    public void power(@RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String command,
+            HttpServletRequest req, HttpServletResponse resp, @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt) throws PowerException {
+        accessValidator.validateUserHasAccessToDevices(req, resp, false, deviceIds);
+        Cookie cookie = dawt == null ? null : cookieUtils.createApacheCookie(dawt, -1, req);
         PowerException exc = null;
         StringBuilder failedIds = new StringBuilder();
         for (String deviceId : deviceIds) {
             MetaStb stb = metaStbCache.getMetaStb(deviceId);
             try {
-                PowerClient client = getPowerClient(stb);
+                PowerClient client = getPowerClient(stb, cookie);
 
                 try {
                     PowerOperation op = PowerOperation.valueOf(command);
@@ -73,7 +88,11 @@ public class PowerController implements ViewConstants {
         }
     }
 
-    protected PowerClient getPowerClient(MetaStb stb) {
-        return new PowerClient(stb);
+    protected PowerClient getPowerClient(MetaStb stb, Cookie authCookie) {
+        PowerClient pc = new PowerClient(stb);
+        if (authCookie != null) {
+            pc.getCookieStore().addCookie(authCookie);
+        }
+        return pc;
     }
 }

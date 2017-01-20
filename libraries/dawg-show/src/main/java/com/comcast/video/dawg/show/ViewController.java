@@ -21,9 +21,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -36,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.comcast.cereal.CerealException;
 import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 import com.comcast.video.dawg.exception.HttpRuntimeException;
 import com.comcast.video.dawg.show.cache.MetaStbCache;
 import com.comcast.video.dawg.show.key.Remote;
@@ -45,9 +49,6 @@ import com.comcast.video.dawg.util.DawgUtil;
 
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Controller for serving up views
@@ -68,6 +69,9 @@ public class ViewController implements ViewConstants {
 
     @Autowired
     private VideoSnap videoSnap;
+
+    @Autowired
+    private JwtDeviceAccessValidator accessValidator;
 
     /** JSON engine. */
     private JsonCerealEngine jsonEngine = new JsonCerealEngine();
@@ -108,21 +112,25 @@ public class ViewController implements ViewConstants {
     public ModelAndView stbView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
             @RequestParam(required = false) String refresh,
-            @RequestHeader("User-Agent") String uaStr) {
+            @RequestHeader("User-Agent") String uaStr,
+            HttpServletRequest req, HttpServletResponse resp) {
     	String stbViewType = STB;
-    	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
+    	return getStbView(req, resp, deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
 
     @RequestMapping(method = { RequestMethod.GET }, value = "/simplified")
     public ModelAndView stbSimplifiedView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
             @RequestParam(required = false) String refresh,
-            @RequestHeader("User-Agent") String uaStr) {
+            @RequestHeader("User-Agent") String uaStr,
+            HttpServletRequest req, HttpServletResponse resp) {
     	String stbViewType = SIMPLIFIED;
-    	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
+    	return getStbView(req, resp, deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
 
-    public ModelAndView getStbView(String deviceId, String mobile, String remoteType, String refresh, String uaStr, String stbViewType){
+    public ModelAndView getStbView(HttpServletRequest req, HttpServletResponse resp, String deviceId, 
+            String mobile, String remoteType, String refresh, String uaStr, String stbViewType) {
+        accessValidator.validateUserHasAccessToDevices(req, resp, true, deviceId);
         MetaStb stb = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
         try {
@@ -289,7 +297,9 @@ public class ViewController implements ViewConstants {
     @RequestMapping(method = {RequestMethod.GET}, value = "/multi")
     public ModelAndView multiView(@RequestParam String[] deviceIds, @RequestParam(required = false) String refresh,
             @RequestParam(required = false, defaultValue = "false") boolean isGenericRemote,
-            @RequestHeader("User-Agent") String uaStr) {
+            @RequestHeader("User-Agent") String uaStr,
+            HttpServletRequest req, HttpServletResponse resp) {
+        accessValidator.validateUserHasAccessToDevices(req, resp, true, deviceIds);
 
         Collection<MetaStb> stbs = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
@@ -350,7 +360,9 @@ public class ViewController implements ViewConstants {
      */
     @RequestMapping(method = {RequestMethod.GET}, value = "/video/multi/snap")
     @ResponseBody
-    public ModelAndView snapMultiVideo(@RequestParam String[] deviceIds, HttpSession session) {
+    public ModelAndView snapMultiVideo(@RequestParam String[] deviceIds, HttpSession session,
+            HttpServletRequest req, HttpServletResponse resp) {
+        accessValidator.validateUserHasAccessToDevices(req, resp, false, deviceIds);
         String deviceIdImageIdJson = null;
         try {
             //JSON engine declared locally to avoid the "--class" key from the the serialized JSON output
@@ -378,13 +390,14 @@ public class ViewController implements ViewConstants {
      *            hold session details for the client
      * @return zip with snapshots of devices in dawg-show multiview
      */
-    @SuppressWarnings("unchecked")
     @RequestMapping(method = {RequestMethod.GET}, value = "/snap/multi", produces = "application/zip")
     public ModelAndView multiSnap(@RequestParam Map<String, String> deviceIdImageIdMap,
-            @RequestParam(required = false) String refresh, HttpServletResponse response, HttpSession session) {
+            @RequestParam(required = false) String refresh, HttpServletResponse response, HttpServletRequest req, HttpSession session) {
 
         String[] deviceIds = deviceIdImageIdMap.keySet().toArray(new String[deviceIdImageIdMap.keySet().size()]);
-        String[] imageIds = deviceIdImageIdMap.values().toArray(new String[deviceIdImageIdMap.values().size()]);;
+        String[] imageIds = deviceIdImageIdMap.values().toArray(new String[deviceIdImageIdMap.values().size()]);
+
+        accessValidator.validateUserHasAccessToDevices(req, response, false, deviceIds);
 
         Collection<MetaStb> stbs = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);

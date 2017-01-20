@@ -15,6 +15,13 @@
  */
 package com.comcast.video.dawg.show.key;
 
+
+import java.util.Date;
+
+import org.apache.http.cookie.ClientCookie;
+import org.apache.http.cookie.Cookie;
+
+import com.comcast.video.dawg.cats.ir.IrClient;
 import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.show.cache.MetaStbCache;
 import com.comcast.video.dawg.show.plugins.RemotePluginManager;
@@ -35,6 +42,7 @@ public class SendKeyThread extends Thread {
     private RemotePluginManager remotePluginManager;
     private KeyException exc;
     private String remoteType;
+    private Cookie authCookie;
 
     public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager) {
         this.deviceId = deviceId;
@@ -46,8 +54,13 @@ public class SendKeyThread extends Thread {
     }
 
     public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager, String remoteType) {
+        this(deviceId, keys, holdTime, metaStbCache, remotePluginManager, remoteType, null);
+    }
+
+    public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager, String remoteType, Cookie authCookie) {
         this(deviceId, keys, holdTime, metaStbCache, remotePluginManager);
         this.remoteType = remoteType;
+        this.authCookie = authCookie;
     }
 
     /**
@@ -69,7 +82,12 @@ public class SendKeyThread extends Thread {
     }
 
     protected KeyInput getIrClient(MetaStb stb, String remoteType) {
-        return remotePluginManager.getKeyInput(stb, remoteType);
+        KeyInput inp = remotePluginManager.getKeyInput(stb, remoteType);
+        if ((inp instanceof IrClient) && (this.authCookie != null)) {
+            ((IrClient) inp).getCookieStore().addCookie(authCookie);
+        }
+        
+        return inp;
     }
 
     /**

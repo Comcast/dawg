@@ -16,8 +16,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.comcast.video.dawg.common.DeviceProvider;
 import com.comcast.video.dawg.common.security.SecuritySwitchFilter;
 import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
+import com.comcast.video.dawg.common.security.jwt.JwtSecurityProvider;
+import com.comcast.video.dawg.house.DawgPoundClient;
 
 @Configuration
 @EnableWebMvc
@@ -49,6 +53,16 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Autowired
     public SecuritySwitchFilter securitySwitchFilter(DawgShowConfiguration config) {
         return new SecuritySwitchFilter(!"none".equals(config.getAuthConfig().getMode()));
+    }
+    
+    @Bean
+    @Autowired
+    public JwtDeviceAccessValidator accessValidator(DawgJwtEncoder jwtEncoder, DawgShowConfiguration config) {
+        boolean enabled = !"none".equals(config.getAuthConfig().getMode());
+        DawgPoundClient deviceProvider = new DawgPoundClient(config.getDawgPoundUrl());
+        JwtSecurityProvider jwtSecurityProvider = new JwtSecurityProvider(config.getDawgHouseUser(), config.getDawgHousePassword(), jwtEncoder);
+        deviceProvider.getClient().setSecurityProvider(jwtSecurityProvider);
+        return new JwtDeviceAccessValidator(jwtEncoder, deviceProvider, enabled);
     }
 
     @Override
