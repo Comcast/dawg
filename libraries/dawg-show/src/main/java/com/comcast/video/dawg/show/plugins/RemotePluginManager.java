@@ -175,7 +175,14 @@ public class RemotePluginManager {
                 return ki;
             }
         }
-        return new IrClient(stb, rt);
+        MetaStb meta = new MetaStb(new HashMap<String, Object>(stb.getData())); // make a copy so we can set some defaults
+        if (!meta.getData().containsKey(MetaStb.RACK_PROXY_ENABLED)) {
+            meta.setRackProxyEnabled(config.getRackProxyEnabledDefault());
+        }
+        if (!meta.getData().containsKey(MetaStb.RACK_PROXY_URL)) {
+            meta.setRackProxyUrl(config.getRackProxyUrlDefault());
+        }
+        return new IrClient(meta, rt);
 
     }
 

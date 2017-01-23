@@ -35,6 +35,8 @@ public class DawgShowConfiguration extends DawgConfiguration {
     public static final String PLUGINS_DIR = "plugins.dir";
     public static final String HOUSE_USER = "house.user";
     public static final String HOUSE_PASSWORD = "house.password";
+    public static final String RACK_PROXY_URL_DEFAULT = "rack.proxy.url.default";
+    public static final String RACK_PROXY_ENABLED_DEFAULT = "rack.proxy.enabled.default";
     public static final String DEFAULT_PLUGINS_DIR = "/opt/dawg/plugins";
 
     /**
@@ -62,5 +64,13 @@ public class DawgShowConfiguration extends DawgConfiguration {
 
     public String getDawgHousePassword() {
         return this.get(HOUSE_PASSWORD);
+    }
+
+    public String getRackProxyUrlDefault() {
+        return this.get(RACK_PROXY_URL_DEFAULT, "");
+    }
+
+    public Boolean getRackProxyEnabledDefault() {
+        return this.get(RACK_PROXY_ENABLED_DEFAULT, Boolean.class, false);
     }
 }

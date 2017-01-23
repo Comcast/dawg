@@ -15,6 +15,8 @@
  */
 package com.comcast.video.dawg.show;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,6 +47,9 @@ public class PowerController implements ViewConstants {
 
     @Autowired
     private MetaStbCache metaStbCache;
+
+    @Autowired
+    private DawgShowConfiguration config;
 
     @Autowired
     private JwtDeviceAccessValidator accessValidator;
@@ -89,7 +94,14 @@ public class PowerController implements ViewConstants {
     }
 
     protected PowerClient getPowerClient(MetaStb stb, Cookie authCookie) {
-        PowerClient pc = new PowerClient(stb);
+        MetaStb meta = new MetaStb(new HashMap<String, Object>(stb.getData())); // make a copy so we can set some defaults
+        if (!meta.getData().containsKey(MetaStb.RACK_PROXY_ENABLED)) {
+            meta.setRackProxyEnabled(config.getRackProxyEnabledDefault());
+        }
+        if (!meta.getData().containsKey(MetaStb.RACK_PROXY_URL)) {
+            meta.setRackProxyUrl(config.getRackProxyUrlDefault());
+        }
+        PowerClient pc = new PowerClient(meta);
         if (authCookie != null) {
             pc.getCookieStore().addCookie(authCookie);
         }

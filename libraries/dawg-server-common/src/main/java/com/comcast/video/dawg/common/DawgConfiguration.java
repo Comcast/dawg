@@ -24,6 +24,8 @@ import org.ini4j.Ini;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.comcast.cereal.CerealSettings;
+import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.video.dawg.common.security.AuthConfigFactory;
 import com.comcast.video.dawg.common.security.AuthServerConfig;
 import com.comcast.video.dawg.common.security.LdapAuthServerConfig;
@@ -117,12 +119,16 @@ public class DawgConfiguration {
      * @throws RuntimeException if no value is found and no default provided
      */
     public String get(String key, String def) {
+        return get(key, String.class, def);
+    }
+    
+    public <T> T get(String key, Class<T> clazz, T def) {
         Ini.Section sec = this.ini.get(INI_SECTION);
 
         if(!sec.containsKey(key) && (def == null))
             throw new RuntimeException("Configuration key '" + key + "' not found");
 
-        return sec.get(key, def);
+        return sec.get(key, clazz, def);
     }
 
     public void put(String key, String value) {

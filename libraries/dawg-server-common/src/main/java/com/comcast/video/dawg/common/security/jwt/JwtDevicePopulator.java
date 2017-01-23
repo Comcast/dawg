@@ -3,6 +3,7 @@ package com.comcast.video.dawg.common.security.jwt;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

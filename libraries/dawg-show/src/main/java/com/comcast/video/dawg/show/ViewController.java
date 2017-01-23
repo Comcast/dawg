@@ -63,6 +63,9 @@ public class ViewController implements ViewConstants {
     private static final String GENERIC_REMOTE_NAME = "GENERIC";
     @Autowired
     private MetaStbCache metaStbCache;
+    
+    @Autowired
+    private DawgShowConfiguration config;
 
     @Autowired
     private RemoteManager remoteManager;
@@ -210,8 +213,9 @@ public class ViewController implements ViewConstants {
     }
 
     private String getProxyUrl(MetaStb meta) {
-        boolean enabled = meta.getRackProxyEnabled();
-        String proxyUrl = prependMissingProtocol(meta.getRackProxyUrl(), "http://");
+        boolean enabled = meta.getData().containsKey(MetaStb.RACK_PROXY_ENABLED) ? meta.getRackProxyEnabled() : config.getRackProxyEnabledDefault();
+        String proxyUrl = meta.getData().containsKey(MetaStb.RACK_PROXY_URL) ? meta.getRackProxyUrl() : config.getRackProxyUrlDefault();
+        proxyUrl = prependMissingProtocol(proxyUrl, "http://");
 
         return enabled && !"http://".equals(proxyUrl) ? proxyUrl : null;
     }
