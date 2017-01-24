@@ -559,13 +559,14 @@ public class MetaStb implements Comparable<MetaStb>, DawgDevice, StbProperties, 
      * {@inheritDoc}
      */
     public Boolean getRackProxyEnabled() {
-        return Boolean.parseBoolean((String) data.get(MetaStb.RACK_PROXY_ENABLED));
+        Object rpe = data.get(MetaStb.RACK_PROXY_ENABLED);
+        return Boolean.parseBoolean(rpe == null ? null : rpe.toString());
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setRackProxyUrl(Boolean rackProxyEnabled) {
+    public void setRackProxyEnabled(Boolean rackProxyEnabled) {
         data.put(MetaStb.RACK_PROXY_ENABLED, rackProxyEnabled);
     }
 

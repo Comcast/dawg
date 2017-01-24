@@ -42,6 +42,7 @@ import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.common.plugin.KeyInputPlugin;
 import com.comcast.video.dawg.common.plugin.PluginConfiguration;
 import com.comcast.video.dawg.show.DawgShowConfiguration;
+import com.comcast.video.dawg.show.DefaultMetaStb;
 import com.comcast.video.dawg.show.key.Remote;
 import com.comcast.video.dawg.show.key.RemoteManager;
 import com.comcast.video.stbio.KeyInput;
@@ -175,8 +176,7 @@ public class RemotePluginManager {
                 return ki;
             }
         }
-        return new IrClient(stb, rt);
-
+        return new IrClient(new DefaultMetaStb(stb.getData(), config), rt);
     }
 
     /**

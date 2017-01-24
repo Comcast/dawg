@@ -47,6 +47,9 @@ public class PowerController implements ViewConstants {
     private MetaStbCache metaStbCache;
 
     @Autowired
+    private DawgShowConfiguration config;
+
+    @Autowired
     private JwtDeviceAccessValidator accessValidator;
     
     private DawgCookieUtils cookieUtils = new DawgCookieUtils();
@@ -89,7 +92,7 @@ public class PowerController implements ViewConstants {
     }
 
     protected PowerClient getPowerClient(MetaStb stb, Cookie authCookie) {
-        PowerClient pc = new PowerClient(stb);
+        PowerClient pc = new PowerClient(new DefaultMetaStb(stb.getData(), config));
         if (authCookie != null) {
             pc.getCookieStore().addCookie(authCookie);
         }

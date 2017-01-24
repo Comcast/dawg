@@ -62,6 +62,8 @@ public class PowerControllerTest {
         cache.putMetaStb(stb);
         final MockPowerClient client = new MockPowerClient(stb);
         PowerController controller = new PowerController();
+        DawgShowConfiguration config = new DawgShowConfiguration();
+        Wiring.autowire(controller, config);
         Assert.assertNotNull(controller.getPowerClient(stb, null)); // really just for code coverage
         controller = new PowerController() {
             protected PowerClient getPowerClient(MetaStb stb, Cookie cookie) {
