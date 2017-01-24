@@ -116,6 +116,8 @@ public class ViewControllerTest {
         Wiring.autowire(controller, remoteMan);
         JwtDeviceAccessValidator validator = new JwtDeviceAccessValidator(null, null, false);
         Wiring.autowire(controller, validator);
+        DawgShowConfiguration config = new DawgShowConfiguration();
+        Wiring.autowire(controller, config);
         return controller;
     }
 }
