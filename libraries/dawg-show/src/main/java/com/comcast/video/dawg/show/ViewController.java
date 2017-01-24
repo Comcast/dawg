@@ -213,9 +213,9 @@ public class ViewController implements ViewConstants {
     }
 
     private String getProxyUrl(MetaStb meta) {
-        boolean enabled = meta.getData().containsKey(MetaStb.RACK_PROXY_ENABLED) ? meta.getRackProxyEnabled() : config.getRackProxyEnabledDefault();
-        String proxyUrl = meta.getData().containsKey(MetaStb.RACK_PROXY_URL) ? meta.getRackProxyUrl() : config.getRackProxyUrlDefault();
-        proxyUrl = prependMissingProtocol(proxyUrl, "http://");
+        MetaStb defaultMeta = new DefaultMetaStb(meta.getData(), config);
+        boolean enabled = defaultMeta.getRackProxyEnabled();
+        String proxyUrl = prependMissingProtocol(defaultMeta.getRackProxyUrl(), "http://");
 
         return enabled && !"http://".equals(proxyUrl) ? proxyUrl : null;
     }

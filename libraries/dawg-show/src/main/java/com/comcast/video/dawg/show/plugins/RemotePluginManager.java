@@ -42,6 +42,7 @@ import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.common.plugin.KeyInputPlugin;
 import com.comcast.video.dawg.common.plugin.PluginConfiguration;
 import com.comcast.video.dawg.show.DawgShowConfiguration;
+import com.comcast.video.dawg.show.DefaultMetaStb;
 import com.comcast.video.dawg.show.key.Remote;
 import com.comcast.video.dawg.show.key.RemoteManager;
 import com.comcast.video.stbio.KeyInput;
@@ -175,15 +176,7 @@ public class RemotePluginManager {
                 return ki;
             }
         }
-        MetaStb meta = new MetaStb(new HashMap<String, Object>(stb.getData())); // make a copy so we can set some defaults
-        if (!meta.getData().containsKey(MetaStb.RACK_PROXY_ENABLED)) {
-            meta.setRackProxyEnabled(config.getRackProxyEnabledDefault());
-        }
-        if (!meta.getData().containsKey(MetaStb.RACK_PROXY_URL)) {
-            meta.setRackProxyUrl(config.getRackProxyUrlDefault());
-        }
-        return new IrClient(meta, rt);
-
+        return new IrClient(new DefaultMetaStb(stb.getData(), config), rt);
     }
 
     /**
