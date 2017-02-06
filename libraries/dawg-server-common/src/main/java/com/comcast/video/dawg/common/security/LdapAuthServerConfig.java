@@ -17,6 +17,8 @@ public class LdapAuthServerConfig extends AuthServerConfig {
     private String groupSearchBase = null;
     private String groupFilter = "member={0}";
     private String usersOrganizationalUnit = "people";
+    private Long connectTimeout = 7000L;
+    private Long readTimeout = 7000L;
     
     public LdapAuthServerConfig() {
         try {
@@ -99,4 +101,21 @@ public class LdapAuthServerConfig extends AuthServerConfig {
     public void setUsersOrganizationalUnit(String usersOrganizationalUnit) {
         this.usersOrganizationalUnit = usersOrganizationalUnit;
     }
+
+    public Long getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    public void setConnectTimeout(Long connectTimeout) {
+        this.connectTimeout = connectTimeout;
+    }
+
+    public Long getReadTimeout() {
+        return readTimeout;
+    }
+
+    public void setReadTimeout(Long readTimeout) {
+        this.readTimeout = readTimeout;
+    }
+    
 }
