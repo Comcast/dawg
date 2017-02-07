@@ -1,7 +1,6 @@
 package com.comcast.video.dawg.show;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.comcast.video.dawg.common.DeviceProvider;
 import com.comcast.video.dawg.common.security.SecuritySwitchFilter;
 import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
 import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
@@ -46,7 +44,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     @Autowired
     public DawgJwtEncoder jwtEncoder(DawgShowConfiguration config) {
-        return new DawgJwtEncoder(config.getAuthConfig().getJwtSecret(), "dawg-show", TimeUnit.HOURS.toMillis(1));
+        return new DawgJwtEncoder(config.getAuthConfig().getJwtSecret(), "dawg-show", config.getAuthConfig().getJwtTtl());
     }
     
     @Bean

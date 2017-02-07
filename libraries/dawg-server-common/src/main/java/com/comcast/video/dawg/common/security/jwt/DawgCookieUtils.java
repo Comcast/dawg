@@ -1,11 +1,17 @@
 package com.comcast.video.dawg.common.security.jwt;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.cookie.ClientCookie;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.google.common.net.InternetDomainName;
 
@@ -40,21 +46,32 @@ public class DawgCookieUtils {
         return servletCookieToApacheCookie(createCookie(value, maxAge, request));
     }
     
+    public Cookie getDawtCookie(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals(COOKIE_NAME)) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
+    }
+    
     /**
-     * Gets the jwt string out of either the cookie or authorization header
+     * Gets the jwt string out of either the session, cookie or authorization header
      * @param request
      * @return
      */
     public String extractJwt(HttpServletRequest request) {
-        String jwt = null;
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(COOKIE_NAME)) {
-                    jwt = cookie.getValue();
-                    break;
-                }
+        HttpSession session = request.getSession();
+        if (session != null) {
+            String jwt = (String) session.getAttribute(DawgCookieUtils.COOKIE_NAME);
+            if (jwt != null) {
+                return jwt;
             }
         }
+        Cookie dawt = getDawtCookie(request);
+        String jwt = dawt == null ? null : dawt.getValue();
         if (jwt == null) {
             String authHeader = request.getHeader("Authorization");
             if ((authHeader != null) && (authHeader.startsWith("Bearer"))) {
@@ -74,5 +91,21 @@ public class DawgCookieUtils {
         apacheCookie.setVersion(cookie.getVersion());
         
         return apacheCookie;
+    }
+    
+    public DawgCreds toDawgCreds(Authentication authentication) {
+        Set<String> roles = new HashSet<String>();
+        for (GrantedAuthority auth : authentication.getAuthorities()) {
+            roles.add(auth.getAuthority());
+        }
+        String pass = authentication.getCredentials() == null ? null : authentication.getCredentials().toString();
+        return new DawgCreds(authentication.getName(), pass, roles);
+    }
+    
+    public void saveJwtInSession(HttpServletRequest req, String jwt) {
+        HttpSession session = req.getSession();
+        if (session != null) {
+            session.setAttribute(COOKIE_NAME, jwt);
+        }
     }
 }

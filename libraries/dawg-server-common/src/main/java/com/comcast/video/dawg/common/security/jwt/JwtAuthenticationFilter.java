@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,31 +43,59 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        String jwt = this.cookieUtils.extractJwt((HttpServletRequest) req);
-        if (jwt != null) {
-            DawgCreds dawgUser = null;
-            try {
-                DawgJwt dawgJwt = this.encoder.decodeJwt(jwt);
-                dawgUser = dawgJwt.getCreds();
-            } catch (Exception e) {
-                LOGGER.warn("Invalid jwt '" + jwt + "'", e);
+        DawgCreds cookieCreds = getCookieCreds((HttpServletRequest) req, (HttpServletResponse) res);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if ((cookieCreds != null) && ((auth == null) || !auth.isAuthenticated())) {
+            Collection<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
+            for (String role : cookieCreds.getRoles()) {
+                auths.add(new SimpleGrantedAuthority(role));
             }
-            if (dawgUser != null) {
-                Collection<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
-                for (String role : dawgUser.getRoles()) {
-                    auths.add(new SimpleGrantedAuthority(role));
-                }
-                if (StringUtils.isEmpty(dawgUser.getUserName()) || StringUtils.isEmpty(dawgUser.getPassword())) {
-                    LOGGER.warn("No username and password found in jwt");
-                } else {
-                    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dawgUser.getUserName(), dawgUser.getPassword(), auths);
-                    Authentication auth = this.authenticationManager.authenticate(token);
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
-            }
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(cookieCreds.getUserName(), cookieCreds.getPassword(), auths);
+            auth = this.authenticationManager.authenticate(token);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
         chain.doFilter(req, res);
         
+    }
+    
+    /**
+     * Gets the creds from the JWT stored in cookies or Authorization header.
+     * If there is no jwt or it has expired and the user is still logged in
+     * via their session, refresh the jwt.
+     * @param req
+     * @param res
+     * @return
+     */
+    private DawgCreds getCookieCreds(HttpServletRequest req, HttpServletResponse res) {
+        DawgCreds dawgCreds = null;
+        String jwt = this.cookieUtils.extractJwt(req);
+        if (jwt != null) {
+            try {
+                DawgJwt dawgJwt = this.encoder.decodeJwt(jwt);
+                DawgCreds dawgUser = dawgJwt.getCreds();
+                if (dawgUser != null) {
+                    if (StringUtils.isEmpty(dawgUser.getUserName()) || StringUtils.isEmpty(dawgUser.getPassword())) {
+                        LOGGER.warn("No username and password found in jwt");
+                    } else {
+                        dawgCreds = dawgUser;
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.debug("Invalid jwt '" + jwt + "'", e);
+            }
+        }
+        if (dawgCreds == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if ((authentication != null) && (authentication.isAuthenticated())) {
+                /** If we don't have a jwt or it is expired, we should refresh the jwt */
+                LOGGER.debug("Refreshing jwt for '" + authentication.getName() + "'");
+                dawgCreds = cookieUtils.toDawgCreds(authentication);
+                jwt = this.encoder.createUserJWT(dawgCreds);
+                res.addCookie(cookieUtils.createCookie(jwt, -1, req));
+                cookieUtils.saveJwtInSession(req, jwt);
+            }
+        }
+        return dawgCreds;
     }
     
 }
