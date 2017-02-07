@@ -1,7 +1,6 @@
 package com.comcast.video.dawg.controller.house;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -55,7 +54,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     @Autowired
     public DawgJwtEncoder jwtEncoder(DawgHouseConfiguration config) {
-        return new DawgJwtEncoder(config.getAuthConfig().getJwtSecret(), "dawg-house", TimeUnit.HOURS.toMillis(1));
+        return new DawgJwtEncoder(config.getAuthConfig().getJwtSecret(), "dawg-house", config.getAuthConfig().getJwtTtl());
     }
     
     @Bean

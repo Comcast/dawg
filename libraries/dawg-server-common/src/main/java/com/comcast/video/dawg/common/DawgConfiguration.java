@@ -17,19 +17,14 @@ package com.comcast.video.dawg.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.Set;
 
 import org.ini4j.Ini;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.comcast.cereal.CerealSettings;
-import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.video.dawg.common.security.AuthConfigFactory;
 import com.comcast.video.dawg.common.security.AuthServerConfig;
 import com.comcast.video.dawg.common.security.LdapAuthServerConfig;
-import com.google.common.collect.Sets;
 
 /**
  * The key value pairs of the dawg configuration.

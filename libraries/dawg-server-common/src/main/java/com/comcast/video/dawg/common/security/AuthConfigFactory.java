@@ -26,6 +26,7 @@ public class AuthConfigFactory {
     public static final String LDAP_READ_TIMEOUT = "ldap.read.timeout";
     public static final String AUTH_MODE = "mode";
     public static final String JWT_SECRET = "jwtSecret";
+    public static final String JWT_TTL = "jwtTtl";
     public static final String CORS_DOMAINS = "corsDomains";
 
     public static final String MODE_NONE = "none";
@@ -54,6 +55,7 @@ public class AuthConfigFactory {
     
     private void setBaseConfig(AuthServerConfig cfg, OptionMap map) {
         cfg.setJwtSecret((String) map.get(JWT_SECRET));
+        cfg.setJwtTtl(map.get(JWT_TTL, Long.class, cfg.getJwtTtl()));
         Set<String> domains = map.containsKey(CORS_DOMAINS) ? Sets.newHashSet(map.get(CORS_DOMAINS).split(",")) : null;
         cfg.setCorsDomains(domains);
     }
