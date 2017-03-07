@@ -45,7 +45,6 @@ public class DawgPoundMongoService implements IDawgPoundService {
 
     private static final String COLLECTION_NAME = "DawgDevices";
 
-    /** Log4j logger for {@link DawgPoundMongoService} class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(DawgPoundMongoService.class);
 
     @Autowired

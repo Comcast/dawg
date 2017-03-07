@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.comcast.pantry.io.CircularQueue;
 import com.comcast.video.stbio.Capture;
@@ -32,7 +33,7 @@ import com.comcast.video.stbio.SerialListener;
  *
  */
 public class CaptureImpl implements SerialListener, Capture {
-    private static Logger logger = Logger.getLogger(CaptureImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(CaptureImpl.class);
 
     // The 500 previous captured strings should be more than enough to search through
     public static final int MAX_CAPTURED = 500;

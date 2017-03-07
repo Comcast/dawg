@@ -27,7 +27,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.comcast.drivethru.RestClient;
 import com.comcast.drivethru.client.DefaultRestClient;
@@ -42,7 +43,7 @@ import com.comcast.drivethru.utils.URL;
  *
  */
 public abstract class DawgClient implements Closeable {
-    public static final Logger logger = Logger.getLogger(DawgClient.class);
+    public static final Logger logger = LoggerFactory.getLogger(DawgClient.class);
 
     /** Constant to store the millisecond value for 1 second.*/
     public static final int ONE_SEC_IN_MILLIS = 1000;

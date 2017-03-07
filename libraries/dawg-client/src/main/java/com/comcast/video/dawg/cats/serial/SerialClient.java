@@ -24,11 +24,12 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.StatusCode;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.comcast.video.dawg.util.DawgUtil;
 import com.comcast.video.stbio.Capture;
@@ -45,7 +46,7 @@ import com.comcast.video.stbio.meta.SerialMeta;
  */
 public class SerialClient implements SerialInput, SerialOutput, WebSocketListener {
 
-    public static final Logger logger = Logger.getLogger(SerialClient.class);
+    public static final Logger logger = LoggerFactory.getLogger(SerialClient.class);
     public static final int DEFAULT_PORT = 15080;
     public static final long DEFAULT_CONNECT_TIME = 30000;
     public static final long DEFAULT_DISCONNECT_TIME = 5000;

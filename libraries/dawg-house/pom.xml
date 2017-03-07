@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>com.comcast.video.dawg</groupId>
         <artifactId>libraries</artifactId>
@@ -12,6 +14,13 @@
     <packaging>war</packaging>
 
     <dependencies>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-client</artifactId>
@@ -27,7 +36,7 @@
             <artifactId>dawg-server-common</artifactId>
             <version>2.1-SNAPSHOT</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -82,7 +91,7 @@
                 <configuration>
                     <license>Apache-2.0</license>
                     <group>Applications/Databases</group>
-                    <!--<icon></icon>-->
+                    <!--<icon></icon> -->
                     <packager>Comcast</packager>
                     <prefix>/usr/local</prefix>
                     <requires>
@@ -133,7 +142,8 @@
                         </executions>
                         <configuration>
                             <nosuffix>true</nosuffix>
-                            <!-- Excluding already minified & error prone files. -->
+                            <!-- Excluding already minified & error prone 
+                                files. -->
                             <excludes>
                                 <exclude>**/*.min.js</exclude>
                                 <exclude>**/*.min.css</exclude>
@@ -143,7 +153,8 @@
                             <webappDirectory>${project.build.directory}/min</webappDirectory>
                         </configuration>
                     </plugin>
-                    <!-- War plugin add all YUI compressor excluded files to the final war from source directory. -->
+                    <!-- War plugin add all YUI compressor excluded files 
+                        to the final war from source directory. -->
                     <plugin>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>

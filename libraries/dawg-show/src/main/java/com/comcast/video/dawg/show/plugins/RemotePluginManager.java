@@ -29,10 +29,11 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -55,7 +56,7 @@ import com.comcast.video.stbio.KeyInput;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class RemotePluginManager {
-    public static final Logger LOGGER = Logger.getLogger(RemotePluginManager.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(RemotePluginManager.class);
 
     @Autowired
     private DawgShowConfiguration config;

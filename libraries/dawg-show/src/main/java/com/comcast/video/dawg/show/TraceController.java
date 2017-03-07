@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class TraceController {
     /** Date formatter to format date which is used in log file naming. */
     private static final SimpleDateFormat FILE_NAME_DATE_FORMATTER = new SimpleDateFormat("MM-dd-yyyy_hh-mm-ss");
 
-    private static final Logger LOGGER = Logger.getLogger(TraceController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TraceController.class);
 
     @Autowired
     private JwtDeviceAccessValidator accessValidator;
