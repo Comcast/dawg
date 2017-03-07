@@ -18,7 +18,8 @@ package com.comcast.video.dawg.controller.park;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -44,7 +45,7 @@ import com.comcast.video.dawg.service.park.ParkService;
 @Controller
 public class PopulateController {
 
-    Logger logger = Logger.getLogger(PopulateController.class);
+    Logger logger = LoggerFactory.getLogger(PopulateController.class);
 
     @Autowired
     HouseRestController houseController;

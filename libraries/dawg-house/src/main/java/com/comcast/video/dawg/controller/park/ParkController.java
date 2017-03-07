@@ -27,7 +27,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -84,7 +85,7 @@ public class ParkController {
     /** Name of model attribute where latest advanced search condition saved. */
     private static final String LATEST_SEARCH_CONDITION_MODEL_ATTRIBUTE_NAME = LATEST_SEARCH_CONDITION_SESSION_ATTRIBUTE_NAME;
 
-    Logger logger = Logger.getLogger(ParkController.class);
+    Logger logger = LoggerFactory.getLogger(ParkController.class);
 
     @Autowired
     ParkService service;

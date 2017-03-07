@@ -18,7 +18,8 @@ package com.comcast.video.dawg.controller.house.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 /**
@@ -29,7 +30,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
  */
 public class TagCondition extends BaseCondition {
 
-    private static final Logger LOGGER = Logger.getLogger(TagCondition.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TagCondition.class);
     private static final String KEY_TAG = "data.tags";
     /* Tag value to be searched */
     private String tag;

@@ -2,12 +2,15 @@ package com.comcast.video.dawg.show;
 
 import java.util.Arrays;
 
+import javax.servlet.Filter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,12 +22,23 @@ import com.comcast.video.dawg.common.security.SecuritySwitchFilter;
 import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
 import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 import com.comcast.video.dawg.common.security.jwt.JwtSecurityProvider;
+import com.comcast.video.dawg.filter.ExclusionFilter;
 import com.comcast.video.dawg.house.DawgPoundClient;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages="com.comcast.video.dawg")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+    
+    @Bean
+    public Filter logFilter() {
+        CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter();
+        filter.setIncludeClientInfo(true);
+        filter.setIncludeQueryString(true);
+        filter.setIncludePayload(true);
+        filter.setMaxPayloadLength(5120);
+        return new ExclusionFilter(filter, "/(resources|images|js|css|public)/.*");
+    }
 
     @Bean
     public ContentNegotiatingViewResolver contentViewResolver() throws Exception {

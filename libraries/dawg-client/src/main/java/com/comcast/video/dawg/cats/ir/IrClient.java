@@ -20,7 +20,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.comcast.drivethru.utils.Method;
 import com.comcast.drivethru.utils.URL;
@@ -38,7 +39,7 @@ import com.comcast.video.stbio.meta.RemoteType;
  *
  */
 public class IrClient extends DawgClient implements KeyInput {
-    public static final Logger logger = Logger.getLogger(IrClient.class);
+    public static final Logger logger = LoggerFactory.getLogger(IrClient.class);
 
     public static final String IR_SERVICE = "ir-service";
     public static final String REST = "rest";

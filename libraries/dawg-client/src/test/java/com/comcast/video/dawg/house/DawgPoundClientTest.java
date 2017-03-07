@@ -34,7 +34,7 @@ import com.comcast.video.dawg.exception.HttpRuntimeException;
  *
  */
 public class DawgPoundClientTest {
-    private static final String DEFAULT_BASE_URL = Config.get("testing", "dawg-pound-reservations", "http://localhost/dawg-pound/reservations");
+    private static final String DEFAULT_BASE_URL = "http://localhost/dawg-pound/reservations";
 
     @SuppressWarnings("unchecked")
     @Test

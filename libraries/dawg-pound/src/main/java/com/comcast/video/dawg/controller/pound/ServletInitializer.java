@@ -25,7 +25,7 @@ public class ServletInitializer extends AbstractAnnotationConfigDispatcherServle
         DelegatingFilterProxy filter = new DelegatingFilterProxy("securitySwitchFilter");
         filter.setContextAttribute("org.springframework.web.servlet.FrameworkServlet.CONTEXT.dispatcher");
         filter.setTargetFilterLifecycle(true);
-        return new Filter[] { filter, new DelegatingFilterProxy("dawgCorsFilter") };
+        return new Filter[] { filter, new DelegatingFilterProxy("dawgCorsFilter"), new DelegatingFilterProxy("logFilter") };
     }
 
     @Override

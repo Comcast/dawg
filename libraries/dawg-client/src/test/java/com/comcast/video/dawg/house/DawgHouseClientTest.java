@@ -24,22 +24,17 @@ import java.util.Map;
 
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicStatusLine;
-
 import org.easymock.EasyMock;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.comcast.cereal.CerealException;
 import com.comcast.cereal.engines.JsonCerealEngine;
-
 import com.comcast.drivethru.RestClient;
 import com.comcast.drivethru.exception.HttpException;
 import com.comcast.drivethru.test.MockRestClient;
 import com.comcast.drivethru.utils.RestRequest;
 import com.comcast.drivethru.utils.RestResponse;
-
-import com.comcast.video.dawg.common.Config;
 import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.exception.HttpRuntimeException;
 
@@ -50,7 +45,7 @@ import com.comcast.video.dawg.exception.HttpRuntimeException;
  */
 public class DawgHouseClientTest {
 
-    private static final String URL = Config.get("testing", "default-dawg-house", "http://localhost:8080/dawg-house");
+    private static final String URL = "http://localhost:8080/dawg-house";
 
     @SuppressWarnings("unchecked")
     @Test

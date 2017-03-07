@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.comcast.video.dawg</groupId>
     <artifactId>dawg</artifactId>
@@ -61,14 +62,13 @@
         <maven.javadoc.plugin.version>2.10.1</maven.javadoc.plugin.version>
         <maven.plugin.license.version>2.11</maven.plugin.license.version>
 
-        <version.commons-lang3>3.1</version.commons-lang3>
         <version.spring>4.3.4.RELEASE</version.spring>
         <version.spring.security>4.2.0.RELEASE</version.spring.security>
         <version.spring.boot>1.4.2.RELEASE</version.spring.boot>
         <version.commons-exec>1.3</version.commons-exec>
         <version.selenium>2.46.0</version.selenium>
         <version.selenium-drivers>23.0.1240.0</version.selenium-drivers>
-        <version.slf4j>1.7.1</version.slf4j>
+        <version.slf4j>1.7.21</version.slf4j>
         <version.ini4j>0.5.4</version.ini4j>
         <version.logback>1.1.2</version.logback>
         <version.testng>6.5.2</version.testng>
@@ -80,19 +80,18 @@
         <version.junit>4.10</version.junit>
         <version.aspectjrt>1.7.0</version.aspectjrt>
         <version.commons-io>2.4</version.commons-io>
+        <version.commons-codec>1.9</version.commons-codec>
+        <version.commons-lang>2.6</version.commons-lang>
         <version.apache.http>4.4.1</version.apache.http>
         <version.comcast.drive-thru>2.0.2</version.comcast.drive-thru>
         <version.comcast.cereal>4.0.2</version.comcast.cereal>
         <version.comcast.pantry>2.0.8</version.comcast.pantry>
         <version.jackson>1.9.12</version.jackson>
         <version.websocket.client>9.1.0.M0</version.websocket.client>
-        <!--<version.mongo>3.0.3</version.mongo>-->
-        <!--<version.mongo>2.12.1</version.mongo>-->
         <version.mongo.spring>1.9.5.RELEASE</version.mongo.spring>
         <version.taglibs>1.1.2</version.taglibs>
-        <version.useragentutils>1.18</version.useragentutils>
         <version.jetty-all>7.6.7.v20120910</version.jetty-all>
-        <version.reflections>0.9.9-RC2</version.reflections>
+        <version.guava>15.0</version.guava>
 
         <!-- Github Info -->
         <git.url>github.com</git.url>
@@ -160,7 +159,8 @@
                 <version>${maven.plugin.license.version}</version>
                 <configuration>
                     <properties>
-                        <owner>Comcast Cable Communications Management, LLC</owner>
+                        <owner>Comcast Cable Communications Management,
+                            LLC</owner>
                     </properties>
                     <excludes>
                         <exclude>**/README.md</exclude>
@@ -318,150 +318,143 @@
             </build>
         </profile>
     </profiles>
-
+    
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${version.slf4j}</version>
         </dependency>
-        <dependency>
-            <groupId>org.ini4j</groupId>
-            <artifactId>ini4j</artifactId>
-            <version>${version.ini4j}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${version.logback}</version>
-        </dependency>
+        
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${version.testng}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <version>${version.easymock}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${version.javax.servlet}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>${version.jstl}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${version.aspectjrt}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${version.slf4j}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${version.commons-io}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.comcast.drivethru</groupId>
-            <artifactId>drive-thru</artifactId>
-            <version>${version.comcast.drive-thru}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.comcast.cereal</groupId>
-            <artifactId>cereal</artifactId>
-            <version>${version.comcast.cereal}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${version.jackson}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.comcast.pantry</groupId>
-            <artifactId>pantry</artifactId>
-            <version>${version.comcast.pantry}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty.websocket</groupId>
-            <artifactId>websocket-client</artifactId>
-            <version>${version.websocket.client}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>${version.javax.inject}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>${version.javax.jsp-api}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.mongodb</groupId>-->
-            <!--<artifactId>mongo-java-driver</artifactId>-->
-            <!--<version>${version.mongo}</version>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>taglibs</groupId>
-            <artifactId>standard</artifactId>
-            <version>${version.taglibs}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>${version.useragentutils}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty.aggregate</groupId>
-            <artifactId>jetty-all-server</artifactId>
-            <version>${version.jetty-all}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>javax.servlet</artifactId>
-                    <groupId>org.eclipse.jetty.orbit</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>${version.reflections}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.ini4j</groupId>
+                <artifactId>ini4j</artifactId>
+                <version>${version.ini4j}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${version.logback}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${version.logback}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${version.javax.servlet}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${version.jstl}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${version.junit}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${version.aspectjrt}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${version.commons-io}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${version.commons-codec}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${version.commons-lang}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.comcast.drivethru</groupId>
+                <artifactId>drive-thru</artifactId>
+                <version>${version.comcast.drive-thru}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-classic</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.comcast.cereal</groupId>
+                <artifactId>cereal</artifactId>
+                <version>${version.comcast.cereal}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.comcast.pantry</groupId>
+                <artifactId>pantry</artifactId>
+                <version>${version.comcast.pantry}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty.websocket</groupId>
+                <artifactId>websocket-client</artifactId>
+                <version>${version.websocket.client}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>${version.javax.inject}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>${version.javax.jsp-api}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>taglibs</groupId>
+                <artifactId>standard</artifactId>
+                <version>${version.taglibs}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty.aggregate</groupId>
+                <artifactId>jetty-all-server</artifactId>
+                <version>${version.jetty-all}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>javax.servlet</artifactId>
+                        <groupId>org.eclipse.jetty.orbit</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
@@ -471,6 +464,11 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
                 <version>${version.apache.http}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${version.guava}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -522,7 +520,7 @@
                 <artifactId>spring-test</artifactId>
                 <version>${version.spring}</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-web</artifactId>
@@ -543,7 +541,7 @@
                 <artifactId>spring-security-core</artifactId>
                 <version>${version.spring.security}</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot</artifactId>
@@ -569,13 +567,13 @@
                 <artifactId>spring-boot-starter-security</artifactId>
                 <version>${version.spring.boot}</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
                 <version>${version.mongo.spring}</version>
             </dependency>
-            
+
         </dependencies>
     </dependencyManagement>
 </project>
