@@ -22,10 +22,8 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,18 +57,16 @@ public class KeyController implements ViewConstants {
     @RequestMapping(method = { RequestMethod.POST }, value = "/sendKey")
     @ResponseBody
     public void sendKey(HttpServletRequest req, HttpServletResponse resp,
-            @RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String key, @RequestParam(required = false) String remoteType,
-            @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt) throws KeyException, InterruptedException {
-        sendKey(req, resp, deviceIds, key, null, remoteType, dawt);
+            @RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String key, @RequestParam(required = false) String remoteType) throws KeyException, InterruptedException {
+        sendKey(req, resp, deviceIds, key, null, remoteType);
     }
 
 
     @RequestMapping(method = {RequestMethod.POST }, value = "/holdKey")
     @ResponseBody
     public void holdKey(HttpServletRequest req, HttpServletResponse resp, 
-            @RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String key, @RequestParam String holdTime, @RequestParam(required = false) String remoteType,
-            @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt) throws KeyException, InterruptedException {
-        sendKey(req, resp, deviceIds, key, holdTime, remoteType, dawt);
+            @RequestParam(value="deviceIds[]") String[] deviceIds, @RequestParam String key, @RequestParam String holdTime, @RequestParam(required = false) String remoteType) throws KeyException, InterruptedException {
+        sendKey(req, resp, deviceIds, key, holdTime, remoteType);
     }
 
     /**
@@ -84,9 +80,9 @@ public class KeyController implements ViewConstants {
      *
      */
     private void sendKey(HttpServletRequest req, HttpServletResponse resp, 
-            String[] deviceIds, String key, String holdTime, String remoteType, String dawt) throws KeyException, InterruptedException {
+            String[] deviceIds, String key, String holdTime, String remoteType) throws KeyException, InterruptedException {
         Key[] keys = new Key[] {Key.valueOf(key)};
-        sendKeys (req, resp, deviceIds, keys, holdTime, remoteType, dawt);
+        sendKeys (req, resp, deviceIds, keys, holdTime, remoteType);
     }
 
     /**
@@ -99,15 +95,15 @@ public class KeyController implements ViewConstants {
      * @throws InterruptedException If any thread has interrupted the current thread.
      *
      */
-    private void sendKeys(HttpServletRequest req, HttpServletResponse resp, String[] deviceIds, Key[] keys, String holdTime, String remoteType, String dawt) throws KeyException, InterruptedException {
+    private void sendKeys(HttpServletRequest req, HttpServletResponse resp, String[] deviceIds, Key[] keys, String holdTime, String remoteType) throws KeyException, InterruptedException {
         accessValidator.validateUserHasAccessToDevices(req, resp, false, deviceIds);
         StringBuilder failedIds = new StringBuilder();
         KeyException exc = null;
         /** Send the key to all the devices in parallel */
         Collection<SendKeyThread> threads = new ArrayList<SendKeyThread>();
-        Cookie cookie = dawt == null ? null : cookieUtils.createApacheCookie(dawt, -1, req);
+        String jwt = cookieUtils.extractJwt(req);
         for (String deviceId : deviceIds) {
-            SendKeyThread keyThread = createSendKeyThread(deviceId, keys, holdTime, remotePluginManager, remoteType, cookie);
+            SendKeyThread keyThread = createSendKeyThread(deviceId, keys, holdTime, remotePluginManager, remoteType, jwt);
             threads.add(keyThread);
             keyThread.start();
         }
@@ -141,15 +137,14 @@ public class KeyController implements ViewConstants {
     public void directTune(HttpServletRequest req, HttpServletResponse resp,
             @RequestParam(value = "deviceIds[]") String[] deviceIds,
             @RequestParam String channelNum,
-            @RequestParam(required = false) String remoteType,
-            @CookieValue(name=DawgCookieUtils.COOKIE_NAME, required=false) String dawt)
+            @RequestParam(required = false) String remoteType)
         throws KeyException, InterruptedException {
         Key[] keys = Key.keysForChannel(channelNum);
-        sendKeys(req, resp, deviceIds, keys, null, remoteType, dawt);
+        sendKeys(req, resp, deviceIds, keys, null, remoteType);
     }
 
 
-    protected SendKeyThread createSendKeyThread(String deviceId, Key[] keys, String holdTime, RemotePluginManager remotePluginManager, String remoteType, Cookie cookie) {
-        return new SendKeyThread(deviceId, keys, holdTime, metaStbCache, remotePluginManager, remoteType, cookie);
+    protected SendKeyThread createSendKeyThread(String deviceId, Key[] keys, String holdTime, RemotePluginManager remotePluginManager, String remoteType, String jwt) {
+        return new SendKeyThread(deviceId, keys, holdTime, metaStbCache, remotePluginManager, remoteType, jwt);
     }
 }

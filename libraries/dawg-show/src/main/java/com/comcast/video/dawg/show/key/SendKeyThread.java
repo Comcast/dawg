@@ -16,10 +16,7 @@
 package com.comcast.video.dawg.show.key;
 
 
-import java.util.Date;
-
-import org.apache.http.cookie.ClientCookie;
-import org.apache.http.cookie.Cookie;
+import org.apache.commons.codec.binary.Base64;
 
 import com.comcast.video.dawg.cats.ir.IrClient;
 import com.comcast.video.dawg.common.MetaStb;
@@ -42,7 +39,7 @@ public class SendKeyThread extends Thread {
     private RemotePluginManager remotePluginManager;
     private KeyException exc;
     private String remoteType;
-    private Cookie authCookie;
+    private String jwt;
 
     public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager) {
         this.deviceId = deviceId;
@@ -57,10 +54,10 @@ public class SendKeyThread extends Thread {
         this(deviceId, keys, holdTime, metaStbCache, remotePluginManager, remoteType, null);
     }
 
-    public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager, String remoteType, Cookie authCookie) {
+    public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager, String remoteType, String jwt) {
         this(deviceId, keys, holdTime, metaStbCache, remotePluginManager);
         this.remoteType = remoteType;
-        this.authCookie = authCookie;
+        this.jwt = jwt;
     }
 
     /**
@@ -83,8 +80,9 @@ public class SendKeyThread extends Thread {
 
     protected KeyInput getIrClient(MetaStb stb, String remoteType) {
         KeyInput inp = remotePluginManager.getKeyInput(stb, remoteType);
-        if ((inp instanceof IrClient) && (this.authCookie != null)) {
-            ((IrClient) inp).getCookieStore().addCookie(authCookie);
+        if ((inp instanceof IrClient) && (this.jwt != null)) {
+            String b64 = Base64.encodeBase64String(this.jwt.getBytes());
+            ((IrClient) inp).getClient().addDefaultHeader("Authorization", "Bearer " + b64);
         }
         
         return inp;
