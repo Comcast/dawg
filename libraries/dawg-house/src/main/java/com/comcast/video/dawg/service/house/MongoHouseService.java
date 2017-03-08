@@ -146,7 +146,7 @@ public class MongoHouseService extends AbstractDawgService implements HouseServi
 
     @Override
     public void deleteStbById(String... id) {
-        Criteria c = new Criteria("id").in(Arrays.asList(id));
+        Criteria c = new Criteria("data.id").in(Arrays.asList(id));
         template.remove(new Query(c), COLLECTION_NAME);
     }
 
