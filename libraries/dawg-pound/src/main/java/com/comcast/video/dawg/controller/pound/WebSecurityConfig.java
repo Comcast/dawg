@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		    .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class)
 			.csrf().disable()
 			.authorizeRequests()
+            .antMatchers("/health/**").permitAll()
 			.antMatchers("/admin/**").hasAnyRole("ADMIN")
 			.antMatchers("/**").hasAnyRole("ADMIN", "POUND");
 	}

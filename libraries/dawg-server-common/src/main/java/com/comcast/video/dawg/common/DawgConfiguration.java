@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.ini4j.Ini;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.comcast.video.dawg.common.security.AuthConfigFactory;
 import com.comcast.video.dawg.common.security.AuthServerConfig;
@@ -42,8 +40,14 @@ public class DawgConfiguration {
     public static final String DAWG_SHOW_URL = "dawg-show-url";
     public static final String DAWG_HOUSE_URL = "dawg-house-url";
     public static final String DAWG_POUND_URL = "dawg-pound-url";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DawgConfiguration.class);
+    public static final String DAWG_SHOW_HEALTH_URL = "dawg-show-health-url";
+    public static final String DAWG_HOUSE_HEALTH_URL = "dawg-house-health-url";
+    public static final String DAWG_POUND_HEALTH_URL = "dawg-pound-health-url";
+    public static final String DEFAULT_DAWG_SHOW_HEALTH_URL = "http://localhost:8080/dawg-show/health";
+    public static final String DEFAULT_DAWG_HOUSE_HEALTH_URL = "http://localhost:8080/dawg-house/health";
+    public static final String DEFAULT_DAWG_POUND_HEALTH_URL = "http://localhost:8080/dawg-pound/health";
+    
+    public static final String DAWG_VERSION = "version";
 
     private Ini ini;
     private AuthServerConfig auth = null;
@@ -69,6 +73,26 @@ public class DawgConfiguration {
      */
     public String getDawgHouseUrl() {
         return DawgConfiguration.slash(this.get(DAWG_HOUSE_URL));
+    }
+
+    /**
+     * Gets the version of dawg that is deployed
+     * @return
+     */
+    public String getDawgVersion() {
+        return this.get(DAWG_VERSION, "latest");
+    }
+
+    public String getDawgShowHealthUrl() {
+        return this.get(DAWG_SHOW_HEALTH_URL, DEFAULT_DAWG_SHOW_HEALTH_URL);
+    }
+
+    public String getDawgHouseHealthUrl() {
+        return this.get(DAWG_HOUSE_HEALTH_URL, DEFAULT_DAWG_HOUSE_HEALTH_URL);
+    }
+
+    public String getDawgPoundHealthUrl() {
+        return this.get(DAWG_POUND_HEALTH_URL, DEFAULT_DAWG_POUND_HEALTH_URL);
     }
 
     /**
