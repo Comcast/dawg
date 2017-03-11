@@ -1,7 +1,6 @@
 package com.comcast.video.dawg.common;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -11,8 +10,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.comcast.drivethru.RestClient;
 import com.comcast.drivethru.client.DefaultRestClient;
@@ -37,8 +34,6 @@ public class HealthService {
         this.componentName = componentName;
     }
 
-    @RequestMapping("/health")
-    @ResponseBody
     public Map<String, Object> health() {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put(APP, APP_VAL);
