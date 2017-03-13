@@ -37,7 +37,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         filter.setIncludeQueryString(true);
         filter.setIncludePayload(true);
         filter.setMaxPayloadLength(5120);
-        return new ExclusionFilter(filter, "/resources/.*");
+        return new ExclusionFilter(filter, "/resources/.*", "/health/?.*");
     }
 
     @Bean

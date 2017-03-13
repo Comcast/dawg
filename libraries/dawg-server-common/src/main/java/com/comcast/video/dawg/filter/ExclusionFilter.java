@@ -11,6 +11,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * A filter wrapper that causes a filter to only execute if the path does not match 
  * a given regular expression
@@ -21,9 +23,9 @@ public class ExclusionFilter implements Filter {
     private String pathExclusionRegex;
     private Filter delegate;
     
-    public ExclusionFilter(Filter delegate, String pathExclusionRegex) {
+    public ExclusionFilter(Filter delegate, String...pathExclusionRegexes) {
         this.delegate = delegate;
-        this.pathExclusionRegex = pathExclusionRegex;
+        this.pathExclusionRegex = "(" + StringUtils.join(pathExclusionRegexes, "|") + ")";
     }
 
     @Override
