@@ -32,7 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -51,7 +52,7 @@ import com.comcast.video.dawg.show.cache.UniqueIndexedCache;
 @Component
 public class VideoSnap {
 
-    private static final Logger LOGGER = Logger.getLogger(VideoSnap.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VideoSnap.class);
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(
             "dd-MM-YY_HH-mm-ss");
     private static final String IMG_FORMAT = "jpg";

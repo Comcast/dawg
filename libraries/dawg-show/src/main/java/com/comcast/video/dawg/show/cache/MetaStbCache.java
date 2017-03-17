@@ -23,12 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.comcast.video.dawg.common.MetaStb;
-import com.comcast.video.dawg.house.DawgHouseClient;
-import com.comcast.video.dawg.show.DawgShowConfiguration;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.DawgJwtEncoder;
+import com.comcast.video.dawg.common.security.jwt.JwtSecurityProvider;
+import com.comcast.video.dawg.house.DawgHouseClient;
+import com.comcast.video.dawg.show.DawgShowConfiguration;
 
 /**
  * Cache that holds metadata for stbs
@@ -44,6 +46,9 @@ public class MetaStbCache {
 
     @Autowired
     private DawgShowConfiguration config;
+
+    @Autowired
+    private DawgJwtEncoder jwtEncoder;
 
     /**
      * Gets the metadata for the stb with the given deviceId. If there is no cached object then
@@ -114,7 +119,12 @@ public class MetaStbCache {
     }
 
     protected DawgHouseClient getDawgHouseClient() {
-        return new DawgHouseClient(config.getDawgHouseUrl());
+        DawgHouseClient client = new DawgHouseClient(config.getDawgHouseUrl());
+        if (config.getAuthConfig().getJwtSecret() != null) {
+            JwtSecurityProvider sp = new JwtSecurityProvider(config.getDawgHouseUser(), config.getDawgHousePassword(), jwtEncoder);
+            client.getClient().setSecurityProvider(sp);
+        }
+        return client;
     }
 
     /**

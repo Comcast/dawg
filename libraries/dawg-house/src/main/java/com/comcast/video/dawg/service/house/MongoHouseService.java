@@ -22,7 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -40,7 +41,7 @@ import com.comcast.video.stbio.meta.Capability;
 public class MongoHouseService extends AbstractDawgService implements HouseService {
     @Autowired
     private ParkService parkService;
-    private static final Logger logger = Logger.getLogger(MongoHouseService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MongoHouseService.class);
     /**
      * Update an existing document or insert the devices if the document doesn't exist.
      */
@@ -145,7 +146,7 @@ public class MongoHouseService extends AbstractDawgService implements HouseServi
 
     @Override
     public void deleteStbById(String... id) {
-        Criteria c = new Criteria("id").in(Arrays.asList(id));
+        Criteria c = new Criteria("data.id").in(Arrays.asList(id));
         template.remove(new Query(c), COLLECTION_NAME);
     }
 

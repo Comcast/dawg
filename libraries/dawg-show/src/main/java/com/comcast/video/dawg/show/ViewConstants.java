@@ -23,18 +23,17 @@ package com.comcast.video.dawg.show;
  */
 public interface ViewConstants {
     /** View Names */
-    public static final String VIEWS = "views/";
-    public static final String STB = VIEWS + "stb";
-    public static final String SIMPLIFIED = VIEWS + "simplified";
-    public static final String MULTI = VIEWS + "multi";
-    public static final String NOSTB = VIEWS + "nostb";
-    public static final String COMPARE_NOT_FOUND = VIEWS + "compareNotFound";
-    public static final String META = VIEWS + "meta";
-    public static final String BROWSERNOTSUPPORTED = VIEWS + "bns";
-    public static final String SNAPPEDIMAGE = VIEWS + "snappedImage";
-    public static final String SNAP_DOWNLOAD = VIEWS + "multiSnapDownloadManager";
-    public static final String REMOTE_PLUGIN = VIEWS + "remote-plugin";
-    public static final String PLUGIN_CONFIG = VIEWS + "plugin-config";
+    public static final String STB = "stb";
+    public static final String SIMPLIFIED = "simplified";
+    public static final String MULTI = "multi";
+    public static final String NOSTB = "nostb";
+    public static final String COMPARE_NOT_FOUND = "compareNotFound";
+    public static final String META = "meta";
+    public static final String BROWSERNOTSUPPORTED = "bns";
+    public static final String SNAPPEDIMAGE = "snappedImage";
+    public static final String SNAP_DOWNLOAD = "multiSnapDownloadManager";
+    public static final String REMOTE_PLUGIN = "remote-plugin";
+    public static final String PLUGIN_CONFIG = "plugin-config";
 
     /** View parameters */
     public static final String DEVICE_ID = "deviceId";
@@ -55,11 +54,16 @@ public interface ViewConstants {
     public static final String TRACE_AVAILABLE = "traceAvailable";
     public static final String TRACE_HOST = "traceHost";
     public static final String SUPPORTED = "supported";
-    public static final String AUDIO_URL = "audioUrl";
+    public static final String AUDIO_URL_OGG = "audioUrl_ogg";
+    public static final String AUDIO_URL_MPEG = "audioUrl_mpeg";
     /** Represent generic remote keys */
     public static final String GENERIC_REMOTE_KEYS = "genericRemoteKeys";
     /** Represent map of image id with corresponding snapshot id */
     public static final String DEVICEID_IMAGEID_MAP = "deviceIdImageIdMap";
+    public static final String STB_URLS = "urls";
+    public static final String STB_URLS_AUDIO_OGG = "audio_ogg";
+    public static final String STB_URLS_AUDIO_MPEG = "audio_mpeg";
+    public static final String STB_URLS_VIDEO = "video";
 
     public static final String IMAGE_CACHE = "imageCache";
 }

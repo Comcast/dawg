@@ -20,7 +20,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.comcast.drivethru.utils.Method;
 import com.comcast.drivethru.utils.URL;
@@ -38,7 +39,7 @@ import com.comcast.video.stbio.meta.RemoteType;
  *
  */
 public class IrClient extends DawgClient implements KeyInput {
-    public static final Logger logger = Logger.getLogger(IrClient.class);
+    public static final Logger logger = LoggerFactory.getLogger(IrClient.class);
 
     public static final String IR_SERVICE = "ir-service";
     public static final String REST = "rest";
@@ -59,6 +60,7 @@ public class IrClient extends DawgClient implements KeyInput {
     private String port;
     private String remoteType;
     private String catsKeySetMapping;
+    private boolean proxyEnabled;
 
     /**
      * Creates a client for the stb with the given metadata
@@ -66,7 +68,9 @@ public class IrClient extends DawgClient implements KeyInput {
      */
     public IrClient(IrMeta irMeta) {
         Validate.notNull(irMeta);
-        this.catsHost = irMeta.getCatsServerHost();
+        this.proxyEnabled = irMeta.getRackProxyEnabled();
+        String rackProxyUrl = irMeta.getRackProxyUrl();
+        this.catsHost = this.proxyEnabled && null != rackProxyUrl ? irMeta.getRackProxyUrl() + "/ir/" + irMeta.getId() : irMeta.getCatsServerHost();
         this.blasterType = getIrBlasterType(irMeta);
         this.irHost = irMeta.getIrServiceUrl();
         this.port = irMeta.getIrServicePort();
@@ -218,8 +222,11 @@ public class IrClient extends DawgClient implements KeyInput {
      */
     private URL formKeyUrl(IrOperation op, Map<String, Object> params, String overRiddenRemoteType) {
         URL url = new URL(formCatsServerBaseUrl(catsHost));
-        url.addPath(IR_SERVICE).addPath(REST);
-        url.addPath(blasterType).addPath(irHost).addPath("" + port).addPath(op.name());
+        if (!this.proxyEnabled) {
+            url.addPath(IR_SERVICE).addPath(REST);
+            url.addPath(blasterType).addPath(irHost).addPath("" + port);
+        }
+        url.addPath(op.name());
 
         if (StringUtils.isEmpty(this.catsKeySetMapping)) {
             if (StringUtils.isEmpty(overRiddenRemoteType)) {

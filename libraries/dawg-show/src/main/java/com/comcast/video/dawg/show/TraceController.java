@@ -20,17 +20,21 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 
 /**
  * Controller class to export the trace logs from dawg show.
@@ -44,12 +48,16 @@ public class TraceController {
     /** Date formatter to format date which is used in log file naming. */
     private static final SimpleDateFormat FILE_NAME_DATE_FORMATTER = new SimpleDateFormat("MM-dd-yyyy_hh-mm-ss");
 
-    private static final Logger LOGGER = Logger.getLogger(TraceController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TraceController.class);
+
+    @Autowired
+    private JwtDeviceAccessValidator accessValidator;
 
     @RequestMapping(value = "trace/export", method = { RequestMethod.POST }, produces = "text/plain")
     @ResponseBody
-    public ModelAndView exportTrace(@RequestParam() String trace, @RequestParam() String device, HttpServletResponse response)  throws IOException {
-        generateLogFile(trace, device, response);
+    public ModelAndView exportTrace(@RequestParam() String trace, @RequestParam() String device, 
+            HttpServletRequest req, HttpServletResponse response)  throws IOException {
+        generateLogFile(trace, device, req, response);
         return null;
     }
 
@@ -60,7 +68,8 @@ public class TraceController {
      * @param response http response to get the trace file
      * @throws IOException Exception occurring while writing log.
      */
-    public void generateLogFile(String trace, String device, HttpServletResponse response) throws IOException {
+    public void generateLogFile(String trace, String device, HttpServletRequest req, HttpServletResponse response) throws IOException {
+        accessValidator.validateUserHasAccessToDevices(req, response, false, device);
         String timestamp = FILE_NAME_DATE_FORMATTER.format(new Date());
         response.setHeader("Content-Disposition", "attachment; filename=Settop_"+ device + "_" + timestamp + ".log");
 

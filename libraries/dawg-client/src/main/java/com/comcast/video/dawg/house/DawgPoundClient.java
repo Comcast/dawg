@@ -24,13 +24,14 @@ import com.comcast.drivethru.exception.HttpException;
 
 import com.comcast.video.dawg.DawgClient;
 import com.comcast.video.dawg.common.Config;
+import com.comcast.video.dawg.common.DeviceProvider;
 import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.exception.HttpRuntimeException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DawgPoundClient extends DawgClient implements IDawgPoundClient {
+public class DawgPoundClient extends DawgClient implements IDawgPoundClient, DeviceProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DawgHouseClient.class);
     public static final String DEFAULT_BASE_URL = Config.get("dawg", "dawg-pound-reservations", "http://localhost:8080/dawg-pound/reservations");
@@ -99,5 +100,10 @@ public class DawgPoundClient extends DawgClient implements IDawgPoundClient {
             throw new HttpRuntimeException(e);
         }
         return new Reservation(deviceId, map.get("reserver"), Long.parseLong(map.get("expiration")), false);
+    }
+
+    @Override
+    public Collection<MetaStb> getDevices(String token) {
+        return getReservedDevices(token);
     }
 }

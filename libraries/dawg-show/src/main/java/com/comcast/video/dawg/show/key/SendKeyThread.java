@@ -15,6 +15,10 @@
  */
 package com.comcast.video.dawg.show.key;
 
+
+import org.apache.commons.codec.binary.Base64;
+
+import com.comcast.video.dawg.cats.ir.IrClient;
 import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.show.cache.MetaStbCache;
 import com.comcast.video.dawg.show.plugins.RemotePluginManager;
@@ -35,6 +39,7 @@ public class SendKeyThread extends Thread {
     private RemotePluginManager remotePluginManager;
     private KeyException exc;
     private String remoteType;
+    private String jwt;
 
     public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager) {
         this.deviceId = deviceId;
@@ -46,8 +51,13 @@ public class SendKeyThread extends Thread {
     }
 
     public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager, String remoteType) {
+        this(deviceId, keys, holdTime, metaStbCache, remotePluginManager, remoteType, null);
+    }
+
+    public SendKeyThread(String deviceId, Key[] keys, String holdTime, MetaStbCache metaStbCache, RemotePluginManager remotePluginManager, String remoteType, String jwt) {
         this(deviceId, keys, holdTime, metaStbCache, remotePluginManager);
         this.remoteType = remoteType;
+        this.jwt = jwt;
     }
 
     /**
@@ -69,7 +79,13 @@ public class SendKeyThread extends Thread {
     }
 
     protected KeyInput getIrClient(MetaStb stb, String remoteType) {
-        return remotePluginManager.getKeyInput(stb, remoteType);
+        KeyInput inp = remotePluginManager.getKeyInput(stb, remoteType);
+        if ((inp instanceof IrClient) && (this.jwt != null)) {
+            String b64 = Base64.encodeBase64String(this.jwt.getBytes());
+            ((IrClient) inp).getClient().addDefaultHeader("Authorization", "Bearer " + b64);
+        }
+        
+        return inp;
     }
 
     /**

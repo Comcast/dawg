@@ -29,10 +29,11 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -42,6 +43,7 @@ import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.video.dawg.common.plugin.KeyInputPlugin;
 import com.comcast.video.dawg.common.plugin.PluginConfiguration;
 import com.comcast.video.dawg.show.DawgShowConfiguration;
+import com.comcast.video.dawg.show.DefaultMetaStb;
 import com.comcast.video.dawg.show.key.Remote;
 import com.comcast.video.dawg.show.key.RemoteManager;
 import com.comcast.video.stbio.KeyInput;
@@ -54,7 +56,7 @@ import com.comcast.video.stbio.KeyInput;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class RemotePluginManager {
-    public static final Logger LOGGER = Logger.getLogger(RemotePluginManager.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(RemotePluginManager.class);
 
     @Autowired
     private DawgShowConfiguration config;
@@ -175,8 +177,7 @@ public class RemotePluginManager {
                 return ki;
             }
         }
-        return new IrClient(stb, rt);
-
+        return new IrClient(new DefaultMetaStb(stb.getData(), config), rt);
     }
 
     /**

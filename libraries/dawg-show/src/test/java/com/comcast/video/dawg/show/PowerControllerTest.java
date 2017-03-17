@@ -15,6 +15,7 @@
  */
 package com.comcast.video.dawg.show;
 
+import org.apache.http.cookie.Cookie;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -24,6 +25,7 @@ import com.comcast.pantry.test.Wiring;
 import com.comcast.video.dawg.cats.power.PowerClient;
 import com.comcast.video.dawg.cats.power.PowerOperation;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 import com.comcast.video.dawg.show.cache.MetaStbCache;
 import com.comcast.video.stbio.exceptions.PowerException;
 
@@ -60,17 +62,21 @@ public class PowerControllerTest {
         cache.putMetaStb(stb);
         final MockPowerClient client = new MockPowerClient(stb);
         PowerController controller = new PowerController();
-        Assert.assertNotNull(controller.getPowerClient(stb)); // really just for code coverage
+        DawgShowConfiguration config = new DawgShowConfiguration();
+        Wiring.autowire(controller, config);
+        Assert.assertNotNull(controller.getPowerClient(stb, null)); // really just for code coverage
         controller = new PowerController() {
-            protected PowerClient getPowerClient(MetaStb stb) {
+            protected PowerClient getPowerClient(MetaStb stb, Cookie cookie) {
                 return client;
             }
         };
         PowerException exc = null;
         Wiring.autowire(controller, cache);
-        Assert.assertNotNull(controller.getPowerClient(stb));
+        JwtDeviceAccessValidator validator = new JwtDeviceAccessValidator(null, null, false);
+        Wiring.autowire(controller, validator);
+        Assert.assertNotNull(controller.getPowerClient(stb, null));
         try {
-            controller.power(new String[] {"000041B7CD52"}, op);
+            controller.power(new String[] {"000041B7CD52"}, op, null, null, null);
         } catch (PowerException e) {
             exc = e;
         }

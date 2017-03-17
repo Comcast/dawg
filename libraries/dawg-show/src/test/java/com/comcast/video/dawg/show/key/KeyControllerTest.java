@@ -15,6 +15,9 @@
  */
 package com.comcast.video.dawg.show.key;
 
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.easymock.EasyMock;
 import org.springframework.util.Assert;
 import org.testng.annotations.DataProvider;
@@ -24,6 +27,7 @@ import com.comcast.pantry.test.TestList;
 import com.comcast.pantry.test.Wiring;
 import com.comcast.video.dawg.cats.ir.IrClient;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 import com.comcast.video.dawg.show.plugins.RemotePluginManager;
 import com.comcast.video.dawg.show.util.MockMetaStbCache;
 import com.comcast.video.dawg.show.util.TestUtils;
@@ -49,11 +53,13 @@ public class KeyControllerTest {
         final IrClient client = EasyMock.createMock(IrClient.class);
         client.pressKeys(Key.GUIDE);
         EasyMock.expectLastCall();
+        
+        HttpServletRequest req = createReq();
 
-        EasyMock.replay(client);
+        EasyMock.replay(client, req);
 
         KeyController controller = new KeyController();
-        Assert.notNull(controller.createSendKeyThread(null, null, null, null, null)); // really just for code coverage
+        Assert.notNull(controller.createSendKeyThread(null, null, null, null, null, null)); // really just for code coverage
         RemotePluginManager rpm = new RemotePluginManager();
 
         /**
@@ -64,15 +70,22 @@ public class KeyControllerTest {
 
         Wiring.autowire(controller, cache);
         Wiring.autowire(controller, rpm);
+        controller.sendKey(req, null, deviceIds, key, remoteType);
 
-        controller.sendKey(deviceIds, key, remoteType);
-
-        EasyMock.verify(client);
+        EasyMock.verify(client, req);
+    }
+    
+    private HttpServletRequest createReq() {
+        HttpServletRequest req = EasyMock.createMock(HttpServletRequest.class);
+        EasyMock.expect(req.getSession()).andReturn(null);
+        EasyMock.expect(req.getCookies()).andReturn(null);
+        EasyMock.expect(req.getHeader("Authorization")).andReturn("Bearer X");
+        return req;
     }
 
     private KeyController getKeyController(final MockMetaStbCache cache, final IrClient client, final RemotePluginManager rpm) {
         KeyController controller = new KeyController() {
-            protected SendKeyThread createSendKeyThread(String deviceId, Key[] key, String holdTime, RemotePluginManager rpm, String remoteType) {
+            protected SendKeyThread createSendKeyThread(String deviceId, Key[] key, String holdTime, RemotePluginManager rpm, String remoteType, String jwt) {
                 SendKeyThread thread = new SendKeyThread(deviceId, key,
                         holdTime, cache, rpm, remoteType) {
                     @Override
@@ -83,6 +96,8 @@ public class KeyControllerTest {
                 return thread;
             }
         };
+        JwtDeviceAccessValidator validator = new JwtDeviceAccessValidator(null, null, false);
+        Wiring.autowire(controller, validator);
         return controller;
     }
 
@@ -108,16 +123,17 @@ public class KeyControllerTest {
         Key[] keys = Key.keysForChannel(channelNum);
 
         RemotePluginManager rpm = new RemotePluginManager();
+        HttpServletRequest req = createReq();
 
         client.pressKeys(keys);
         EasyMock.expectLastCall();
-        EasyMock.replay(client);
+        EasyMock.replay(client, req);
 
         KeyController controller = getKeyController(cache, client, rpm);
         Wiring.autowire(controller, cache);
 
-        controller.directTune(deviceIds, channelNum, remoteType);
+        controller.directTune(req, null, deviceIds, channelNum, remoteType);
 
-        EasyMock.verify(client);
+        EasyMock.verify(client, req);
     }
 }

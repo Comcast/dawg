@@ -20,11 +20,15 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.config.SocketConfig;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.comcast.drivethru.RestClient;
 import com.comcast.drivethru.client.DefaultRestClient;
@@ -39,7 +43,7 @@ import com.comcast.drivethru.utils.URL;
  *
  */
 public abstract class DawgClient implements Closeable {
-    public static final Logger logger = Logger.getLogger(DawgClient.class);
+    public static final Logger logger = LoggerFactory.getLogger(DawgClient.class);
 
     /** Constant to store the millisecond value for 1 second.*/
     public static final int ONE_SEC_IN_MILLIS = 1000;
@@ -50,15 +54,17 @@ public abstract class DawgClient implements Closeable {
     private static final String DEFAULT_CATS_SERVER = "";
 
     protected RestClient client;
+    protected CookieStore cookieStore;
 
-    private static HttpClient defaultClient() {
-        return HttpClientBuilder.create().setDefaultSocketConfig(SocketConfig.custom()
+    private static HttpClient defaultClient(CookieStore cookieStore) {
+        return HttpClientBuilder.create()
+                .setDefaultCookieStore(cookieStore).setDefaultSocketConfig(SocketConfig.custom()
                 .setSoTimeout(RestClient.DEFAULT_TIMEOUT).build())
             .disableContentCompression().build();
     }
 
-    private static RestClient defaultRestClient(String defaultBaseUrl) {
-        return new DefaultRestClient(defaultBaseUrl, defaultClient());
+    private static RestClient defaultRestClient(String defaultBaseUrl, CookieStore cookieStore) {
+        return new DefaultRestClient(defaultBaseUrl, defaultClient(cookieStore));
     }
 
     public DawgClient() {
@@ -66,7 +72,8 @@ public abstract class DawgClient implements Closeable {
     }
 
     public DawgClient(String defaultBaseUrl) {
-        this(defaultRestClient(defaultBaseUrl));
+        this.cookieStore = new BasicCookieStore();
+        this.client = defaultRestClient(defaultBaseUrl, this.cookieStore);
     }
 
     public DawgClient(RestClient client) {
@@ -142,5 +149,12 @@ public abstract class DawgClient implements Closeable {
     public void setClient(RestClient client) {
         this.client = client;
     }
-
+    
+    public void setJwt(String jwt) {
+        this.client.addDefaultHeader("Authorization", "Bearer " + new String(Base64.encodeBase64(jwt.getBytes(), false)));
+    }
+    
+    public CookieStore getCookieStore() {
+        return this.cookieStore;
+    }
 }

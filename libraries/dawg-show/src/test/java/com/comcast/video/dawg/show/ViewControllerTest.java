@@ -25,6 +25,8 @@ import org.testng.annotations.Test;
 import com.comcast.pantry.test.TestList;
 import com.comcast.pantry.test.Wiring;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
+import com.comcast.video.dawg.show.cache.MetaStbCache;
 import com.comcast.video.dawg.show.key.Remote;
 import com.comcast.video.dawg.show.key.RemoteManager;
 import com.comcast.video.dawg.show.util.MockMetaStbCache;
@@ -44,13 +46,12 @@ public class ViewControllerTest {
     }
 
     @Test(dataProvider="testStbViewNoStbData")
-    public void testStbViewNoStb(boolean byExc) {
+    public void testStbViewNoStb(boolean byExc) throws IOException {
         MockMetaStbCache cache = new MockMetaStbCache();
         cache.throwExc = byExc;
-        ViewController controller = new ViewController();
-        Wiring.autowire(controller, cache);
+        ViewController controller = getViewController(cache);
 
-        ModelAndView mav = controller.stbView(DEVICE_ID, null, null, null, null);
+        ModelAndView mav = controller.stbView(DEVICE_ID, null, null, null, null, null, null);
         Assert.assertEquals(mav.getViewName(), ViewConstants.NOSTB);
         Assert.assertEquals(mav.getModelMap().get(ViewConstants.DEVICE_ID), DEVICE_ID);
     }
@@ -78,13 +79,9 @@ public class ViewControllerTest {
 
         MockMetaStbCache cache = new MockMetaStbCache();
         cache.cache.put(TestUtils.ID, stb);
-        RemoteManager remoteMan = new RemoteManager();
-        remoteMan.load();
-        ViewController controller = new ViewController();
-        Wiring.autowire(controller, cache);
-        Wiring.autowire(controller, remoteMan);
+        ViewController controller = getViewController(cache);
 
-        ModelAndView mav = controller.stbView(TestUtils.ID, mobileParam, null, null, ua);
+        ModelAndView mav = controller.stbView(TestUtils.ID, mobileParam, null, null, ua, null, null);
 
         Assert.assertEquals(mav.getModel().get(ViewConstants.MOBILE), isMobile);
         Assert.assertEquals(mav.getModel().get(ViewConstants.TRACE_AVAILABLE), traceAvailable);
@@ -101,17 +98,26 @@ public class ViewControllerTest {
 
         MockMetaStbCache cache = new MockMetaStbCache();
         cache.cache.put(TestUtils.ID, stb);
-        RemoteManager remoteMan = new RemoteManager();
-        remoteMan.load();
-        ViewController controller = new ViewController();
-        Wiring.autowire(controller, cache);
-        Wiring.autowire(controller, remoteMan);
+        ViewController controller = getViewController(cache);
 
-        ModelAndView mav = controller.stbSimplifiedView(TestUtils.ID, mobileParam, null, null, ua);
+        ModelAndView mav = controller.stbSimplifiedView(TestUtils.ID, mobileParam, null, null, ua, null, null);
 
         Assert.assertEquals(mav.getModel().get(ViewConstants.MOBILE), isMobile);
         Assert.assertEquals(mav.getModel().get(ViewConstants.TRACE_AVAILABLE), traceAvailable);
         Remote remote = (Remote) mav.getModel().get(ViewConstants.REMOTE);
         Assert.assertEquals(remote.getName(), actualRemote);
+    }
+    
+    private ViewController getViewController(MetaStbCache cache) throws IOException {
+        RemoteManager remoteMan = new RemoteManager();
+        remoteMan.load();
+        ViewController controller = new ViewController();
+        Wiring.autowire(controller, cache);
+        Wiring.autowire(controller, remoteMan);
+        JwtDeviceAccessValidator validator = new JwtDeviceAccessValidator(null, null, false);
+        Wiring.autowire(controller, validator);
+        DawgShowConfiguration config = new DawgShowConfiguration();
+        Wiring.autowire(controller, config);
+        return controller;
     }
 }

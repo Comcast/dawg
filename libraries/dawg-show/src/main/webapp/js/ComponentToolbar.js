@@ -324,23 +324,25 @@ function HideWidget(canvas) {
      * Draws and fills the half circle
      */
     this.drawCircle = function() {
-        var ctx = this.canvas.getContext("2d");
-        var centerX = this.canvas.width / 2;
-        var centerY = 0;
-        var radius = this.canvas.height - 3;
-
-        var grd = ctx.createRadialGradient(centerX, centerY, radius / 2, centerX, centerY, radius);
-        grd.addColorStop(0, '#ffffff');
-        grd.addColorStop(1, '#888888');
-
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius , 0, Math.PI, false);
-        ctx.fillStyle = grd;
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#000000';
-        ctx.stroke();
-        ctx.closePath();
+    	if (this.canvas.height > 0) {
+	        var ctx = this.canvas.getContext("2d");
+	        var centerX = this.canvas.width / 2;
+	        var centerY = 0;
+	        var radius = this.canvas.height - 3;
+	
+	        var grd = ctx.createRadialGradient(centerX, centerY, radius / 2, centerX, centerY, radius);
+	        grd.addColorStop(0, '#ffffff');
+	        grd.addColorStop(1, '#888888');
+	
+	        ctx.beginPath();
+	        ctx.arc(centerX, centerY, radius , 0, Math.PI, false);
+	        ctx.fillStyle = grd;
+	        ctx.fill();
+	        ctx.lineWidth = 2;
+	        ctx.strokeStyle = '#000000';
+	        ctx.stroke();
+	        ctx.closePath();
+    	}
     }
 
     /**

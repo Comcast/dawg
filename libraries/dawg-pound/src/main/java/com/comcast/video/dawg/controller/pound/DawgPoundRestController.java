@@ -63,7 +63,6 @@ public class DawgPoundRestController {
     @Autowired
     ServerUtils serverUtils;
 
-    /** Log4j logger for {@link DawgPoundRestController} class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(DawgPoundRestController.class);
 
     /**

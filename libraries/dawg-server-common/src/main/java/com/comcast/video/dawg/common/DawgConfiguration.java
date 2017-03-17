@@ -17,10 +17,12 @@ package com.comcast.video.dawg.common;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.ini4j.Ini;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.comcast.video.dawg.common.security.AuthConfigFactory;
+import com.comcast.video.dawg.common.security.AuthServerConfig;
+import com.comcast.video.dawg.common.security.LdapAuthServerConfig;
 
 /**
  * The key value pairs of the dawg configuration.
@@ -30,6 +32,7 @@ import org.slf4j.LoggerFactory;
 public class DawgConfiguration {
 
     public static final String INI_SECTION = "dawg";
+    public static final String INI_AUTH_SECTION = "auth";
 
     public static final String DAWG_PATH_PARAM = "dawg.path";
     public static final String DEFAULT_DAWG_PATH = "/etc/dawg/";
@@ -37,10 +40,18 @@ public class DawgConfiguration {
     public static final String DAWG_SHOW_URL = "dawg-show-url";
     public static final String DAWG_HOUSE_URL = "dawg-house-url";
     public static final String DAWG_POUND_URL = "dawg-pound-url";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DawgConfiguration.class);
+    public static final String DAWG_SHOW_HEALTH_URL = "dawg-show-health-url";
+    public static final String DAWG_HOUSE_HEALTH_URL = "dawg-house-health-url";
+    public static final String DAWG_POUND_HEALTH_URL = "dawg-pound-health-url";
+    public static final String DEFAULT_DAWG_SHOW_HEALTH_URL = "http://localhost:8080/dawg-show/health";
+    public static final String DEFAULT_DAWG_HOUSE_HEALTH_URL = "http://localhost:8080/dawg-house/health";
+    public static final String DEFAULT_DAWG_POUND_HEALTH_URL = "http://localhost:8080/dawg-pound/health";
+    
+    public static final String DAWG_VERSION = "version";
 
     private Ini ini;
+    private AuthServerConfig auth = null;
+    private AuthConfigFactory authConfigFactory = new AuthConfigFactory();
 
     public DawgConfiguration() {
         this.ini = new Ini();
@@ -65,11 +76,53 @@ public class DawgConfiguration {
     }
 
     /**
+     * Gets the version of dawg that is deployed
+     * @return
+     */
+    public String getDawgVersion() {
+        return this.get(DAWG_VERSION, "latest");
+    }
+
+    public String getDawgShowHealthUrl() {
+        return this.get(DAWG_SHOW_HEALTH_URL, DEFAULT_DAWG_SHOW_HEALTH_URL);
+    }
+
+    public String getDawgHouseHealthUrl() {
+        return this.get(DAWG_HOUSE_HEALTH_URL, DEFAULT_DAWG_HOUSE_HEALTH_URL);
+    }
+
+    public String getDawgPoundHealthUrl() {
+        return this.get(DAWG_POUND_HEALTH_URL, DEFAULT_DAWG_POUND_HEALTH_URL);
+    }
+
+    /**
      * Gets the url to the dawg-pound server that this configuration points to
      * @return
      */
     public String getDawgPoundUrl() {
         return DawgConfiguration.slash(this.get(DAWG_POUND_URL));
+    }
+    
+    private void lazyAuthCfg() {
+        if (this.auth == null) {
+            if (this.ini.containsKey(INI_AUTH_SECTION)) {
+                Ini.Section sec = this.ini.get(INI_AUTH_SECTION);
+                this.auth = this.authConfigFactory.createConfig(sec);
+            } else {
+                /** If none given, just create an empty config */
+                this.auth = new AuthServerConfig();
+            }
+        }
+    }
+    
+    public AuthServerConfig getAuthConfig() {
+        lazyAuthCfg();
+        return this.auth;
+    }
+    
+    public LdapAuthServerConfig getLdapAuthConfig() {
+        lazyAuthCfg();
+        return (LdapAuthServerConfig) (this.auth instanceof LdapAuthServerConfig ? this.auth : null);
     }
 
     public String get(String key) {
@@ -85,12 +138,16 @@ public class DawgConfiguration {
      * @throws RuntimeException if no value is found and no default provided
      */
     public String get(String key, String def) {
+        return get(key, String.class, def);
+    }
+    
+    public <T> T get(String key, Class<T> clazz, T def) {
         Ini.Section sec = this.ini.get(INI_SECTION);
 
         if(!sec.containsKey(key) && (def == null))
             throw new RuntimeException("Configuration key '" + key + "' not found");
 
-        return sec.get(key, def);
+        return sec.get(key, clazz, def);
     }
 
     public void put(String key, String value) {

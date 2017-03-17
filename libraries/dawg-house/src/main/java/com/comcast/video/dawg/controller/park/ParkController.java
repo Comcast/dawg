@@ -27,7 +27,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.comcast.cereal.CerealException;
 import com.comcast.cereal.CerealSettings;
@@ -83,7 +85,7 @@ public class ParkController {
     /** Name of model attribute where latest advanced search condition saved. */
     private static final String LATEST_SEARCH_CONDITION_MODEL_ATTRIBUTE_NAME = LATEST_SEARCH_CONDITION_SESSION_ATTRIBUTE_NAME;
 
-    Logger logger = Logger.getLogger(ParkController.class);
+    Logger logger = LoggerFactory.getLogger(ParkController.class);
 
     @Autowired
     ParkService service;
@@ -106,6 +108,25 @@ public class ParkController {
     public String index(Model model) throws CerealException {
         return "login";
     }
+    
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView login(
+    		@RequestParam(value = "error", required = false) String error,
+    		@RequestParam(value = "logout", required = false) String logout,
+    		@RequestParam(value = "unauthorized", required = false) String unauthorized) {
+
+        	ModelAndView mav = new ModelAndView("login");
+        	if(error != null) {
+        		mav.addObject("error", true);
+        	}
+        	if(logout != null) {
+        		mav.addObject("logout", true);
+        	}
+        	if (unauthorized != null) {
+        		mav.addObject("unauthorized", true);
+        	}
+        	return mav;
+        }
 
     @SuppressWarnings("unchecked")
     @RequestMapping("/{token}*")

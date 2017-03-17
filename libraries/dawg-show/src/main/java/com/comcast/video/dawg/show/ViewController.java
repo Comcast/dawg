@@ -21,9 +21,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -36,19 +39,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.comcast.cereal.CerealException;
 import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.common.security.jwt.JwtDeviceAccessValidator;
 import com.comcast.video.dawg.exception.HttpRuntimeException;
 import com.comcast.video.dawg.show.cache.MetaStbCache;
 import com.comcast.video.dawg.show.key.Remote;
 import com.comcast.video.dawg.show.key.RemoteManager;
 import com.comcast.video.dawg.show.video.VideoSnap;
 import com.comcast.video.dawg.util.DawgUtil;
-import com.comcast.video.stbio.meta.Model;
 
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Controller for serving up views
@@ -63,6 +63,9 @@ public class ViewController implements ViewConstants {
     private static final String GENERIC_REMOTE_NAME = "GENERIC";
     @Autowired
     private MetaStbCache metaStbCache;
+    
+    @Autowired
+    private DawgShowConfiguration config;
 
     @Autowired
     private RemoteManager remoteManager;
@@ -70,8 +73,32 @@ public class ViewController implements ViewConstants {
     @Autowired
     private VideoSnap videoSnap;
 
+    @Autowired
+    private JwtDeviceAccessValidator accessValidator;
+
     /** JSON engine. */
     private JsonCerealEngine jsonEngine = new JsonCerealEngine();
+    
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView login(
+        @RequestParam(value = "error", required = false) String error,
+        @RequestParam(value = "logout", required = false) String logout,
+        @RequestParam(value = "unauthorized", required = false) String unauthorized) {
+
+    	ModelAndView mav = new ModelAndView("login");
+    	if(error != null) {
+    		mav.addObject("error", true);
+    	}
+    	if(logout != null) {
+    		mav.addObject("logout", true);
+    	}
+    	if (unauthorized != null) {
+    		mav.addObject("unauthorized", true);
+    	}
+    	return mav;
+    }
+
+    public enum AudioType { OGG, MPEG; }
 
     /**
      * Serves up the standard view of the stb
@@ -88,21 +115,25 @@ public class ViewController implements ViewConstants {
     public ModelAndView stbView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
             @RequestParam(required = false) String refresh,
-            @RequestHeader("User-Agent") String uaStr) {
+            @RequestHeader("User-Agent") String uaStr,
+            HttpServletRequest req, HttpServletResponse resp) {
     	String stbViewType = STB;
-    	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
+    	return getStbView(req, resp, deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
 
     @RequestMapping(method = { RequestMethod.GET }, value = "/simplified")
     public ModelAndView stbSimplifiedView(@RequestParam String deviceId, @RequestParam(required=false) String mobile,
             @RequestParam(required = false) String remoteType,
             @RequestParam(required = false) String refresh,
-            @RequestHeader("User-Agent") String uaStr) {
+            @RequestHeader("User-Agent") String uaStr,
+            HttpServletRequest req, HttpServletResponse resp) {
     	String stbViewType = SIMPLIFIED;
-    	return getStbView(deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
+    	return getStbView(req, resp, deviceId, mobile, remoteType, refresh, uaStr, stbViewType);
     }
 
-    public ModelAndView getStbView(String deviceId, String mobile, String remoteType, String refresh, String uaStr, String stbViewType){
+    public ModelAndView getStbView(HttpServletRequest req, HttpServletResponse resp, String deviceId, 
+            String mobile, String remoteType, String refresh, String uaStr, String stbViewType) {
+        accessValidator.validateUserHasAccessToDevices(req, resp, true, deviceId);
         MetaStb stb = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
         try {
@@ -117,8 +148,9 @@ public class ViewController implements ViewConstants {
             mav.addObject(DEVICE_ID, deviceId);
         } else {
             boolean supported = BrowserSupport.isBrowserSupported(uaStr);
-            String videoUrl = prependMissingProtocol(stb.getVideoSourceUrl(), "http://");
-            String audioUrl = prependMissingProtocol(stb.getAudioUrl(), "http://");
+            String videoUrl = getVideoUrl(stb);
+            String audioUrlOgg = getAudioUrl(stb, AudioType.OGG);
+            String audioUrlMpeg = getAudioUrl(stb, AudioType.MPEG);
 
             Boolean mob = false;
 
@@ -150,7 +182,6 @@ public class ViewController implements ViewConstants {
             mav.addObject(SELECTED_REMOTE_TYPE, remoteType);
             mav.addObject(MOBILE, mob);
             mav.addObject(VIDEO_URL, videoUrl);
-            mav.addObject(VIDEO_CAMERA, stb.getVideoCamera());
             mav.addObject(VIDEO_AVAILABLE, validUrl(videoUrl) || validUrl(stb.getHdVideoUrl()));
             mav.addObject(HD_VIDEO_URL, stb.getHdVideoUrl());
             mav.addObject(TRACE_AVAILABLE, validUrl(stb.getSerialHost()));
@@ -158,9 +189,52 @@ public class ViewController implements ViewConstants {
             mav.addObject(IR_AVAILABLE, validUrl(stb.getIrServiceUrl()) && validUrl(stb.getIrServicePort()));
             mav.addObject(SUPPORTED, supported);
             mav.addObject(IPADDRESS, stb.getIpAddress().getHostName());
-            mav.addObject(AUDIO_URL, audioUrl);
+            mav.addObject(AUDIO_URL_MPEG, audioUrlMpeg);
+            mav.addObject(AUDIO_URL_OGG, audioUrlOgg);
         }
         return mav;
+    }
+
+    private String getAudioUrl(MetaStb meta, AudioType type) {
+        String proxyUrl = this.getProxyUrl(meta);
+        String audioUrl = prependMissingProtocol(meta.getAudioUrl(), "http://");
+
+        if (null == audioUrl) {
+            return null;
+        }
+        String format = (type == AudioType.OGG) ? "ogg" : "mp3";
+
+        if (null != proxyUrl) {
+            return proxyUrl + "/audio/" + meta.getId() + "/" + format;
+        }
+
+        return audioUrl + "/play1." + format;
+
+    }
+
+    private String getProxyUrl(MetaStb meta) {
+        MetaStb defaultMeta = new DefaultMetaStb(meta.getData(), config);
+        boolean enabled = defaultMeta.getRackProxyEnabled();
+        String proxyUrl = prependMissingProtocol(defaultMeta.getRackProxyUrl(), "http://");
+
+        return enabled && !"http://".equals(proxyUrl) ? proxyUrl : null;
+    }
+
+    private String getVideoUrl(MetaStb meta) {
+        String proxyUrl = this.getProxyUrl(meta);
+        String videoUrl = prependMissingProtocol(meta.getVideoSourceUrl(), "http://");
+
+        if (null == videoUrl) {
+            return null;
+        }
+
+        if (null != proxyUrl) {
+            return proxyUrl + "/video/" + meta.getId();
+        }
+
+        String camera = meta.getVideoCamera();
+        String path = "/axis-cgi/mjpg/video.cgi" + (null == camera ? "" : "?camera=" + camera);
+        return videoUrl + path;
     }
 
     /**
@@ -172,12 +246,12 @@ public class ViewController implements ViewConstants {
     private String prependMissingProtocol(String url, String defaultProtocol) {
         String rv = url;
         if (    null != url
-             && !(    url.startsWith("http://")
-                   || url.startsWith("https://")))
+             && !(    url.toLowerCase().startsWith("http://")
+                   || url.toLowerCase().startsWith("https://")))
        {
            rv = defaultProtocol + url;
        }
-        return rv;
+        return rv != null && rv.endsWith("/") ? rv.substring(0, rv.length() - 1).trim() : rv;
     }
 
     /**
@@ -227,7 +301,9 @@ public class ViewController implements ViewConstants {
     @RequestMapping(method = {RequestMethod.GET}, value = "/multi")
     public ModelAndView multiView(@RequestParam String[] deviceIds, @RequestParam(required = false) String refresh,
             @RequestParam(required = false, defaultValue = "false") boolean isGenericRemote,
-            @RequestHeader("User-Agent") String uaStr) {
+            @RequestHeader("User-Agent") String uaStr,
+            HttpServletRequest req, HttpServletResponse resp) {
+        accessValidator.validateUserHasAccessToDevices(req, resp, true, deviceIds);
 
         Collection<MetaStb> stbs = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
@@ -250,6 +326,15 @@ public class ViewController implements ViewConstants {
 
         ModelAndView mav = new ModelAndView(MULTI);
         mav.addObject(STBS, stbs);
+        Map<String, Map<String, String>> urls = new HashMap<>();
+        for (MetaStb stb : stbs) {
+            Map<String, String> stbUrls = new HashMap<>();
+            stbUrls.put(STB_URLS_VIDEO, getVideoUrl(stb));
+            stbUrls.put(STB_URLS_AUDIO_OGG, getAudioUrl(stb, AudioType.OGG));
+            stbUrls.put(STB_URLS_AUDIO_MPEG, getAudioUrl(stb, AudioType.MPEG));
+            urls.put(stb.getId(), stbUrls);
+        }
+        mav.addObject(STB_URLS, urls);
 
         /* Map containing remote types with corresponding count */
         Map<String, Integer> allUsedRemoteCounts = getAllUsedRemotes(stbs);
@@ -279,7 +364,9 @@ public class ViewController implements ViewConstants {
      */
     @RequestMapping(method = {RequestMethod.GET}, value = "/video/multi/snap")
     @ResponseBody
-    public ModelAndView snapMultiVideo(@RequestParam String[] deviceIds, HttpSession session) {
+    public ModelAndView snapMultiVideo(@RequestParam String[] deviceIds, HttpSession session,
+            HttpServletRequest req, HttpServletResponse resp) {
+        accessValidator.validateUserHasAccessToDevices(req, resp, false, deviceIds);
         String deviceIdImageIdJson = null;
         try {
             //JSON engine declared locally to avoid the "--class" key from the the serialized JSON output
@@ -307,13 +394,14 @@ public class ViewController implements ViewConstants {
      *            hold session details for the client
      * @return zip with snapshots of devices in dawg-show multiview
      */
-    @SuppressWarnings("unchecked")
     @RequestMapping(method = {RequestMethod.GET}, value = "/snap/multi", produces = "application/zip")
     public ModelAndView multiSnap(@RequestParam Map<String, String> deviceIdImageIdMap,
-            @RequestParam(required = false) String refresh, HttpServletResponse response, HttpSession session) {
+            @RequestParam(required = false) String refresh, HttpServletResponse response, HttpServletRequest req, HttpSession session) {
 
         String[] deviceIds = deviceIdImageIdMap.keySet().toArray(new String[deviceIdImageIdMap.keySet().size()]);
-        String[] imageIds = deviceIdImageIdMap.values().toArray(new String[deviceIdImageIdMap.values().size()]);;
+        String[] imageIds = deviceIdImageIdMap.values().toArray(new String[deviceIdImageIdMap.values().size()]);
+
+        accessValidator.validateUserHasAccessToDevices(req, response, false, deviceIds);
 
         Collection<MetaStb> stbs = null;
         boolean ref = refresh == null ? false : Boolean.parseBoolean(refresh);
