@@ -15,8 +15,8 @@
  */
 package com.comcast.dawg.test.base;
 
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -29,7 +29,7 @@ import org.testng.ITestResult;
 public class TestListener implements ITestListener {
 
     /** Listener class logger. */
-    private static final Logger LOGGER = Logger.getLogger(TestListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestListener.class);
 
     /**
      * Called when a test class finishes all of its tests.

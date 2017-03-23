@@ -15,13 +15,13 @@
  */
 package com.comcast.dawg.selenium;
 
-import org.apache.log4j.Logger;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for wait on loading of DOM element.
@@ -29,7 +29,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class SeleniumWaiter {
 
     /** Logger object for the class. */
-    private static final Logger LOGGER = Logger.getLogger(SeleniumWaiter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SeleniumWaiter.class);
 
     /** One second represented in milli second. */
     private static final int ONE_SEC_IN_MILLI = 1000;
