@@ -10,9 +10,6 @@
     <version>2.2-SNAPSHOT</version>
     <name>(Comcast) ${project.artifactId}</name>
     <description>Config for the dawg-servers</description>
-    <properties>
-        <rpm.disabled>false</rpm.disabled>
-    </properties>
 
     <build>
         <plugins>
@@ -30,7 +27,6 @@
                 </executions>
 
                 <configuration>
-                    <disabled>${rpm.disabled}</disabled>
                     <license>Apache-2.0</license>
                     <group>Applications/Databases</group>
                     <!--<icon></icon>-->
