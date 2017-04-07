@@ -18,11 +18,6 @@ package com.comcast.dawg.house.pages;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comcast.dawg.TestServers;
-import com.comcast.dawg.selenium.SeleniumWaiter;
-
-import org.apache.log4j.Logger;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -30,8 +25,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.Select;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+
+import com.comcast.dawg.TestServers;
+import com.comcast.dawg.selenium.SeleniumWaiter;
 
 /**
  * Holds element constants for the models.jsp page for dawg-house.
@@ -116,7 +115,7 @@ public class ModelPage extends LoadableComponent<ModelPage> {
     private static final String MODEL_CONFIG_URL = TestServers.getHouse() + "modelsConfig/";
 
     /** Class level logger object. */
-    private static final Logger LOGGER = Logger.getLogger(ModelPage.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModelPage.class);
 
     /** Model delete completion wait in seconds. */
     private static final int DELETE_MODEL_COMPLETION_WAIT = 2;

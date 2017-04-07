@@ -15,14 +15,14 @@
  */
 package com.comcast.dawg.test.base;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Listeners;
 
@@ -37,7 +37,7 @@ import com.comcast.video.dawg.house.DawgHouseClient;
 public class TestBase {
 
     /** Test logger. */
-    protected static Logger logger = Logger.getLogger(TestBase.class);
+    protected static Logger logger = LoggerFactory.getLogger(TestBase.class);
 
     /** To cache the test STBs for later deletion. */
     protected Map<String, MetaStb> testStbs = new HashMap<String, MetaStb>();

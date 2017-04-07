@@ -18,11 +18,6 @@ package com.comcast.dawg.house.pages;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comcast.dawg.TestServers;
-import com.comcast.dawg.selenium.SeleniumWaiter;
-
-import org.apache.log4j.Logger;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -30,6 +25,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.comcast.dawg.TestServers;
+import com.comcast.dawg.selenium.SeleniumWaiter;
 
 /**
  * Holds element constants for the index.jsp page for dawg-house.
@@ -39,7 +39,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class IndexPage {
 
     /** Index page logger. */
-    private static final Logger LOGGER = Logger.getLogger(IndexPage.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IndexPage.class);
 
     /** Replaceable element for attribute values. */
     private static final String REPLACEABLE_ELEMENT = "#@#";
