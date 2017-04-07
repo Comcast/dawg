@@ -35,7 +35,6 @@ import org.openqa.selenium.remote.service.DriverService;
 import com.comcast.dawg.saucelab.SauceConnector;
 import com.comcast.dawg.saucelab.SauceConstants;
 import com.comcast.dawg.saucelab.SauceProvider;
-import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 
 /**
  * Singleton that starts up browsers used to test on
@@ -52,8 +51,7 @@ public class BrowserServiceManager {
     private static final List<String> CHROME_OPTION_ARGUMENTS = Collections.unmodifiableList(Arrays.asList(
         "--start-maximized", "allow-running-insecure-content", "ignore-certificate-errors"));
 
-    private static String testMode;
-    private static SauceTunnelManager tunnelManager = null;
+    private static String testMode = SauceProvider.getTestMode();
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -62,7 +60,6 @@ public class BrowserServiceManager {
                 BrowserServiceManager.shutdownAll();
             }
         });
-        testMode = SauceProvider.getTestMode();
     }
 
     /**
@@ -75,11 +72,8 @@ public class BrowserServiceManager {
 
         if (global == null) {
             if (null != testMode && SauceConstants.SAUCE.equals(testMode)) {
-                DesiredCapabilities sauceCapabilities = null;
                 String osVersion = null;
-                if (null == tunnelManager) {
-                    tunnelManager = SauceConnector.startSauceConnect();
-                }
+                SauceConnector.getInstance().startSauceConnect();
                 String platformtype = SauceProvider.getSaucePlatform();
                 if (SauceConstants.WINDOWS.equals(platformtype)) {
                     osVersion = SauceProvider.getWinOsVersion();
@@ -90,8 +84,8 @@ public class BrowserServiceManager {
                 } else {
                     LOGGER.error("Invalid Platform type" + platformtype);
                 }
-                sauceCapabilities = setSauceCapabilities(osVersion, browser);
-                global = new RemoteWebDriver(new URL("http://" + SauceProvider.getSauceUserName() + ":" + SauceProvider.getSauceKey() + "@" + SauceConstants.SAUCE_URL), sauceCapabilities);
+                DesiredCapabilities sauceCapabilities = setSauceCapabilities(osVersion, browser);
+                global = new RemoteWebDriver(new URL(SauceProvider.getSauceUserName() + ":" + SauceProvider.getSauceKey() + "@" + SauceConstants.SAUCE_URL), sauceCapabilities);
                 drivers.put(global, null);
             } else {
                 DriverService service = start(browser);
@@ -189,7 +183,7 @@ public class BrowserServiceManager {
         if (null != driver) {
             if (null != testMode && SauceConstants.SAUCE.equals(testMode)) {
                 driver.quit();
-                SauceConnector.stopSauceConnect();
+                SauceConnector.getInstance().stopSauceConnect();
             } else {
                 try {
                     drivers.get(driver).stop();

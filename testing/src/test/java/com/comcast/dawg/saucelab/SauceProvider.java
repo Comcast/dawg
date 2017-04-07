@@ -26,27 +26,27 @@ import com.comcast.video.dawg.common.Config;
  */
 public class SauceProvider {
 
-    public static final String TEST_MODE = "test.mode";
-    public static final String SAUCE_KEY = "sauce.key";
-    public static final String SAUCE_USERNAME = "sauce.username";
-    public static final String SAUCE_PORT = "sauce.port";
-    public static final String SAUCE_PLATFORM = "test.platform";
+    private static final String TEST_MODE = "test.mode";
+    private static final String SAUCE_KEY = "sauce.key";
+    private static final String SAUCE_USERNAME = "sauce.username";
+    private static final String SAUCE_PORT = "sauce.port";
+    private static final String SAUCE_PLATFORM = "test.platform";
 
-    public static final String SAUCE_WIN_VERSION = "win.version";
-    public static final String SAUCE_MAC_VERSION = "mac.version";
-    public static final String SAUCE_LINUX_VERSION = "linux.version";
-    public static final String CHROME_VERSION = "chrome.version";
+    private static final String SAUCE_WIN_VERSION = "win.version";
+    private static final String SAUCE_MAC_VERSION = "mac.version";
+    private static final String SAUCE_LINUX_VERSION = "linux.version";
+    private static final String CHROME_VERSION = "chrome.version";
 
-    public static final String DEFAULT_TEST_MODE = Config.get("saucelab", "test-mode", "local");
-    public static final String DEFAULT_SAUCE_KEY = Config.get("saucelab", "sauce-key",
+    private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "test-mode", "local");
+    private static final String DEFAULT_SAUCE_KEY = Config.get("saucelab", "sauce-key",
         "c420f9b5-524c-4083-9bef-4ca0c4e6f15c");
-    public static final String DEFAULT_SAUCE_USERNAME = Config.get("saucelab", "sauce-username", "CSVTE");
-    public static final String DEFAULT_SAUCE_PORT = Config.get("saucelab", "sauce-port", "4445");
-    public static final String DEFAULT_SAUCE_PLATFORM = Config.get("saucelab", "sauce-platform", "windows");
-    public static final String DEFAULT_WIN_VERSION = Config.get("saucelab", "sauce-win-version", "Windows 8.1");
-    public static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "sauce-mac-version", "macOS 10.12");
-    public static final String DEFAULT_LINUX_VERSION = Config.get("saucelab", "sauce-linux-version", "Linux");
-    public static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "chrome-version", "46");
+    private static final String DEFAULT_SAUCE_USERNAME = Config.get("saucelab", "sauce-username", "CSVTE");
+    private static final String DEFAULT_SAUCE_PORT = Config.get("saucelab", "sauce-port", "4445");
+    private static final String DEFAULT_SAUCE_PLATFORM = Config.get("saucelab", "sauce-platform", "windows");
+    private static final String DEFAULT_WIN_VERSION = Config.get("saucelab", "sauce-win-version", "Windows 8.1");
+    private static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "sauce-mac-version", "macOS 10.12");
+    private static final String DEFAULT_LINUX_VERSION = Config.get("saucelab", "sauce-linux-version", "Linux");
+    private static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "chrome-version", "46");
 
 
     /**

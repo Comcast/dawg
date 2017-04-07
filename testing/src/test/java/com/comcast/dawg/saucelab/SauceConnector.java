@@ -30,14 +30,26 @@ import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 public class SauceConnector {
     private static final Logger LOGGER = Logger.getLogger(SauceConnector.class);
     private static final String options = " -i " + SauceConstants.DAWG_TEST;
-    private static SauceTunnelManager tunnelManager = null;
+    private static SauceTunnelManager tunnelManager;
+    private static SauceConnector connector = null;
+    
     
     /**
-     * Method to establish secure sauce connection to run tests in sauce labs    
-     * @return SauceTunnelManager    
+     * Creates instance of SauceConnector
+     * @return SauceConnector
+     */
+    public static SauceConnector getInstance() {
+        if (null == connector) {
+            connector = new SauceConnector();
+        }
+        return connector;
+    }
+
+    /**
+     * Method to establish secure sauce connection to run tests in sauce lab
      */
 
-    public static SauceTunnelManager startSauceConnect() {
+    public void startSauceConnect() {
         tunnelManager = new SauceConnectFourManager(true);
         try {
             tunnelManager.openConnection(SauceProvider.getSauceUserName(), SauceProvider.getSauceKey(),
@@ -46,13 +58,13 @@ public class SauceConnector {
         } catch (IOException e) {
             LOGGER.error("Error generated when launching Sauce Connect", e);
         }
-        return tunnelManager;
+
     }
     /**
      * Close sauce connection with sauce labs once the test execution completes.  
      *
      */
-    public static void stopSauceConnect() {
+    public void stopSauceConnect() {
         //close running process
         tunnelManager.closeTunnelsForPlan(SauceProvider.getSauceKey(), options, null);
     }

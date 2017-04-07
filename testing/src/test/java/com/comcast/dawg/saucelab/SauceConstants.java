@@ -32,7 +32,7 @@ public class SauceConstants {
     public static final String LOCAL = "local";
 
     /** sauce url constant. */
-    public static final String SAUCE_URL = "ondemand.saucelabs.com:80/wd/hub";
+    public static final String SAUCE_URL = "http://ondemand.saucelabs.com:80/wd/hub";
 
     /** Constant for dawg test */
     public static final String DAWG_TEST = "dawgtest";

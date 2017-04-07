@@ -32,12 +32,12 @@ mvn clean test -Dtest=LoginPageIT -Dtest.mode=sauce -Dsauce.username=XXXX -Dsauc
 
 **For executing test in MAC platform with a particular platform verison**
 ``` sh
-mvn clean test -Dtest=LoginPageIT -Dtest.platform=mac -Dmac.veriosn=OS X 10.12
+mvn clean test -Dtest=LoginPageIT -Dtest.platform=mac -Dmac.version=OS X 10.12
 ```
 **For executing tests in MAC platform with particular chrome version**
 
 ```sh
-mvn clean test -Dtest=LoginPageIT -Dtest.platform=mac -Dmac.veriosn=OS X 10.12 -Dchrome.veriosn=57
+mvn clean test -Dtest=LoginPageIT -Dtest.platform=mac -Dmac.veriosn=OS X 10.12 -Dchrome.version=57
 ```
 
 **For executing test in Windows platform with a particular platform verison and chrome version**
@@ -47,16 +47,16 @@ mvn clean test -Dtest=LoginPageIT -Dwin.version=Windows 8.1
 ```
 
 ``` sh
-mvn clean test -Dtest=LoginPageIT -Dwin.version=Windows 8.1 -Dchrome.veriosn=56
+mvn clean test -Dtest=LoginPageIT -Dwin.version=Windows 8.1 -Dchrome.version=56
 ```
 **For executing test in Linux platform with a particular platform verison and chrome version**
 *LINUX(Platform version-Linux)*
 
 ```sh
-mvn clean test -Dtest=LoginPageIT -Dtest.platform=linux -Dmac.veriosn=Linux
+mvn clean test -Dtest=LoginPageIT -Dtest.platform=linux -Dmac.version=Linux
 ```
 ```sh
-mvn clean test -Dtest=LoginPageIT -Dtest.platform=linux -Dmac.veriosn=Linux -Dchrome.veriosn=44
+mvn clean test -Dtest=LoginPageIT -Dtest.platform=linux -Dmac.veriosn=Linux -Dchrome.version=44
 ``` 
 
 
