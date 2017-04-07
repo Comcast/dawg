@@ -49,7 +49,7 @@ public class EditDeviceUIIT {
     public Map<String, MetaStb> addedStbs = new HashMap<String, MetaStb>();
     public static final String DEVICE_PREF = "edit";
     public static final String CXT_MENU = "cxtMenu";
-
+    
     @Test
     public void testLaunchOverlay() throws IOException {
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
@@ -62,7 +62,7 @@ public class EditDeviceUIIT {
                 MetaStb.PROGRAM, MetaStb.REMOTETYPE, MetaStb.TAGS , MetaStb.CONTROLLER_IP_ADDRESS, MetaStb.HARDWARE_REVISION, MetaStb.SLOT_NAME, MetaStb.IRBLASTERTYPE
         };
         Map<String, Object> data = stb.getData();
-        for (String prop :propsToCheck) {
+        for (String prop : propsToCheck) {
             EditDeviceRow row = null;
             try {
                 row = edOverlay.getRow(prop);
@@ -82,7 +82,7 @@ public class EditDeviceUIIT {
         }
     }
 
-    @DataProvider(name="testChangeValueData")
+    @DataProvider(name = "testChangeValueData")
     public TestList testChangeValueData() {
         TestList tl = new TestList();
 
@@ -100,7 +100,7 @@ public class EditDeviceUIIT {
      * @author Kevin Pearson
      * @throws IOException
      */
-    @Test(dataProvider="testChangeValueData")
+    @Test(dataProvider = "testChangeValueData")
     public void testChangeValue(boolean save, String refreshedName, boolean isModified) throws IOException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
@@ -165,7 +165,7 @@ public class EditDeviceUIIT {
      *            capabilities to true
      * @throws IOException
      */
-    @Test(dataProvider="testChangeModelNameData")
+    @Test(dataProvider = "testChangeModelNameData")
     public void testChangeModelName(String newModelName, String expectedCapabilities, String expectedFamily, boolean validModelName, boolean modifiedProps) throws IOException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
@@ -174,7 +174,7 @@ public class EditDeviceUIIT {
         EditDeviceOverlay edOverlay = loadPageAndLaunchEditOverlay(driver, token, stb.getId());
         EditDeviceRow model = edOverlay.getRow("model");
         EditDeviceRow family = edOverlay.getRow("family");
-        EditDeviceRow capabilities = edOverlay.getRow("capabilities") ;
+        EditDeviceRow capabilities = edOverlay.getRow("capabilities");
         Assert.assertFalse(model.isModified());
         if (modifiedProps) {
             family.changeValue("TestFamily");
@@ -188,7 +188,7 @@ public class EditDeviceUIIT {
         waitForNewPageToLoad(driver, edOverlay.getOverlayUI());
         edOverlayNext = launchEditOverlay(driver, stb.getId());
         Assert.assertTrue(ExpectedConditions.stalenessOf(edOverlay.getOverlayUI()).apply(driver));
-        if ( !validModelName && !modifiedProps) {
+        if (!validModelName && !modifiedProps) {
             MetaStb updated = client.getById(stb.getId());
             Map<String, Object> data = updated.getData();
             Assert.assertNull(data.get("family"));
@@ -203,7 +203,7 @@ public class EditDeviceUIIT {
         }
     }
 
-    @DataProvider(name="testAddPropertyNonSetData")
+    @DataProvider(name = "testAddPropertyNonSetData")
     public TestList testAddPropertyNonSetData() {
         TestList tl = new TestList();
 
@@ -220,7 +220,7 @@ public class EditDeviceUIIT {
      * @author Kevin Pearson
      * @throws IOException
      */
-    @Test(dataProvider="testAddPropertyNonSetData")
+    @Test(dataProvider = "testAddPropertyNonSetData")
     public void testAddPropertyNonSet(String val) throws IOException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
@@ -246,15 +246,15 @@ public class EditDeviceUIIT {
         Assert.assertEquals(newVal, val);
     }
 
-    @DataProvider(name="testAddPropertySetData")
+    @DataProvider(name = "testAddPropertySetData")
     public TestList testAddPropertySetData() {
         TestList tl = new TestList();
 
         tl.add("", new String[]{});
-        tl.add("val1", new String[]{ "val1" });
-        tl.add("val1,val2", new String[]{ "val1","val2" });
-        tl.add("val1, val2", new String[]{ "val1","val2" });
-        tl.add("val1, val2,", new String[]{ "val1","val2" });
+        tl.add("val1", new String[]{"val1" });
+        tl.add("val1,val2", new String[]{"val1", "val2" });
+        tl.add("val1, val2", new String[]{"val1", "val2" });
+        tl.add("val1, val2,", new String[]{"val1", "val2" });
 
         return tl;
     }
@@ -265,7 +265,7 @@ public class EditDeviceUIIT {
      * @author Kevin Pearson
      * @throws IOException
      */
-    @Test(dataProvider="testAddPropertySetData")
+    @Test(dataProvider = "testAddPropertySetData")
     public void testAddPropertySet(String val, String[] contained) throws IOException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
@@ -291,7 +291,7 @@ public class EditDeviceUIIT {
         Assert.assertEquals(coll.size(), contained.length);
         for (String contain : contained) {
             Assert.assertTrue(coll.contains(contain),
-                    "Backend did not contain '" + contain + "', had values: " + coll.toString());
+                "Backend did not contain '" + contain + "', had values: " + coll.toString());
         }
     }
 

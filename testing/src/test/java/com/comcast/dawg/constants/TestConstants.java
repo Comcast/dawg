@@ -86,7 +86,7 @@ public class TestConstants {
 
     /** The user name used for the integration tests. */
     public static final String USER = "integrationuser";
-
+    
     /**
      * Test STB capability.
      */

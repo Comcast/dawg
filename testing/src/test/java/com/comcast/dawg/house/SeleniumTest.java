@@ -28,7 +28,7 @@ public class SeleniumTest {
 
     public ThreadLocal<RemoteWebDriver> drivers = new ThreadLocal<RemoteWebDriver>();
 
-    @BeforeMethod(groups="uitest")
+    @BeforeMethod(groups = "uitest")
     public void launchSelenium() throws IOException {
         drivers.set(BrowserServiceManager.getDriver(Browser.chrome));
     }

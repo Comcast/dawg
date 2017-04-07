@@ -16,18 +16,26 @@
 package com.comcast.dawg.selenium;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.service.DriverService;
+
+import com.comcast.dawg.saucelab.SauceConnector;
+import com.comcast.dawg.saucelab.SauceConstants;
+import com.comcast.dawg.saucelab.SauceProvider;
+import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 
 /**
  * Singleton that starts up browsers used to test on
@@ -35,13 +43,17 @@ import org.openqa.selenium.remote.service.DriverService;
  *
  */
 public class BrowserServiceManager {
+    private static final Logger LOGGER = Logger.getLogger(BrowserServiceManager.class);
     private static Map<RemoteWebDriver, DriverService> drivers = new HashMap<RemoteWebDriver, DriverService>();
     private static RemoteWebDriver global = null;
 
+
     /** Chrome browser setting arguments. */
     private static final List<String> CHROME_OPTION_ARGUMENTS = Collections.unmodifiableList(Arrays.asList(
-                "--start-maximized", "allow-running-insecure-content", "ignore-certificate-errors"));
+        "--start-maximized", "allow-running-insecure-content", "ignore-certificate-errors"));
 
+    private static String testMode;
+    private static SauceTunnelManager tunnelManager = null;
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -50,6 +62,7 @@ public class BrowserServiceManager {
                 BrowserServiceManager.shutdownAll();
             }
         });
+        testMode = SauceProvider.getTestMode();
     }
 
     /**
@@ -59,12 +72,51 @@ public class BrowserServiceManager {
      * @throws IOException
      */
     public static synchronized RemoteWebDriver getDriver(Browser browser) throws IOException {
+
         if (global == null) {
-            DriverService service = start(browser);
-            global = new RemoteWebDriver(service.getUrl(), getDesiredBrowserCapabilities(browser));
-            drivers.put(global, service);
+            if (null != testMode && SauceConstants.SAUCE.equals(testMode)) {
+                DesiredCapabilities sauceCapabilities = null;
+                String osVersion = null;
+                if (null == tunnelManager) {
+                    tunnelManager = SauceConnector.startSauceConnect();
+                }
+                String platformtype = SauceProvider.getSaucePlatform();
+                if (SauceConstants.WINDOWS.equals(platformtype)) {
+                    osVersion = SauceProvider.getWinOsVersion();
+                } else if (SauceConstants.MAC.equals(platformtype)) {
+                    osVersion = SauceProvider.getMacOsVersion();
+                } else if (SauceConstants.LINUX.equals(platformtype)) {
+                    osVersion = SauceProvider.getLinuxOsVersion();
+                } else {
+                    LOGGER.error("Invalid Platform type" + platformtype);
+                }
+                sauceCapabilities = setSauceCapabilities(osVersion, browser);
+                global = new RemoteWebDriver(new URL("http://" + SauceProvider.getSauceUserName() + ":" + SauceProvider.getSauceKey() + "@" + SauceConstants.SAUCE_URL), sauceCapabilities);
+                drivers.put(global, null);
+            } else {
+                DriverService service = start(browser);
+                global = new RemoteWebDriver(service.getUrl(), getDesiredBrowserCapabilities(browser));
+                drivers.put(global, service);
+            }
         }
         return global;
+    }
+
+    /**
+     * Set the desired capabilities for running tests in sauce labs.   
+     * @param osVersion 
+     * @param browser
+     *        Browser in which test to be run        
+     * @return Capabilities corresponding to the browser and platform passed.
+     */
+    private static DesiredCapabilities setSauceCapabilities(String osVersion, Browser browser) {
+        DesiredCapabilities sauceCapabilities = new DesiredCapabilities();
+        sauceCapabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
+        sauceCapabilities.setCapability(CapabilityType.VERSION, SauceProvider.getChromeVersion());
+        sauceCapabilities.setCapability(CapabilityType.PLATFORM, osVersion);
+        sauceCapabilities.setCapability(SauceConstants.NAME, SauceConstants.DAWG_TEST_INFO);
+        sauceCapabilities.setCapability(SauceConstants.TUNNEL_IDENTIFIER, SauceConstants.DAWG_TEST);
+        return sauceCapabilities;
     }
 
     /**
@@ -127,16 +179,23 @@ public class BrowserServiceManager {
         drivers.clear();
     }
 
+
     /**
      * Shuts down the selenium service for the given browser
      * @param browser
      */
     public static void shutdown(RemoteWebDriver driver) {
-        if (driver != null) {
-            try {
-                drivers.get(driver).stop();
-            } catch (Throwable e) {
-                e.printStackTrace();
+
+        if (null != driver) {
+            if (null != testMode && SauceConstants.SAUCE.equals(testMode)) {
+                driver.quit();
+                SauceConnector.stopSauceConnect();
+            } else {
+                try {
+                    drivers.get(driver).stop();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
