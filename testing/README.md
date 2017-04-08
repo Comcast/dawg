@@ -5,9 +5,9 @@ Instructions to run selenium dawg tests in Sauce Labs
 
 **Description**
 
-Automating dawg portal selenium tests inside sauce Labs.Automation can run in different Platforms (Windows,Linux,Mac)with various chrome browser versions inside Labs.
+Automating dawg portal selenium tests inside sauce Labs. Automation can run in different Platforms (Windows,Linux,Mac)with various chrome browser versions inside Labs.
 
-**Supported Platform versions in Sauce Labs**
+**Tests will run in sauce labs with following Supported Platform versions**
 
 |Platform  | Versions |
 | ------ | ------ |
