@@ -47,16 +47,17 @@ public class SauceConnector {
 
     /**
      * Method to establish secure sauce connection to run tests in sauce lab
+     * @throws SauceTestException 
      */
 
-    public void startSauceConnect() {
+    public void startSauceConnect() throws SauceTestException {
         tunnelManager = new SauceConnectFourManager(true);
         try {
             tunnelManager.openConnection(SauceProvider.getSauceUserName(), SauceProvider.getSauceKey(),
                 Integer.parseInt(SauceProvider.getSaucePort()), null, options, null, true, null);
 
         } catch (IOException e) {
-            LOGGER.error("Error generated when launching Sauce Connect", e);
+            throw new SauceTestException("Error generated when launching Sauce Connect", e);
         }
 
     }

@@ -14,19 +14,21 @@ Automating dawg portal selenium tests inside sauce Labs.Automation can run in di
 | Windows | Windows 10, Windows 8.1, Windows 8, Windows 7 |
 | MAC |OS X 10.12, OS X 10.11,OS X 10.10,OS X 10.9, OS X 10.9 |
 | Linux | Linux |
+
 **Supported chrome versions in Sauce Labs**
+
 |Platform  | Chrome Versions |
 | ------ | ------ |
 | Windows | 46, 52, 51, 53, 54,55, 56, 57 |
 | MAC |57, 56, 53, 51,50,49,47,46 |
 | Linux | 47, 46, 45, 44 |
+
 **For executing tests in SauceLabs**
->*Note : If sauce credentials(-Dsauce.username -Dsauce.key -Dsauce.port) are not specified it will take the default values from config file*
+>*Note : sauce credentials are mandatory(-Dsauce.username -Dsauce.key -Dsauce.port)
 
 ```sh
-mvn clean test -Dtest=LoginPageIT -Dtest.mode=sauce -Dsauce.username=XXXX -Dsauce.key=XXXXXXXX -Dsauce.port=4446
+mvn clean test -Dtest=LoginPageIT -Dtest.mode=sauce -Dsauce.username=XXXX -Dsauce.key=XXXXXXXX -Dsauce.port=4445 -Dsauce.url=http://XXX
 ```
-
 **For executing tests in different Platform inside SauceLabs**
 >*Note :If platform type , platform version or chrome version is not specified, then the test will runs with default windows platform with platform version Windows 8.1 with chrome version 46*
 

@@ -31,22 +31,20 @@ public class SauceProvider {
     private static final String SAUCE_USERNAME = "sauce.username";
     private static final String SAUCE_PORT = "sauce.port";
     private static final String SAUCE_PLATFORM = "test.platform";
+    private static final String SAUCE_URL = "sauce.url";
 
     private static final String SAUCE_WIN_VERSION = "win.version";
     private static final String SAUCE_MAC_VERSION = "mac.version";
     private static final String SAUCE_LINUX_VERSION = "linux.version";
-    private static final String CHROME_VERSION = "chrome.version";
+    private static final String CHROME_VERSION = "chrome.version";   
 
-    private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "test-mode", "local");
-    private static final String DEFAULT_SAUCE_KEY = Config.get("saucelab", "sauce-key",
-        "c420f9b5-524c-4083-9bef-4ca0c4e6f15c");
-    private static final String DEFAULT_SAUCE_USERNAME = Config.get("saucelab", "sauce-username", "CSVTE");
-    private static final String DEFAULT_SAUCE_PORT = Config.get("saucelab", "sauce-port", "4445");
-    private static final String DEFAULT_SAUCE_PLATFORM = Config.get("saucelab", "sauce-platform", "windows");
-    private static final String DEFAULT_WIN_VERSION = Config.get("saucelab", "sauce-win-version", "Windows 8.1");
-    private static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "sauce-mac-version", "macOS 10.12");
-    private static final String DEFAULT_LINUX_VERSION = Config.get("saucelab", "sauce-linux-version", "Linux");
-    private static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "chrome-version", "46");
+    private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "default-test-mode", "local");  
+    private static final String DEFAULT_SAUCE_PLATFORM = Config.get("saucelab", "default-sauce-platform", "windows");
+    private static final String DEFAULT_WIN_VERSION = Config.get("saucelab", "default-sauce-win-version", "Windows 8.1");
+    private static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "default-sauce-mac-version", "macOS 10.12");
+    private static final String DEFAULT_LINUX_VERSION = Config.get("saucelab", "default-sauce-linux-version", "Linux");
+    private static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "default-chrome-version", "46");
+    private static final String DEFAULT_SAUCE_URL = Config.get("saucelab", "default-sauce-url", "http://ondemand.saucelabs.com:80/wd/hub");
 
 
     /**
@@ -56,13 +54,21 @@ public class SauceProvider {
     public static final String getTestMode() {
         return getData(TEST_MODE, DEFAULT_TEST_MODE);
     }
+    
+    /**
+     * Gets the sauce URL
+     * @return
+     */
+    public static final String getSauceURl() {
+        return getData(SAUCE_URL, DEFAULT_SAUCE_URL);
+    }
 
     /**
      * Gets the sauce lab key
      * @return
      */
     public static final String getSauceKey() {
-        return getData(SAUCE_KEY, DEFAULT_SAUCE_KEY);
+        return System.getProperty(SAUCE_KEY);
     }
 
     /**
@@ -70,7 +76,7 @@ public class SauceProvider {
      * @return
      */
     public static final String getSauceUserName() {
-        return getData(SAUCE_USERNAME, DEFAULT_SAUCE_USERNAME);
+        return  System.getProperty(SAUCE_USERNAME);
     }
 
     /**
@@ -78,7 +84,7 @@ public class SauceProvider {
      * @return
      */
     public static final String getSaucePort() {
-        return getData(SAUCE_PORT, DEFAULT_SAUCE_PORT);
+        return System.getProperty(SAUCE_PORT);
     }
 
     /**
