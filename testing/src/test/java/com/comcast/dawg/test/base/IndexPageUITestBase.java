@@ -36,7 +36,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import org.seleniumhq.jetty9.http.HttpStatus;
+import org.seleniumhq.jetty7.http.HttpStatus;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
