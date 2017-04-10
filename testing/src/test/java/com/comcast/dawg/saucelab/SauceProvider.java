@@ -44,7 +44,7 @@ public class SauceProvider {
     private static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "default-sauce-mac-version", "macOS 10.12");
     private static final String DEFAULT_LINUX_VERSION = Config.get("saucelab", "default-sauce-linux-version", "Linux");
     private static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "default-chrome-version", "46");
-    private static final String DEFAULT_SAUCE_URL = Config.get("saucelab", "default-sauce-url", "http://ondemand.saucelabs.com:80/wd/hub");
+    private static final String DEFAULT_SAUCE_URL = Config.get("saucelab", "default-sauce-url", "ondemand.saucelabs.com:80/wd/hub");
 
 
     /**

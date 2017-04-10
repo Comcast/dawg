@@ -21,6 +21,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import com.comcast.dawg.saucelab.SauceTestException;
 import com.comcast.dawg.selenium.Browser;
 import com.comcast.dawg.selenium.BrowserServiceManager;
 
@@ -29,7 +30,7 @@ public class SeleniumTest {
     public ThreadLocal<RemoteWebDriver> drivers = new ThreadLocal<RemoteWebDriver>();
 
     @BeforeMethod(groups = "uitest")
-    public void launchSelenium() throws IOException {
+    public void launchSelenium() throws IOException, SauceTestException {
         drivers.set(BrowserServiceManager.getDriver(Browser.chrome));
     }
 

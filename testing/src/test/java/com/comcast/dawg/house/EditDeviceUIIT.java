@@ -37,6 +37,7 @@ import org.testng.annotations.Test;
 import com.comcast.dawg.MetaStbBuilder;
 import com.comcast.dawg.TestServers;
 import com.comcast.dawg.house.pages.IndexPage;
+import com.comcast.dawg.saucelab.SauceTestException;
 import com.comcast.dawg.selenium.Browser;
 import com.comcast.dawg.selenium.BrowserServiceManager;
 import com.comcast.pantry.test.TestList;
@@ -51,7 +52,7 @@ public class EditDeviceUIIT {
     public static final String CXT_MENU = "cxtMenu";
     
     @Test
-    public void testLaunchOverlay() throws IOException {
+    public void testLaunchOverlay() throws IOException, SauceTestException {
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
         String token = MetaStbBuilder.getUID("testtoken");
@@ -99,9 +100,10 @@ public class EditDeviceUIIT {
      * @param isModified If the property should be marked as modified when the page is refreshed
      * @author Kevin Pearson
      * @throws IOException
+     * @throws SauceTestException 
      */
     @Test(dataProvider = "testChangeValueData")
-    public void testChangeValue(boolean save, String refreshedName, boolean isModified) throws IOException {
+    public void testChangeValue(boolean save, String refreshedName, boolean isModified) throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
@@ -164,9 +166,10 @@ public class EditDeviceUIIT {
      *            if set true, will change the isModified property of family and
      *            capabilities to true
      * @throws IOException
+     * @throws SauceTestException 
      */
     @Test(dataProvider = "testChangeModelNameData")
-    public void testChangeModelName(String newModelName, String expectedCapabilities, String expectedFamily, boolean validModelName, boolean modifiedProps) throws IOException {
+    public void testChangeModelName(String newModelName, String expectedCapabilities, String expectedFamily, boolean validModelName, boolean modifiedProps) throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
@@ -219,9 +222,10 @@ public class EditDeviceUIIT {
      * @param val The value to give for the new property
      * @author Kevin Pearson
      * @throws IOException
+     * @throws SauceTestException 
      */
     @Test(dataProvider = "testAddPropertyNonSetData")
-    public void testAddPropertyNonSet(String val) throws IOException {
+    public void testAddPropertyNonSet(String val) throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
@@ -264,9 +268,10 @@ public class EditDeviceUIIT {
      * @param val The value to give for the new property
      * @author Kevin Pearson
      * @throws IOException
+     * @throws SauceTestException 
      */
     @Test(dataProvider = "testAddPropertySetData")
-    public void testAddPropertySet(String val, String[] contained) throws IOException {
+    public void testAddPropertySet(String val, String[] contained) throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
@@ -296,7 +301,7 @@ public class EditDeviceUIIT {
     }
 
     @Test
-    public void testAddPropertyKeyExists() throws IOException {
+    public void testAddPropertyKeyExists() throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
@@ -311,7 +316,7 @@ public class EditDeviceUIIT {
     }
 
     @Test
-    public void testAddPropertyEmptyKey() throws IOException {
+    public void testAddPropertyEmptyKey() throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
@@ -325,7 +330,7 @@ public class EditDeviceUIIT {
     }
 
     @Test
-    public void testDeleteProp() throws IOException {
+    public void testDeleteProp() throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);
@@ -351,9 +356,10 @@ public class EditDeviceUIIT {
      * mark unmodified, refresh page, verify it is still marked unmodified
      * @author Kevin Pearson
      * @throws IOException
+     * @throws SauceTestException 
      */
     @Test
-    public void testMarkPropModified() throws IOException {
+    public void testMarkPropModified() throws IOException, SauceTestException {
         RemoteWebDriver driver = BrowserServiceManager.getDriver(Browser.chrome);
         MetaStb stb = MetaStbBuilder.build().uid(DEVICE_PREF).stb();
         addStb(stb);

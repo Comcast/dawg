@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import com.comcast.dawg.TestServers;
+import com.comcast.dawg.saucelab.SauceTestException;
 import com.comcast.dawg.selenium.Browser;
 import com.comcast.dawg.selenium.BrowserServiceManager;
 import com.comcast.video.dawg.common.DawgDevice;
@@ -50,7 +51,7 @@ public class UITestBase extends TestBase {
 
         try {
             driver = BrowserServiceManager.getDriver(Browser.chrome);
-        } catch (IOException e) {
+        } catch (IOException | SauceTestException e) {
             Assert.fail("Failed to set the driver.", e);
         }
     }
