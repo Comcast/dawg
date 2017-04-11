@@ -100,7 +100,7 @@ public class BulkTagIT extends IndexPageUITestBase {
         validateBackendStbMetaDataTags(testStb, newTag);
     }
 
-    @Test(description = "Tests if a user can tag a box that has tags but not the given one", groups = "EXISTING_TAG_REQUIRED_TEST_GROUP")
+    @Test(description = "Tests if a user can tag a box that has tags but not the given one", groups = {"EXISTING_TAG_REQUIRED_TEST_GROUP", "smoke"})
     protected void testNewTag() {
         String newTag = createDynamicTestTagNames();
 

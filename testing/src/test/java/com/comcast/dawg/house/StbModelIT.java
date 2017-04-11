@@ -214,7 +214,7 @@ public class StbModelIT {
      * @throws ClientProtocolException
      *
      */
-    @Test(groups = "rest")
+    @Test(groups = {"rest", "smoke"})
     public void testDelete() throws ClientProtocolException, IOException {
         String id = MetaStbBuilder.getUID("SA3200");
         addModel(id, INIT_CAP, INIT_FAMILY);

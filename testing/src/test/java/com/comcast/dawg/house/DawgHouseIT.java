@@ -138,7 +138,7 @@ public class DawgHouseIT {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    @Test(groups="rest")
+    @Test(groups={"rest", "smoke"})
     public void getStbsByIdWithValidIdTest() throws ClientProtocolException, IOException {
         String url = TestServers.getHouse() + "devices/id/" + ID;
         HttpGet method = new HttpGet(url);
@@ -271,7 +271,7 @@ public class DawgHouseIT {
      * @throws IOException
      * @throws ClientProtocolException
      */
-    @Test(groups="rest")
+    @Test(groups={"rest","smoke"})
     public void deleteSingleValidIdTest() throws ClientProtocolException, IOException {
         String id = MetaStbBuilder.getUID(ID_PREF);
         int status = addStb(id, MAC);
@@ -351,7 +351,7 @@ public class DawgHouseIT {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    @Test(groups="rest")
+    @Test(groups={"rest","smoke"})
     public void getStbsByIdsTest() throws ClientProtocolException, IOException {
         String url = TestServers.getHouse() + "devices/id";
         HttpPost method = new HttpPost(url);
@@ -512,7 +512,7 @@ public class DawgHouseIT {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    @Test(groups="rest")
+    @Test(groups={"rest", "smoke"})
     public void populateInvalidTest() throws ClientProtocolException, IOException {
         String invalidClientToken = "xyz";
         String url = TestServers.getHouse() + "devices/populate/" + invalidClientToken;
