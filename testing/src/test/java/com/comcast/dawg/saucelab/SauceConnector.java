@@ -17,8 +17,6 @@ package com.comcast.dawg.saucelab;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 
@@ -28,12 +26,11 @@ import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
  *
  */
 public class SauceConnector {
-    private static final Logger LOGGER = Logger.getLogger(SauceConnector.class);
+
     private static final String options = " -i " + SauceConstants.DAWG_TEST;
     private static SauceTunnelManager tunnelManager;
     private static SauceConnector connector = null;
-    
-    
+
     /**
      * Creates instance of SauceConnector
      * @return SauceConnector
@@ -61,12 +58,21 @@ public class SauceConnector {
         }
 
     }
+
     /**
      * Close sauce connection with sauce labs once the test execution completes.  
      *
      */
     public void stopSauceConnect() {
         //close running process
-        tunnelManager.closeTunnelsForPlan(SauceProvider.getSauceKey(), options, null);
+        try {
+            if (null != tunnelManager) {
+                tunnelManager.closeTunnelsForPlan(SauceProvider.getSauceKey(), options, null);
+            } else {
+                throw new SauceTestException("Failed to close Sauce Connection");
+            }
+        } catch (SauceTestException e) {
+            e.printStackTrace();
+        }
     }
 }

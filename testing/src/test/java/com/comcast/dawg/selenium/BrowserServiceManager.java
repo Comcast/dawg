@@ -70,7 +70,7 @@ public class BrowserServiceManager {
     /**
      * Gets a web driver for a given browser
      * @param browser The browser to get a driver for
-     * @return
+     * @return remote Web driver
      * @throws IOException
      * @throws SauceTestException 
      */
@@ -219,6 +219,10 @@ public class BrowserServiceManager {
         }
     }
 
+    /**
+     * Shuts down and remove the driver
+     * @param RemoteWebDriver
+     */
     public static void shutdownAndRemove(RemoteWebDriver driver) {
         shutdown(driver);
         drivers.remove(driver);

@@ -27,7 +27,7 @@ Automating dawg portal selenium tests inside sauce Labs. Automation can run in d
 ```sh
 mvn clean test -Dtest.mode=sauce -Dsauce.username=XXXX -Dsauce.key=XXXXXXXX -Dsauce.port=4445 -Dsauce.url=http://XXX -Dgroups=smoke
 
-**For executing all tests together in SauceLabs**
+**For executing Integration tests in SauceLabs**
 ```sh
 mvn clean test -Dtest.mode=sauce -Dsauce.username=XXXX -Dsauce.key=XXXXXXXX -Dsauce.port=4445 -Dsauce.url=http://XXX
 ```
