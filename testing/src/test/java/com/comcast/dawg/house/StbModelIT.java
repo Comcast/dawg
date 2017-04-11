@@ -20,8 +20,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.comcast.video.dawg.common.Config;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -36,7 +34,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -44,6 +41,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.comcast.dawg.MetaStbBuilder;
+import com.comcast.video.dawg.common.Config;
 
 /**
  * The API Functional tests for the DAWG House - StbModelController
@@ -67,7 +65,7 @@ public class StbModelIT {
     /**
      * The capabilities of the model
      */
-    private static final String CAPABILITIES =  "[\"SINGLE_TUNER\"]";
+    private static final String CAPABILITIES = "[\"SINGLE_TUNER\"]";
     /**
      * The box family
      */
@@ -90,15 +88,15 @@ public class StbModelIT {
     private Set<String> addedDeviceIds = new HashSet<String>();
     private Set<String> addedModelIds = new HashSet<String>();
 
-    @BeforeClass(groups="rest")
+    @BeforeClass(groups = "rest")
     public void setup() throws ClientProtocolException, IOException {
         // Add a new model
         int status = addModel(MODEL_NAME, CAPABILITIES, FAMILY);
         Assert.assertTrue(status == HttpStatus.SC_OK, "could not add new model");
     }
 
-    @AfterClass(groups="rest")
-    public void tearDown() throws ClientProtocolException, IOException  {
+    @AfterClass(groups = "rest")
+    public void tearDown() throws ClientProtocolException, IOException {
         //  remove all added models
         for (String modelId : addedModelIds) {
             try {
@@ -123,10 +121,10 @@ public class StbModelIT {
      * @throws ClientProtocolException
      *
      */
-    @Test(groups="rest")
+    @Test(groups = {"rest", "smoke" })
     public void testGetModels() throws ClientProtocolException, IOException {
         String expectedFamily = "MAC_S";
-        String[] id = { "SA4250HDC" };
+        String[] id = {"SA4250HDC" };
         String url = BASE_URL + "/models?id=" + id;
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(url);
@@ -145,15 +143,15 @@ public class StbModelIT {
      * @throws ClientProtocolException
      *
      */
-    @Test(groups="rest")
+    @Test(groups = "rest")
     public void testAddModel() throws ClientProtocolException, IOException {
 
-        String id =  "SA3000";
+        String id = "SA3000";
         String url = BASE_URL + "/models/" + id;
         String name = "SA3000";
         String cap = "[\"VOD\"]";
         String family = "MAC_S";
-        HttpEntity entity = new StringEntity("{\"name\":\"" + name + "\", \"capabilities\":" + cap + ", \"family\":\"" + family +"\"}");
+        HttpEntity entity = new StringEntity("{\"name\":\"" + name + "\", \"capabilities\":" + cap + ", \"family\":\"" + family + "\"}");
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
@@ -182,11 +180,11 @@ public class StbModelIT {
      * @throws ClientProtocolException
      *
      */
-    @Test(groups="rest")
+    @Test(groups = {"rest", "smoke" })
     public void testAddExistingModel() throws ClientProtocolException, IOException {
         String cap = "[\"VOD\"]";
         String url = BASE_URL + "/models/" + MODEL_ID;
-        HttpEntity entity = new StringEntity("{\"name\":\"" + MODEL_NAME + "\", \"capabilities\":" + cap + ", \"family\":\"" + "newfamily" +"\"}");
+        HttpEntity entity = new StringEntity("{\"name\":\"" + MODEL_NAME + "\", \"capabilities\":" + cap + ", \"family\":\"" + "newfamily" + "\"}");
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
@@ -216,9 +214,9 @@ public class StbModelIT {
      * @throws ClientProtocolException
      *
      */
-    @Test(groups="rest")
+    @Test(groups = "rest")
     public void testDelete() throws ClientProtocolException, IOException {
-        String id =  MetaStbBuilder.getUID("SA3200");
+        String id = MetaStbBuilder.getUID("SA3200");
         addModel(id, INIT_CAP, INIT_FAMILY);
         Assert.assertTrue(modelExists(id));
 
@@ -234,7 +232,7 @@ public class StbModelIT {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    @Test(groups="rest")
+    @Test(groups = "rest")
     public void testModels() throws ClientProtocolException, IOException {
         String url = BASE_URL + "/models?id=" + MODEL_ID;
         HttpClient httpclient = new DefaultHttpClient();
@@ -245,8 +243,8 @@ public class StbModelIT {
         Assert.assertNotNull(responseBody);
         // verify that the added model is present
 
-        Assert.assertTrue(responseBody.contains(MODEL_NAME)) ;
-        Assert.assertTrue(responseBody.contains(FAMILY)) ;
+        Assert.assertTrue(responseBody.contains(MODEL_NAME));
+        Assert.assertTrue(responseBody.contains(FAMILY));
     }
 
     /**
@@ -256,7 +254,7 @@ public class StbModelIT {
      * @throws IOException
      */
     @Test(dataProvider = "params")
-    public void testAssignModels(String stbInitialCaps,String stbInitialFamily,String stbExpectedFinalCaps,String stbExpectedFinalFamily) throws ClientProtocolException, IOException {
+    public void testAssignModels(String stbInitialCaps, String stbInitialFamily, String stbExpectedFinalCaps, String stbExpectedFinalFamily) throws ClientProtocolException, IOException {
         String id = MetaStbBuilder.getUID("modeltest");
         String modelName = MetaStbBuilder.getUID("mod");
         String mac = "00:00:00:00:00:BB";
@@ -276,7 +274,7 @@ public class StbModelIT {
         doAssignModels();
 
         // verify that the stb is now populated with FAMILY AND CAPABILITIES
-        verifyResult(id, modelName, stbExpectedFinalCaps,stbExpectedFinalFamily);
+        verifyResult(id, modelName, stbExpectedFinalCaps, stbExpectedFinalFamily);
     }
 
     private boolean modelExists(String modelName) throws ClientProtocolException, IOException {
@@ -304,9 +302,9 @@ public class StbModelIT {
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
         String responseBody = httpclient.execute(httpget, responseHandler);
         Assert.assertNotNull(responseBody);
-        Assert.assertTrue(responseBody.contains(expectedModel)) ;
-        Assert.assertTrue(responseBody.contains(expectedCapabilities)) ;
-        Assert.assertTrue(responseBody.contains(expectedFamily)) ;
+        Assert.assertTrue(responseBody.contains(expectedModel));
+        Assert.assertTrue(responseBody.contains(expectedCapabilities));
+        Assert.assertTrue(responseBody.contains(expectedFamily));
     }
 
     /**
@@ -329,7 +327,7 @@ public class StbModelIT {
         } else if (null == capability) {
             entity = new StringEntity("{\"macAddress\":\"" + mac + "\",\"model\":\"" + model + "\",\"capabilities\":null,\"family\":\"" + family + "\"}");
         } else if (null == family) {
-            entity =  new StringEntity("{\"macAddress\":\"" + mac + "\",\"model\":\"" + model + "\",\"capabilities\":" + capability +",\"family\":null}");
+            entity = new StringEntity("{\"macAddress\":\"" + mac + "\",\"model\":\"" + model + "\",\"capabilities\":" + capability + ",\"family\":null}");
         }
         HttpPut method = new HttpPut(url);
         method.addHeader("Content-Type", "application/json");
@@ -351,6 +349,7 @@ public class StbModelIT {
     private HttpEntity createStringEntity(String expectedModel, String expectedCapabilities, String expectedFamily) throws UnsupportedEncodingException {
         return new StringEntity("{\"name\":\"" + expectedModel + "\",\"capabilities\":" + expectedCapabilities + ",\"family\":\"" + expectedFamily + "\"}");
     }
+
     /**
      * Removes the stb from the list
      * @param url the dawg url
@@ -363,8 +362,9 @@ public class StbModelIT {
         String url = BASE_URL + "devices/id/" + id;
         HttpDelete delMethod = new HttpDelete(url);
         HttpResponse response = httpClient.execute(delMethod);
-        return  getStatus(response);
+        return getStatus(response);
     }
+
     /**
      * Performs assignmodels
      * @throws ClientProtocolException
@@ -388,7 +388,7 @@ public class StbModelIT {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    private int addModel( String modelName, String capabilities, String family) throws ClientProtocolException, IOException {
+    private int addModel(String modelName, String capabilities, String family) throws ClientProtocolException, IOException {
         addedModelIds.add(modelName);
         String url = BASE_URL + "/models/" + modelName;
         HttpEntity entity = createStringEntity(modelName, capabilities, family);
@@ -401,6 +401,7 @@ public class StbModelIT {
 
         return getStatus(response);
     }
+
     /**
      * Removes the added model from the list
      * @param id the model id
@@ -438,10 +439,6 @@ public class StbModelIT {
 
     @DataProvider(name = "params")
     public Object[][] keyProvider() {
-        return new Object[][] {
-            { null,null,INIT_CAP,INIT_FAMILY },
-            { null,"FAMILY1",INIT_CAP,"FAMILY1"},
-            { "[\"CAP2\"]",null,"[\"CAP2\"]",INIT_FAMILY}
-        };
+        return new Object[][]{{null, null, INIT_CAP, INIT_FAMILY }, {null, "FAMILY1", INIT_CAP, "FAMILY1" }, {"[\"CAP2\"]", null, "[\"CAP2\"]", INIT_FAMILY } };
     }
 }

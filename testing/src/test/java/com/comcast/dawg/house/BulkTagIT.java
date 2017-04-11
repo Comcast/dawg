@@ -66,7 +66,7 @@ public class BulkTagIT extends IndexPageUITestBase {
         logger.info("Tag got created is before test : " + existingTagName);
     }
 
-    @Test(description = "Tests if a user can tag a box that has no tags")
+    @Test(description = "Tests if a user can tag a box that has no tags", groups = "smoke")
     protected void testValidTag() {
         String newTag = createDynamicTestTagNames();
 
@@ -215,7 +215,7 @@ public class BulkTagIT extends IndexPageUITestBase {
 
     @Test(
         description = "Tests if a user can tag a box with multiple tags and the box already contains one of those tags",
-        groups = TestGroups.EXISTING_TAG_REQUIRED_TEST_GROUP
+        groups = {TestGroups.EXISTING_TAG_REQUIRED_TEST_GROUP, "smoke"}
     )
     protected void testMultipleTagWithExistingTag() {
         String existingTag = existingTagName;
@@ -287,7 +287,7 @@ public class BulkTagIT extends IndexPageUITestBase {
 
     }
 
-    @Test(description = "Tests if a user can tag multiple boxes.")
+    @Test(description = "Tests if a user can tag multiple boxes.", groups = "smoke")
     protected void testMultipleStbTaging() {
         MetaStb testStb1 = createTestStb();
         MetaStb testStb2 = createTestStb();

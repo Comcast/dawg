@@ -102,7 +102,7 @@ public class DawgHouseIT {
      * @throws ClientProtocolException
      *
      */
-    @Test(groups="rest")
+    @Test(groups = {"rest", "smoke" })
     public void listAllTest() throws ClientProtocolException, IOException {
         String expectedStb = "00:00:00:00:00:AA";
         addStb("0000000000aa", expectedStb);
@@ -222,7 +222,7 @@ public class DawgHouseIT {
      * This method tests adding multiple boxes and verifies by calling the  @link{HouseRestController#listAll()}
      *
      */
-    @Test(groups="rest")
+    @Test(groups = {"rest", "smoke" })
     public void addMultipleBoxesTest() {
         String deviceId1 = "112233445566";
         String macId1 = "11:22:33:44:55:66";

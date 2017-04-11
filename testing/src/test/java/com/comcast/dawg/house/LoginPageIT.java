@@ -45,7 +45,7 @@ public class LoginPageIT extends SeleniumTest {
      */
     @Test(
         description="Tests if a user can input a user name and click enter to log in",
-        groups="uitest"
+        groups={"uitest", "smoke"}
     )
     public void testLogin() throws IOException {
         String user = "integrationuser";
@@ -69,7 +69,7 @@ public class LoginPageIT extends SeleniumTest {
     @Test(
         description="Tests if a message explaining that a username was invalid " +
             "becomes visible when the user tries to log in with an invalid username",
-        groups="uitest"
+            groups={"uitest", "smoke"}
     )
     public void testBadLogin() throws IOException {
         RemoteWebDriver driver = drivers.get();
