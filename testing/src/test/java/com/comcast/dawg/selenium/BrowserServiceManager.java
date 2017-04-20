@@ -63,7 +63,7 @@ public class BrowserServiceManager {
                 BrowserServiceManager.shutdownAll();
             }
         });
-    } 
+    }
 
     /**
      * Gets a web driver for a given browser
