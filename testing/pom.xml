@@ -11,158 +11,77 @@
 	<artifactId>testing</artifactId>
 	<version>2.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
+
 	<name>(Comcast) ${project.artifactId}</name>
 	<description>DAWG testing</description>
 
+
 	<properties>
 		<package>com/comcast/dawg/selenium/chromedriver</package>
+		<magic-wand.version>4.0.3</magic-wand.version>
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<!-- We use the dependency-plugin to download 3rd party binaries and 
-					bundle them into the selenium artifact -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<configuration>
-					<stripVersion>true</stripVersion>
-				</configuration>
-				<executions>
-					<execution>
-						<id>copy</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.seleniumhq.selenium</groupId>
-									<artifactId>selenium-drivers</artifactId>
-									<version>23.0.1240.0</version>
-									<classifier>linux32</classifier>
-									<type>bin</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/classes/${package}/linux32</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.seleniumhq.selenium</groupId>
-									<artifactId>selenium-drivers</artifactId>
-									<version>23.0.1240.0</version>
-									<classifier>linux64</classifier>
-									<type>bin</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/classes/${package}/linux64</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.seleniumhq.selenium</groupId>
-									<artifactId>selenium-drivers</artifactId>
-									<version>23.0.1240.0</version>
-									<classifier>win32</classifier>
-									<type>exe</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/classes/${package}/win32</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.seleniumhq.selenium</groupId>
-									<artifactId>selenium-drivers</artifactId>
-									<version>23.0.1240.0</version>
-									<classifier>mac32</classifier>
-									<type>bin</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/classes/${package}/mac32</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>**/*IT.java</include>
-						<groups>uitest,smoke</groups>
-					</includes>
-				</configuration>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-dependency-plugin
-										</artifactId>
-										<versionRange>
-											[2.4,)
-										</versionRange>
-										<goals>
-											<goal>copy</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-
 	<dependencies>
-
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-exec</artifactId>
 			<version>1.3</version>
 		</dependency>
+
 		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-remote-driver</artifactId>
-			<version>2.46.0</version>
+			<groupId>com.comcast.video.dawg</groupId>
+			<artifactId>dawg-client</artifactId>
+			<version>2.1.50</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.comcast.magic-wand</groupId>
+			<artifactId>core</artifactId>
+			<version>${magic-wand.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comcast.magic-wand</groupId>
+			<artifactId>chrome</artifactId>
+			<version>${magic-wand.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comcast.magic-wand</groupId>
+			<artifactId>saucelabs</artifactId>
+			<version>${magic-wand.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>2.46.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.saucelabs.maven.plugin</groupId>
-			<artifactId>sauce-connect-plugin</artifactId>
-			<version>2.1.23</version>
-		</dependency>
-		<dependency>
-			<groupId>com.comcast.video.dawg</groupId>
-			<artifactId>dawg-client</artifactId>
-			<version>[1.1.50,)</version>
+			<version>3.0.1</version>
 		</dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>		
+			<dependency>
+				<artifactId>selenium-remote-driver</artifactId>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<version>3.0.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*IT.java</include>
+						<groups>uitest, smoke, rest</groups>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

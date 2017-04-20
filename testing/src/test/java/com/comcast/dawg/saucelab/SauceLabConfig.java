@@ -24,7 +24,7 @@ import com.comcast.video.dawg.common.Config;
  * @author Priyanka
  *
  */
-public class SauceProvider {
+public class SauceLabConfig {
 
     private static final String TEST_MODE = "test.mode";
     private static final String SAUCE_KEY = "sauce.key";
@@ -36,13 +36,12 @@ public class SauceProvider {
     private static final String SAUCE_WIN_VERSION = "win.version";
     private static final String SAUCE_MAC_VERSION = "mac.version";
     private static final String SAUCE_LINUX_VERSION = "linux.version";
-    private static final String CHROME_VERSION = "chrome.version";   
+    private static final String CHROME_VERSION = "chrome.version";
 
-    private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "default-test-mode", "local");  
+    private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "default-test-mode", "local");
     private static final String DEFAULT_SAUCE_PLATFORM = Config.get("saucelab", "default-sauce-platform", "windows");
     private static final String DEFAULT_WIN_VERSION = Config.get("saucelab", "default-sauce-win-version", "Windows 8.1");
     private static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "default-sauce-mac-version", "macOS 10.12");
-    private static final String DEFAULT_LINUX_VERSION = Config.get("saucelab", "default-sauce-linux-version", "Linux");
     private static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "default-chrome-version", "46");
     private static final String DEFAULT_SAUCE_URL = Config.get("saucelab", "default-sauce-url", "ondemand.saucelabs.com:80/wd/hub");
 
@@ -54,7 +53,7 @@ public class SauceProvider {
     public static final String getTestMode() {
         return getData(TEST_MODE, DEFAULT_TEST_MODE);
     }
-    
+
     /**
      * Gets the sauce URL
      * @return
@@ -76,7 +75,7 @@ public class SauceProvider {
      * @return
      */
     public static final String getSauceUserName() {
-        return  System.getProperty(SAUCE_USERNAME);
+        return System.getProperty(SAUCE_USERNAME);
     }
 
     /**
@@ -109,14 +108,6 @@ public class SauceProvider {
      */
     public static final String getMacOsVersion() {
         return getData(SAUCE_MAC_VERSION, DEFAULT_MAC_VERSION);
-    }
-
-    /**
-     *  Gets the sauce platform version for Linux
-     * @return
-     */
-    public static final String getLinuxOsVersion() {
-        return getData(SAUCE_LINUX_VERSION, DEFAULT_LINUX_VERSION);
     }
 
     /**

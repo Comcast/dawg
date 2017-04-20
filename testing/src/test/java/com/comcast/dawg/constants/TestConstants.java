@@ -87,6 +87,12 @@ public class TestConstants {
     /** The user name used for the integration tests. */
     public static final String USER = "integrationuser";
     
+    /** Constant for chromeDriverVersion */
+    public static final String CHROME_DRIVER_VERSION = "chromeDriverVersion";
+    
+    /** Constant for version no */
+    public static final String VERSION = "2.28";
+    
     /**
      * Test STB capability.
      */

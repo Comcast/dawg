@@ -11,7 +11,7 @@ Automating dawg portal selenium tests inside sauce Labs. Automation can run in d
 | ------ | ------ |
 | Windows | Windows 10, Windows 8.1, Windows 8, Windows 7 |
 | MAC |OS X 10.12, OS X 10.11, OS X 10.10, OS X 10.9 |
-| Linux | Linux |
+| Linux | No specific version |
 
 **Supported chrome versions in Sauce Labs**
 
@@ -32,7 +32,7 @@ mvn clean test -Dtest.mode=sauce -Dsauce.username=XXXX -Dsauce.key=XXXXXXXX -Dsa
 mvn clean test -Dtest.mode=sauce -Dsauce.username=XXXX -Dsauce.key=XXXXXXXX -Dsauce.port=4445 -Dsauce.url=http://XXX
 ```
 **For executing tests in different Platform inside SauceLabs**
->*Note :If platform type , platform version or chrome version is not specified, then the test will runs with default windows platform with platform version Windows 8.1 with chrome version 46*
+>*Note :If platform type , platform version or chrome version is not specified, then the test will runs with default windows platform with platform version 8.1 with chrome version 46*
 
 **For executing test in MAC platform with a particular platform verison**
 ``` sh
@@ -47,10 +47,10 @@ mvn clean test -Dgroups=smoke -Dtest.platform=mac -Dmac.veriosn=OS X 10.12 -Dchr
 **For executing test in Windows platform with a particular platform verison and chrome version**
 
 ``` sh
-mvn clean test -Dgroups=smoke -Dwin.version=Windows 8.1 -Dchrome.version=56
+mvn clean test -Dgroups=smoke -Dwin.version=8.1 -Dchrome.version=56
 ```
-**For executing test in Linux platform with a particular platform verison and chrome version**
+**For executing test in Linux platform with particular chrome version**
 
 ```sh
-mvn clean test -Dgroups=smoke -Dtest.platform=linux -Dmac.version=Linux -Dchrome.version=44
+mvn clean test -Dgroups=smoke -Dtest.platform=linux -Dchrome.version=44
 ```
