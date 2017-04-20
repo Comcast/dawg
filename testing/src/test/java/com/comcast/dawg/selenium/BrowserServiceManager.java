@@ -22,11 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.service.DriverService;
 
 import com.comcast.dawg.constants.TestConstants;
 import com.comcast.dawg.saucelab.SauceConstants;
@@ -65,20 +63,7 @@ public class BrowserServiceManager {
                 BrowserServiceManager.shutdownAll();
             }
         });
-    }
-
-    /**
-     * Starts a selenium service for a given browser
-     * @param browser The browser to start the service for
-     * @return
-     * @throws IOException
-     */
-    public static DriverService start(Browser browser) throws IOException {
-        BrowserDriverProvider provider = getProvider(browser);
-        DriverService service = new ChromeDriverService.Builder().usingDriverExecutable(provider.getDriverFile()).usingAnyFreePort().build();
-        service.start();
-        return service;
-    }
+    } 
 
     /**
      * Gets a web driver for a given browser

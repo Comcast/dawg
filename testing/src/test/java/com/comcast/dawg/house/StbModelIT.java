@@ -439,6 +439,10 @@ public class StbModelIT {
 
     @DataProvider(name = "params")
     public Object[][] keyProvider() {
-        return new Object[][]{{null, null, INIT_CAP, INIT_FAMILY }, {null, "FAMILY1", INIT_CAP, "FAMILY1" }, {"[\"CAP2\"]", null, "[\"CAP2\"]", INIT_FAMILY } };
+        return new Object[][] {
+            { null,null,INIT_CAP,INIT_FAMILY },
+            { null,"FAMILY1",INIT_CAP,"FAMILY1"},
+            { "[\"CAP2\"]",null,"[\"CAP2\"]",INIT_FAMILY}
+        };
     }
 }

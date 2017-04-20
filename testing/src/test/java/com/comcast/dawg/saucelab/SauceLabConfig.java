@@ -34,8 +34,7 @@ public class SauceLabConfig {
     private static final String SAUCE_URL = "sauce.url";
 
     private static final String SAUCE_WIN_VERSION = "win.version";
-    private static final String SAUCE_MAC_VERSION = "mac.version";
-    private static final String SAUCE_LINUX_VERSION = "linux.version";
+    private static final String SAUCE_MAC_VERSION = "mac.version";  
     private static final String CHROME_VERSION = "chrome.version";
 
     private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "default-test-mode", "local");
