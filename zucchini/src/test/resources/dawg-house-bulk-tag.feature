@@ -1,41 +1,48 @@
 @uitest 
 Feature: Dawg house's bulk tag behaviours. 
-	Verify behavior when logging into the dawg house portal
 
 Background: 
-	Given I am on the Log In page of dawg house portal 
+	Given I am on the home page of dawg house portal 
 	
-Scenario: Tag a box has no tags 
+Scenario: Tag a box has no tags to new tag 
 	When I add a box having no tags to new tag 
 	Then the box added to the newly added tag in the tag cloud 
 	
-Scenario: Tag a box has no tags to already existing tag [doubt]
-	When I add a box having no tags to existing tag 
-	Then verify the box added to existing tag 
+Scenario: Tag a box has no tags to an existing tag 
+	When I add a box having no tags to an existing tag 
+	Then the box should be added to existing tag 
 	
-Scenario: Tag a box that contains one tag 
+Scenario: Tag a box that contains one tag to new tag 
 	When I tag a box having one tag to new tag 
-	Then verify the box added to the new tag 
+	Then the box should be added to new tag 
+	
+	#new feature added	
+Scenario: Tag a box that contains one tag to existing tag 
+	When I tag a box having one tag to existing tag 
+	Then the box should be added to existing tag 
 	
 Scenario: Tag a box with multiple tags 
 	When I tag a box with multiple tags 
 	Then the box added to the multiple tags in tag cloud 
 	
 Scenario: Tag a box with multiple tags and the box already tagged to one of those tags 
-	When I Tag a box with multiple tags that already tagged to one of those tags 
-   Then the box tagged to new tag and the box remains same in the alreday existing tag  
-   	
-Scenario: Tag a box with an existing tag 
-	When I tag a box with an existing tag in tag cloud
-	Then the box added to the existing tag 
-
-Scenario: Tag multiple boxes to new tag
-	When I tag multiple boxes to new tag
-	Then the selected boxes added to the new tag in tag cloud
+	When I add a box having tag to that tag 
+	Then the box added remains same in the tag 
+	And I add another tag to that box 
+	Then I should see the box added to that tag 
 	
-Scenario: Verify the alert message when add a tag without selecting any box
-	When I add a tag without selecting the box
-	Then an alert message will be displayed
+Scenario: Tag multiple boxes to new tag 
+	When I tag multiple boxes to new tag 
+	Then I should see the boxes added to the new tag 
 	
-
+	#new feature added		
+Scenario: Tag multiple boxes to existing tag 
+	When I tag multiple boxes to an existing tag 
+	Then I should see the boxes added to the existing tag 
+	
+Scenario: Verify the alert message when add a tag without selecting any box 
+	When I add a tag without selecting the box 
+	Then an alert message should be displayed 
+	
+	
 	

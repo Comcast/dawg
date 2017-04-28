@@ -5,14 +5,15 @@ Background:
 	
 Scenario: Add a new capability name on model configuration page 
 	When I click on the Add model button I can see model overlay 
-	Then a lists of capabilities are available on the model overlay 
-	Then add a new capability to the model overlay 
-	And capability added listed on the model overlay 
+	Then I should see the list of capabilities displayed in the model overlay 
+	And add a new capability to the model overlay 
+	Then capability added listed on the model overlay 
 	
 Scenario: Add a new family name on model overlay page 
 	When I click on the Add model button I can see model overlay 
-	Then add a new family name 
-	And the newly added family name persist on the page 
+	Then I add a new family name 
+	And the family named added to model overlay
+	Then I reopen the model overlay to confirm the family name persists
 	
 Scenario Outline: Verify the alert message while trying to add a duplicate enty 
 	When I click on the Add model button I can see model overlay 
@@ -38,7 +39,9 @@ Scenario: Edit a new model on model configuration page
 	Then capabilities and famility name added with model get reflected in the page 
 	
 Scenario: Delete a model from the model configuration page 
-	When I click on the Delete model button 
+	When I click on the Delete model button
+	Then an alert message is displayed 
+	And I select ok on the alert box
 	Then the model will be removed from the page 
 	
 	
