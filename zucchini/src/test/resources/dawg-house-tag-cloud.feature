@@ -37,13 +37,13 @@ Scenario: Verify STB's list in filter table based on tag de-selection
 	Then I should see the STB's listed for all tags in tag cloud 
 	
 	# new scenario 
-Scenario: Selection of tags having common STB list 
+Scenario: Selection of tags having common STB's list 
 	When I select any tag element 
 	Then I should see the STB's listed for the selected tag element 
 	When I select another tag element which has same list of STBs in first tag 
 	Then I should see the STB's list displayed remains same 
 	
-Scenario: De-selection of tags having common STB's' list 
+Scenario: De-selection of tags having common STB's list 
 	Given I selected any two tags elements having same STB's list 
 	Then I should see the STBs listed for both tag elements 
 	And I de-select the first tag element 
@@ -52,7 +52,7 @@ Scenario: De-selection of tags having common STB's' list
 Scenario: 
 	Verify tag highlight remains on first tag when adding a new tag to tag cloud 
 	Given I have a tag element having two tagged STBs 
-	And the STB's' list of selected tag should be displayed 
+	And the STB's list of selected tag should be displayed 
 	When I tag one STB to a new tag 
 	Then I should see the STB added to new tag in tag cloud 
 	And the highlight remains on the first tag 
