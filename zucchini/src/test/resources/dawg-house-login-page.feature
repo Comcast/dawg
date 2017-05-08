@@ -13,5 +13,5 @@ Scenario: Login in to dawg house with valid credentials
 Scenario: Login in to dawg house with invalid credentials
 	When I enter incorrect credentials
 	And  I click Sign In button
-	Then I should see the error "Invalid credentials"
+	Then I should see the error message "Invalid credentials"
 	

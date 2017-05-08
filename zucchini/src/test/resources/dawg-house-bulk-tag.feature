@@ -20,11 +20,15 @@ Scenario: Tag a box that has one tag to new tag
 	Then I should see the box is added to new tag in tag cloud 
 	And the box is tagged with two tags
 	
-Scenario: Tag a box has no tags to multiple tags  
+Scenario Outline: Tag a box has no tags to multiple tags  
     Given I have a box that has no tags  
-	When I tag the box with three different tags 
-	Then I should see the box added to three tags in tag cloud 
-	And the box is tagged with three tags
+	When I tag the box with <count> different tags 
+	Then I should see the box added to <count> tags in tag cloud 
+	And the box is tagged with <count> tags
+	Examples:
+	| count |
+	|   3   |
+	|   5   |
 	
 Scenario: Tag a box with multiple tags if the box already tagged to one of those tags 
     Given I have a box that has one tag
