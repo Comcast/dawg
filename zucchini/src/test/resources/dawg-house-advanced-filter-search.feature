@@ -14,8 +14,7 @@ Scenario Outline: Verify the search results using multiple filter values
 		|2      | 		
 		|4      |
 	
-Scenario Outline: 
-	Verify the search results while selecting condition buttons (AND,OR,NOT) 
+Scenario Outline: Verify the search results while selecting condition buttons (AND,OR,NOT) 
 	Given I added two filter value/s to advanced filter overlay 
 	And I should see filter value/s added in filter overlay 
 	When I select condition button/s "<button>" 
@@ -112,13 +111,12 @@ Scenario Outline: Verify the search results using multiple filter values with co
 		
 Scenario Outline: Verify search results by applying group conditions (AND and OR) and applying single conditions  
 	Given I added four filter value/s to advanced filter overlay 
-	When I apply 'AND' condition to first two filter values 
-	Then I should see condition applied for first two values 
-	And I apply 'OR' condition to last two filter values 
-	Then I should see condition applied for last two values 
+	When I apply 'AND' condition to first two filter values 	
+	And I apply 'OR' condition to last two filter values 	
+	Then I should see group condition applied for the filter values
 	When I select both filter values with group condition applied
 	And I select condition button/s "<button>" 
-	Then I should see condition<button> applied for filter values
+	Then I should see condition "<button>" applied for filter values
 	When I select "Search" button 
 	Then I should see the search results displayed in the filter table 
 	Examples: 
@@ -153,7 +151,7 @@ Scenario Outline: Break the group conditions with two filter values
 	When I apply '<condition>' condition to <count> filter values 
 	Then I should see filter condition '<condition>' applied in filter values 
 	When I select "BREAK" button 
-	Then each filter conditions splitted as separate
+	Then each filter conditions splitted as <count>
 	Examples: 
 		|condition|count | 	
 		|OR       |two   |

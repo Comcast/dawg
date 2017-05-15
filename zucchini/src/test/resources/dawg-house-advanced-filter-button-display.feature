@@ -7,7 +7,7 @@ Background:
 Scenario: Verify button display in advanced filter overlay using single filter values 
 	Given I added one filter value/s to advanced filter overlay 	
 	Then I should see filter value/s added in filter overlay 
-	And I should verify following buttons displayed as follows 
+	And I should verify following buttons displayed as below 
 		|Button  |Enabled  | 
 		|AND     |false    |
 		|OR      |false    |
@@ -20,7 +20,7 @@ Scenario: Verify button display in advanced filter overlay using single filter v
 Scenario: Verify button display in advanced filter overlay using multiple filter values 
 	Given I added two filter value/s to advanced filter overlay 	
 	Then I should see both filter value/s added in filter overlay 
-	And I should verify following buttons displayed as follows
+	And I should verify following buttons displayed as below
 		|Button  |Enabled  | 
 		|AND     |true     |
 		|OR      |true     |
@@ -37,7 +37,7 @@ Verify button display in advanced filter overlay while de-selecting all filter v
 	Then I should see filter value/s added in filter overlay 
 	And I should verify all filter value checkboxes as selected 
 	When I uncheck filter value/s 
-	And I should verify following buttons displayed as follows 
+	And I should verify following buttons displayed as below 
 		|Button  |Enabled| 
 		|AND     |false  | 	
 		|OR      |false  | 	
@@ -53,7 +53,7 @@ Verify button display in advanced filter overlay while de-selecting all filter v
 Scenario Outline: Verify button display while selecting condition buttons(AND, OR, AND NOT, OR NOT) 
 	Given I added two filter value/s to advanced filter overlay 
 	When I select condition button/s "<button>" 
-	Then I should verify the button display as follows 
+	Then I should verify following buttons displayed as below
 		|Button  |Enabled | 
 		|AND     |false   |
 		|OR      |false   |
@@ -72,7 +72,7 @@ Scenario Outline: Verify button display while selecting condition buttons(AND, O
 Scenario: Verify button display while selecting condition button NOT 
 	Given I added two filter value/s to advanced filter overlay 
 	When I select condition button/s "NOT" 
-	Then I should verify the button display as follows 
+	Then I should verify following buttons displayed as below
 		|Button  |Enabled| 
 		|AND     |true   |
 		|OR      |true   |
@@ -87,7 +87,7 @@ Scenario Outline: Verify the button display while deleting filter value/s from f
 	Then I should see filter value/s added in filter overlay 
 	When I select "Delete" button 
 	Then I should see filter value/s removed from filter overlay 
-	And I should verify following buttons displayed as follows
+	And I should verify following buttons displayed as below
 	    |Button  |Enabled|
 	    |Add     |true   |
 		|AND     |false  |
