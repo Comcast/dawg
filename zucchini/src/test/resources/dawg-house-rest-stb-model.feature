@@ -1,29 +1,59 @@
 Feature: Covers various test cases related to STB Model (addition/updation/removal of STB Model from Dawg House)
 
-Scenario: verify accessing particular STB with valid model id specified as query Params
-	When I GET an STB device with valid model id specified as query Params
-	Then I should receive status code 200
-	And I should receive response with STB model Id and family name 
-	
-Scenario: verify adding particular STB with mandatory model details specified in request body
-	When I add an STB model with mandatory model details specified in request body
-	Then I should receive status code 200
-	And The added STB model should get appended to the list
-	
-Scenario: verify adding new capability to an STB Model already present in the list
-	When I add an STB model with new capability and mandatory model details specified in request body
-	Then I should receive status code 200
-	And The added capability for the STB model should be present in the list
+Background: 
+	Given I added an STB device to dawg house with following details
+	|model_name|capabilities|family|
+    |DTA30|[\"SINGLE_TUNER\"]|DTA|
+    Then I should receive status code 200
 
-Scenario: verify removing an STB Model with valid model id specified as path Params
-	Given I add an STB model with mandatory model details specified in request body
-	Then The added STB model should get appended to the list
-	When I DELETE an STB model with valid model id specified as path Params
-	Then The deleted STB model should get removed from the list
+Scenario: Access an STB model from dawg house
+	Given I GET an STB device model from dawg house
+	Then I should receive status code 200
+	And I should verify that the response contains model id and family name
 	
-Scenario: verify that added STB Model get reflected in STb device during assign model
-	Given I add an STB model with mandatory model details specified in request body
-	Then I PUT an STB device with mandatory details and no model details
+Scenario: Add an STB model to dawg house with specified properties
+	Given I added an STB model to dawg house with following properties
+	|id|name|Capabilites|family|
+	|SA3000|SA300|VOD|MAC_S|
+	Then I should receive status code 200
+	And I should verify that added STB model is available in the list
+	
+Scenario: Add a new capability to an STB Model already present in the list
+	Given I added an STB model to dawg house with following properties
+	| name  | Capabilites |  family   |
+	| DTA30 |     VOD     | newfamily |
+	Then I should receive status code 200
+	Then I should verify that the capability added is available in the list
+
+Scenario: Remove an existing STB model 
+	Given  I added an STB model to dawg house with following properties 
+	|  name  | Capabilites | family |
+	| SA3200 |     CAP     | FAMILY |
+	Then I should verify that added STB model is available in the list
+	When I delete the STB model from dawg house 
+	Then I should receive status code 200
+	And I should verify that the STB is removed from the list
+	
+Scenario Outline: Verify presence of STB model properties when STB model is accessed
+     When I GET an STB device model from dawg house
+     Then I should receive the status code 200
+     And I should verify that the response contains model name <model>, capability <cap>, family name <family>
+     Examples:
+     | model | cap | family |
+     | SA3200  |  CAP  |  FAMILY  |
+         	
+Scenario Outline: verify that added STB Model get reflected in STB device during assign model
+	Given I added an STB model to dawg house with following properties 
+	|  name  | cabability | family |
+	| SA3200 |    CAP     | FAMILY |
+	Then I should receive the status code 200 
+	When I add STB device to dawg house with Family <Family> and Capabilities <Capabilities> 
+	Then I should receive the status code 200 
 	When I assign the same STB model
-	Then The added STB model details should get reflected for STB device
+	And I should verify that STB device contains the expected capabilities <caps> and Family name <family>
+	Examples: 
+	| Capabilities |    Family    |    caps      |  family   |
+	|     null     |     null     |    "CAP"     | "FAMILY"  |
+	|     null     |  "FAMILY1"   |    "CAP"     | "FAMILY1" |
+	|  [\"CAP2\"]" |     null     | "[\"CAP2\"]" |  FAMILY   |
 	
