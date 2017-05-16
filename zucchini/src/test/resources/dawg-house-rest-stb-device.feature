@@ -1,54 +1,56 @@
 Feature: Covers various test cases related to STB device (addition/updation/removal of STB device from Dawg House)
 
-Background: Add an STB device to dawg house
+Background: 
     Given I added an STB device to dawg house with following details
-	|id|mac|
-    |aabbccddeeff|AA:BB:CC:DD:EE:FF|
+	| id           | mac               |
+    | aabbccddeeff | AA:BB:CC:DD:EE:FF |
     Then I should receive status code 200
     
-Scenario: Add an STB device to dawg house and verify that STB device list contains added devices
+Scenario: Verify STB device added is available in the dawg house
 	Given I added an STB device to dawg house with following details
-    |id|mac|
-    |0000000000aa|00:00:00:00:00:AA| 
+    | id           | mac               |
+	| 0000000000aa | 00:00:00:00:00:AA | 
     Then I should receive status code 200
 	When I GET STB device list from dawg house
 	Then I should receive status code 200
-	And I verify that the response contains expected STB id and MAC address
+	And I should verify that the response contains expected STB device id and MAC address
 	
-Scenario: Access particular STB with invalid device id from dawg house
-	Given I GET an STB device from dawg house with invalid device id 
+Scenario: Get an STB using invalid device id from dawg house
+	Given I GET an STB device using invalid device id from dawg house
 	Then I should receive the response "Not found Error"
 	
-Scenario: Access particular STB with valid device id from dawg house
-	Given I GET an STB device from dawg house with valid device id
+Scenario: Get an STB using valid device id from dawg house
+	Given I GET an STB device using valid device id from dawg house
 	Then I should receive status code 200
-	And I verify that the response contains expected MAC address 
+	And I should verify that the response contains expected MAC address 
 	
-Scenario: Add an STB to dawg house with mandatory details given as request body
+Scenario: Add an STB to dawg house with specified properties
 	Given I added an STB device to dawg house with following details
-    |id|mac|
-    |ffeeddccbbaa|FF:EE:DD:CC:BB:AA|
+    | id           | mac               |
+    | ffeeddccbbaa | FF:EE:DD:CC:BB:AA |
 	Then I should receive status code 200
-	Given I GET an STB device from dawg house with same device id
-	And I verify that the response contains expected MAC address 
+	When I GET an STB device from dawg house with same device id
+	Then I should verify that the response contains expected MAC address 
 	
-Scenario Outline: Add an STB to dawg house with invalid model params given as request body
-	Given I added an STB device to dawg house with mandatory details, expected capabilities <caps> and Family name <family>
-	|id|mac|model|
-	|modeltest|00:00:00:00:00:BB|InvalidModel|
+Scenario Outline: Add an STB to dawg house with invalid model params
+	Given I added an STB device to dawg house with device id <id> , mac address <mac>, model <model>, capabilities  <caps> and Family name <family>
 	Then I should receive status code 200
-	And I verify that added STB device contains expected model name, capabilities <caps> and Family name <family> 
+	And I should verify that added STB device contains expected model name <model>, capabilities <caps> and Family name <family> 
 	Examples:
-	|caps|family|
-	|[]||
-    |[]|TEST FAMILY|
-    |[\"CAPS\"]||
-    |[\"CAPS\"]|TEST FAMILY|
+	| id         | caps       | mac               | family      | model        |
+	| modeltest1 | []         | 00:00:00:00:00:AA ||              InvalidModel |
+    | modeltest2 | []         | 00:00:00:00:00:BB | TEST FAMILY | InvalidModel |
+    | modeltest3 | [\"CAPS\"] | 00:00:00:00:00:CC ||              InvalidModel |
+    | modeltest4 | [\"CAPS\"] | 00:00:00:00:00:DD | TEST FAMILY | InvalidModel |
 	
-Scenario: Add multiple STBs to dawg house
-	Given I add 2 STBs with mandatory details to dawg house
+Scenario Outline: Add multiple STBs to dawg house
+	Given I added 2 STB devices to dawg house with device id <id> and mac address <mac>
 	Then I should receive status code 200
-	And The STB device list should get populated with added STBs details
+	And I should verify that STB devices added are available in the dawg house
+	Examples:
+	| id           | mac               |
+	| 112233445566 | 11:22:33:44:55:66 |
+	| 665544332211 | 66:55:44:33:22:11 |
 
 Scenario: Remove STB from dawg house with invalid device id
 	Given I DELETE an STB device from dawg house with invalid device id
@@ -56,47 +58,47 @@ Scenario: Remove STB from dawg house with invalid device id
 	
 Scenario: Remove STB from dawg house with valid device id
 	Given I added an STB device to dawg house with following details
-    |id|mac|
-    |resttest|AA:BB:CC:DD:EE:FF|
+    | id       | mac               |
+    | resttest | AA:BB:CC:DD:EE:FF |
     Then I should receive status code 200
 	When I DELETE an STB device from dawg house with same device id
 	Then I should receive status code 200
-	And The deleted STB device should get removed from STB device list
+	And I should verify that STB device is removed from dawg house
 	
 Scenario: Remove STB from dawg house with valid device id specified as query param
  	Given I added an STB device to dawg house with following details
-    |id|mac|
-    |resttest|00:00:00:00:00:11|
+    | id       | mac               |
+    | resttest | 00:00:00:00:00:11 |
     Then I should receive status code 200
-	When I GET delete STB service with valid device id 
+	When I delete an STB device from dawg house with same device id specified as query param
 	Then I should receive status code 200
-	And The deleted STB device should get removed from STB device list
+	And  I should verify that STB device is removed from dawg hosue
 	
 Scenario: Remove STB from dawg house with invalid device id specified as query param	
-    Given I GET delete STB service with invalid device id 
+    Given I delete an STB device from dawg house with invalid device id specified as query param
 	Then I should receive the response "Not found Error"
 	
-Scenario: Access particular STB from dawg house with valid device id specified in request body
+Scenario: Get an STB from dawg house with valid device id specified in request body
 	When I POST access STB service with valid device id
-	|id|
-	|aabbccddeeff|
+	| id           |
+	| aabbccddeeff |
 	Then I should receive status code 200
 	And I verify that the response contains expected STB id and MAC address 
 
-Scenario: Access particular STB from dawg house with invalid device id specified in request body
+Scenario: Get an STB from dawg house with invalid device id specified in request body
 	When I POST access STB service with invalid device id
 	Then I should receive the response "Not found Error"
 
-Scenario: Access particular STB from dawg house with model name specified as query param
+Scenario: Get an STB from dawg house with model name specified as query param
 	Given I added an STB device to dawg house with following details
-	|      id      |   model  |
+	| id           | model    |
 	| 000000000000 | newmodel | 
 	Then I should receive status code 200
 	When I GET an STB device from dawg house with same model name specified as query param
 	Then I should receive status code 200
 	And I verify that the response contains expected STB model name
 	
-Scenario Outline: Access particular STB from dawg house with valid model name specified as query param
+Scenario Outline: Get an STB from dawg house with valid model name specified as query param
 	When I GET an STB device from dawg house with valid model name <model>
 	Then I should receive status code 200
 	Examples:
@@ -118,7 +120,7 @@ Scenario Outline: Access particular STB from dawg house with valid model name sp
 	|%5C%22%20FLUSHDB|
 	|null|
 	
-Scenario Outline: Access particular STB from dawg house with invalid model name specified as query param
+Scenario Outline: Get an STB from dawg house with invalid model name specified as query param
 	When I GET an STB device from dawg house with invalid model name <model>
 	Then I should receive status code 500
 	Examples:
@@ -126,7 +128,7 @@ Scenario Outline: Access particular STB from dawg house with invalid model name 
 	|?refresh=true|
 	|%3Frefresh%3Dtrue|
 
-Scenario Outline: Access particular STB from dawg house with illegal model name specified as query param
+Scenario Outline: Get an STB from dawg house with illegal model name specified as query param
 	When I GET an STB device from dawg house with illegal model name <model>
 	Then I should receive the response "Not found Error"
 	Examples:
@@ -144,38 +146,46 @@ Scenario Outline: Access particular STB from dawg house with illegal model name 
 	|\\ FLUSHDB \u0022 + "\"|
 	|\uD800|
 
-Scenario: Populate from dawg house with valid client token specified as path param
+Scenario: Populate device lists from dawg house with valid client token specified as path param
 	When I POST populate from dawg house with valid client token
 	Then I should receive response which is not empty
 
-Scenario: Populate from dawg house with invalid client token specified as path param
+Scenario: Populate device lists from dawg house with invalid client token specified as path param
 	When I POST populate from dawg house with invalid client token
 	Then I should receive response which is zero
 	
-Scenario: Update tags for an STB by specifying device id and tag as request body
+Scenario: Add tags for an STB in dawg house by specifying device id and tag as request body
 	Given I added an STB device to dawg house with following details
-    |id|mac|
-    |resttest|AA:BB:CC:DD:EE:FF|
+    | id       | mac               |
+    | resttest | AA:BB:CC:DD:EE:FF |
 	When I add tags to STB device with following details
-	|id|tag|
-	|resttest|testtag|
+	| id       | tag           |
+	| resttest | [\"testtag\"] |
 	Then I should receive status code 200
-	And The tags should get updated for the same STB
-	
-Scenario: Remove tags for an STB by specifying device id and tag as request body
+	And I should verify that tags are added for the same STB
+
+Scenario: Update tags for an existing STB in dawg house by specifying device id and tag as request body
+	Given I update tags for an existing STB device with following details
+	| id       | tag                       |
+	| resttest | [\"newtag1\",\"newtag2\"] |
+	Then I should receive status code 200
+	And I should verify that tags are updated for the same STB
+		
+Scenario: Remove tags from an STB by specifying device id and tag as request body
 	When I remove tags from an STB device with following details
-	|id|tag|
-	|aabbccddeeff|testtag|
+	| id           | tag           |
+	| aabbccddeeff | [\"testtag\"] |
 	Then I should receive status code 200
-	And The tags should get removed for the same STB
+	And I should verify that tags are removed from the STB
 	
 Scenario: Update STB details on Dawg House
 	Given I added an STB device to dawg house with following details
-	|id|token|
-	|resttest|testuser|
-	Then I have reserved the same STB using Dawg Pound
-	And I update the make for the same STB
-	Then I verify that the response contains expected STB device make and token 
+	| id       | token    |
+	| resttest | testuser |
+	When I reserve the same STB in Dawg Pound
+	Then I should verify that the response contains reservation token and STB device make
+	When I update make for the same STB
+	Then I should verify that the response contains reservation token and updated STB device make  
 
 
 	
