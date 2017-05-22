@@ -27,6 +27,7 @@ import org.testng.Assert;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.DawgHousePageElements;
 import com.comcast.dawg.helper.LoginHelper;
+import com.comcast.dawg.utils.ImageCapture;
 import com.comcast.zucchini.TestContext;
 
 import cucumber.api.java.en.Given;
@@ -44,12 +45,13 @@ public class DawgCommonGlue {
     /**
      * Login to dawg-house portal   
      * OnZukeStep:"I am on the Log In page of dawg house portal"    
+     * @throws InterruptedException 
      */
     @Given("^I am on the Log In page of dawg house portal$")
     public void launchDawgLoginPage() {
-        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-        System.out.println(driver.toString());
-        driver.get(LoginHelper.getDawgUrl());
+        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);        
+        driver.get(LoginHelper.getDawgUrl()); 
+        ImageCapture.addImage();
         // Verify login page displayed
         WebElement loginFormElement = driver.findElementByXPath(DawgHousePageElements.LOGIN_FORM_XPATH);
         Assert.assertTrue(loginFormElement.isDisplayed(), "Failed to display dawg house login page");

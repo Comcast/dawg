@@ -13,13 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.comcast.dawg.reporter;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+package com.comcast.dawg.utils;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -28,41 +22,24 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.zucchini.TestContext;
 
+import cucumber.api.Scenario;
+
 /**
  *Capture screen shot using web driver 
+ *@author priyanka.sl
  */
 public class ImageCapture {
 
     /**
-     * Captures the UI screenshot     
-     * @return BufferedImage   
-     */
-    private static BufferedImage captureScreenShot() {
-        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-        File screenshot = (File) ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        return readImageFile(screenshot);
-    }
-
-    /**
-     * Gets the buffered image  
-     * @param image file  
-     * @return BufferedImage   
-     */
-    private static BufferedImage readImageFile(File file) {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
-
-    /**
-     * Add image 
+     * Captures the UI screenshot and attaching to cucumber report        
      */
     public static void addImage() {
-        captureScreenShot();
+        Scenario scenario = (Scenario) TestContext.getCurrent().get("scenario");
+        if (null != scenario) {
+            RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            scenario.embed(screenshot, "image/png");
+        }
     }
 
 }

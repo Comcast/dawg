@@ -15,9 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.comcast.dawg.constants.DawgHouseConstants;
+import com.comcast.dawg.utils.ImageCapture;
 import com.comcast.zucchini.TestContext;
 
 import cucumber.api.Scenario;
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 
 /**
@@ -42,6 +44,17 @@ public class ZukeHook {
     }
 
     /**
+     * This method embeds screenshots to cucumber reports when ever a step fails.
+     * @param  scenario
+     */
+    @After("@uitest")
+    public void embedScreenshotOnFail(Scenario s) {
+        if (s.isFailed()) {
+            ImageCapture.addImage();
+        }
+    }
+
+    /**
      * Method executes before each scenario
      * 
      */
@@ -49,6 +62,5 @@ public class ZukeHook {
     public void setupBefore() {
 
     }
-
 
 }

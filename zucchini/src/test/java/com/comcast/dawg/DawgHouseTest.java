@@ -25,7 +25,7 @@ import cucumber.api.CucumberOptions;
  * 
  * @author Priyanka
  */
-@CucumberOptions(glue = {"com.comcast.dawg.glue" }, features = {"src/test/resources/features/" }, tags = {"@uitest" })
+@CucumberOptions(glue = {"com.comcast.dawg.glue" }, features = {"src/test/resources/features/" }, tags = {"@uitest1" })
 public class DawgHouseTest extends AbstractZucchiniTest {
 
     /** Logger for the DawgHouseTest class. */

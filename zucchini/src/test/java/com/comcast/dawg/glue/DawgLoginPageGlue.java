@@ -15,7 +15,6 @@
  */
 package com.comcast.dawg.glue;
 
-import org.apache.log4j.Logger;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
@@ -39,7 +38,7 @@ public class DawgLoginPageGlue {
      * Select the button 
      * OnZukeStep:"I select (.*) button"    
      */
-    @When("^I select (.*) button$")
+    @When("^I click (.*) button$")
     public void selectButton(String button) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         driver.getKeyboard().pressKey(Keys.ENTER);
