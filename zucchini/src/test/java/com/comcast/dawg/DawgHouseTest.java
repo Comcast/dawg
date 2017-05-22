@@ -9,11 +9,14 @@
  */
 package com.comcast.dawg;
 
+import java.io.IOException;
 import java.util.List;
 
-import com.comcast.zucchini.TestContext;
-
 import org.apache.log4j.Logger;
+
+import com.comcast.dawg.utils.DawgTestManager;
+import com.comcast.zucchini.AbstractZucchiniTest;
+import com.comcast.zucchini.TestContext;
 
 import cucumber.api.CucumberOptions;
 
@@ -23,17 +26,28 @@ import cucumber.api.CucumberOptions;
  * @author Priyanka
  */
 @CucumberOptions(glue = {"com.comcast.dawg.glue" }, features = {"src/test/resources/features/" }, tags = {"@uitest" })
-public class DawgHouseTest extends DawgTest {
+public class DawgHouseTest extends AbstractZucchiniTest {
 
     /** Logger for the DawgHouseTest class. */
     private static final Logger LOGGER = Logger.getLogger(DawgHouseTest.class);
-
+   
     @Override
     public List<TestContext> getTestContexts() {
-      
-          //  return DevPortalTestController.getBrowserTestContexts();
-        
+        try {
+            return DawgTestManager.getDriverTextContexts();
+        } catch (DawgTestException | IOException e) {
+            LOGGER.error("Failed to create TestContexts for Web driver. Reason: " + e.getMessage());
+        }
         return null;
+    }
+
+    /**
+     * Terminates the Web driver processes at the end of the test
+     */
+    @Override
+    public void cleanup(TestContext context) {
+        DawgTestManager.shutdown();
+
     }
 
 }

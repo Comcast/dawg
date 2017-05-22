@@ -14,14 +14,11 @@
 
 	<name>(Comcast) ${project.artifactId}</name>
 	<description>DAWG testing</description>
-
-
 	<properties>
 		<package>com/comcast/dawg/selenium/chromedriver</package>
 		<magic-wand.version>4.0.3</magic-wand.version>
-		<zukes.version>[2.2,3)</zukes.version>
+		<zukes.version>[2.2,3)</zukes.version>		
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.comcast.zucchini</groupId>
@@ -64,7 +61,7 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
 			<version>3.0.1</version>
-		</dependency>
+		</dependency>		
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
