@@ -77,5 +77,9 @@ Scenario: Unreserve an STB device which is already reserved via POST request wit
     And I verify that the response contains unreserved token
     
 Scenario: Unreserve an STB device which is already reserved via POST request with invalid device id
-    Given I send POST request to 'unreserve STB' which is already reserved with invalid device id
+    Given I send POST request to 'reserve STB' with following details
+    | id        | token       |
+    | poundrest | reservetest |
+    Then I should receive status code 200  
+    Given I send POST request to unreserve same STB with invalid device id
     Then I verify that the response as empty
