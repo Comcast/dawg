@@ -7,7 +7,7 @@ Background:
 Scenario Outline: Verify the search results using multiple filter values 
 	Given I added <Count> filter value/s to advanced filter overlay 	 
 	Then I should see filter value/s added in filter overlay 
-	When I select "Search" button 
+	When I select 'Search' button 
 	Then I should see the search results displayed in the filter table 
 		Examples: 
 		|Count  | 		
@@ -19,7 +19,7 @@ Scenario Outline: Verify the search results while selecting condition buttons (A
 	And I should see filter value/s added in filter overlay 
 	When I select condition button/s "<button>" 
 	Then I should see condition applied to filter values
-	When I select "Search" button 
+	When I select 'Search' button 
 	Then I should see the search results displayed in the filter table 
 	Examples: 
 		|button  | 		
@@ -31,9 +31,9 @@ Scenario Outline: Verify the search results while selecting condition buttons (A
 			
 Scenario Outline: Verify the search results using single filter values 
 	Given there is an advanced filter with "<field>", "<option>", "<value>" 
-	When I select "Add" button 
+	When I select 'Add' button 
 	Then I should see filter "<field>" "<option>" "<value>" values added in filter overlay 
-	When I select "Search" button 
+	When I select 'Search' button 
 	Then I should see the search results displayed in the filter table 
 	Examples: 
 		| field                 | option  | value               |  		
@@ -51,9 +51,9 @@ Scenario Outline: Verify the search results using single filter values
 Scenario Outline: Verify the search results using single filter values with NOT condition 
 	Given there is an advanced filter with "<field>", "<option>", "<value>" 
 	When I click Add button to add filters in filter overlay 
-	And I select "NOT" button in the filter overlay 
+	And I select 'NOT' button in the filter overlay 
 	Then I should see filter "<field>" "<option>" "<value>" values added in filter overlay 
-	When I select "Search" button 
+	When I select 'Search' button 
 	Then I should see the search results displayed for NOT condition of filter query
 	Examples: 
 		| field                 | option  | value               |  		
@@ -84,7 +84,7 @@ Scenario: Verify search results by applying filter conditions together (AND and 
 	Then I should see condition applied for first two values 
 	And I apply 'OR' condition to last two filter values 
 	Then I should see condition applied for last two values 
-	When I select "Search" button 
+	When I select 'Search' button 
 	Then I should see the search results for group condition filter 
 	
 #new scenario	
@@ -98,9 +98,9 @@ Scenario Outline: Verify the search results using multiple filter values with co
 		| Slot Name             | contains| TestSlotName        | 
 		| IR Blaster Type       | contains| TestIrBlasterType   | 	
 	Then I should see filter values added in filter overlay 
-	When I select condition button/s "<button>" 
-	Then I should see "<button>" condition applied for all filter values 
-	When I select "Search" button 
+	When I select condition button/s '<button>' 
+	Then I should see '<button>' condition applied for all filter values 
+	When I select 'Search' button 
 	Then I should see the search results displayed for "<button>" condition 
 	Examples: 
 		|button  | 	
@@ -115,9 +115,9 @@ Scenario Outline: Verify search results by applying group conditions (AND and OR
 	And I apply 'OR' condition to last two filter values 	
 	Then I should see group condition applied for the filter values
 	When I select both filter values with group condition applied
-	And I select condition button/s "<button>" 
-	Then I should see condition "<button>" applied for filter values
-	When I select "Search" button 
+	And I select condition button/s '<button>' 
+	Then I should see condition '<button>' applied for filter values
+	When I select 'Search' button 
 	Then I should see the search results displayed in the filter table 
 	Examples: 
 		|button  | 	
@@ -138,7 +138,7 @@ Scenario: Verify the deletion of single filter value
 Scenario Outline: Verify the deletion of filter values 
 	Given I added <count> filter value/s to advanced filter overlay 
 	And I should see filter value/s added in filter overlay 
-	When I select "Delete" button 
+	When I select 'Delete' button 
 	Then I should see all filter value/s removed from filter overlay 
 	Examples: 
 		|count  | 	
@@ -150,7 +150,7 @@ Scenario Outline: Break the group conditions with two filter values
 	Given I added <count> filter values to advanced filter overlay 
 	When I apply '<condition>' condition to <count> filter values 
 	Then I should see filter condition '<condition>' applied in filter values 
-	When I select "BREAK" button 
+	When I select 'BREAK' button 
 	Then each filter conditions splitted as <count>
 	Examples: 
 		|condition|count | 	
@@ -166,5 +166,5 @@ Scenario: Break the group conditions with four filter values
 	And I apply 'OR' condition to last two filter values 
 	Then I should see condition applied for last two values 
 	When I select both filter values with group condition applied 
-	And I select "BREAK" button 
+	And I select 'BREAK' button 
 	Then each filter conditions splitted as separate	

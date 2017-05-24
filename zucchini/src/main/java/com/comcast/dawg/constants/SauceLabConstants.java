@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 package com.comcast.dawg.constants;
-
-
-
 /**
- * Sauce constant class  
+ * Constant class for SauceLabs automation  
  *
  * @author  Priyanka 
  *  */
 public class SauceLabConstants {
-
 
     /** Constant to run tests in saucelabs. */
     public static final String SAUCE = "sauce";

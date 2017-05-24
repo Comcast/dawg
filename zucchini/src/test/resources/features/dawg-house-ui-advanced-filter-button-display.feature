@@ -52,7 +52,7 @@ Verify button display in advanced filter overlay while de-selecting all filter v
 		|2      |	
 Scenario Outline: Verify button display while selecting condition buttons(AND, OR, AND NOT, OR NOT) 
 	Given I added two filter value/s to advanced filter overlay 
-	When I select condition button/s "<button>" 
+	When I select condition button/s '<button>' 
 	Then I should verify following buttons displayed as below
 		|Button  |Enabled | 
 		|AND     |false   |
@@ -71,7 +71,7 @@ Scenario Outline: Verify button display while selecting condition buttons(AND, O
 #new scenario
 Scenario: Verify button display while selecting condition button NOT 
 	Given I added two filter value/s to advanced filter overlay 
-	When I select condition button/s "NOT" 
+	When I select condition button/s 'NOT' 
 	Then I should verify following buttons displayed as below
 		|Button  |Enabled| 
 		|AND     |true   |
@@ -85,7 +85,7 @@ Scenario: Verify button display while selecting condition button NOT
 Scenario Outline: Verify the button display while deleting filter value/s from filter table 
 	Given I added <count> filter value/s to advanced filter overlay  
 	Then I should see filter value/s added in filter overlay 
-	When I select "Delete" button 
+	When I select 'Delete' button 
 	Then I should see filter value/s removed from filter overlay 
 	And I should verify following buttons displayed as below
 	    |Button  |Enabled|

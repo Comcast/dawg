@@ -44,7 +44,7 @@ import com.comcast.zucchini.TestContext;
 import com.comcast.dawg.selenium.Browser;
 
 /**
- * Controller class for running all UI test cases both in local or sauce Labs
+ * Controller class for Creating Web driver instances 
  * @author Priyanka 
  */
 public class DawgDriverController {

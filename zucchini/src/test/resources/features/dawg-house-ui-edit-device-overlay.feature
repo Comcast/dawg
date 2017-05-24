@@ -27,5 +27,5 @@ Scenario: Verify STB device edit overlay is dismissed
 	Given I selected one STB device from dawg house 
 	When I select edit option on right click 
 	Then the Edit Device overlay is displayed 
-	And I select "Close" button in edit overlay 
+	And I select 'Close' button in edit overlay 
 	Then edit device overlay is dismissed 

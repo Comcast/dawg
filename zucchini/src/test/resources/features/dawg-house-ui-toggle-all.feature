@@ -20,11 +20,6 @@ Scenario: Verify the toggle all behaviour when multiple tag selected
 	Given I selected any tag element in tag cloud	
 	When I select toggle all checkbox 
 	Then I should see all STB checkboxes as checked
-	And I select another tag element 
+	When I select another tag element in tag cloud
 	Then I should see the toggle all checkbox as unchecked
 	And the STB checkboxes of first tag remains as checked
-	
-	
-	
-	
-	
