@@ -1,5 +1,5 @@
 /**
- * Copyright 2010 Comcast Cable Communications Management, LLC
+ * Copyright 2017 Comcast Cable Communications Management, LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,23 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 
 import com.comcast.dawg.constants.DawgHouseConstants;
-import com.comcast.dawg.helper.LoginHelper;
+import com.comcast.dawg.constants.DawgHousePageElements;
+import com.comcast.dawg.helper.DawgLoginHelper;
 import com.comcast.zucchini.TestContext;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 /**
- * This class contains implementation for Dawg house common scenarios
- *
+ * This class contains implementation for Dawg house common scenarios *
  * @author priyanka.sl
- *
  */
 public class DawgLoginPageGlue {
-
     /**
      * Select the button 
      * OnZukeStep:"I select (.*) button"    
      */
-    @When("^I click (.*) button$")
+    @When("^I select (.*) button$")
     public void selectButton(String button) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         driver.getKeyboard().pressKey(Keys.ENTER);
@@ -50,7 +48,8 @@ public class DawgLoginPageGlue {
      */
     @When("^I enter incorrect credentials$")
     public void enterIncorrectCredentails() {
-        LoginHelper.getInstance().enterLoginCredentials("$$$$$", "password");
+        DawgLoginHelper.getInstance().enterLoginCredentials(DawgHouseConstants.INVALID_USERNAME,
+            DawgHouseConstants.INVALID_PASSWORD);
     }
 
     /**
@@ -60,9 +59,8 @@ public class DawgLoginPageGlue {
     @Then("^I should see the error message (.*)$")
     public void verifyLoginFailed(String msg) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-        String invalidLoginMsg = driver.findElementByXPath("//div[@class='alert alert-danger']").getText();
+        String invalidLoginMsg = driver.findElementByXPath(DawgHousePageElements.INVALID_LOGIN_MSG_XPATH).getText();
         Assert.assertEquals(invalidLoginMsg, DawgHouseConstants.INVALID_LOGIN_MSG,
             "Failed to verify invalid login error message");
-
     }
 }

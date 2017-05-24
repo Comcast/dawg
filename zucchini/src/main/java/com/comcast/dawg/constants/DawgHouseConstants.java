@@ -15,34 +15,25 @@
  */
 package com.comcast.dawg.constants;
 
-
 /**
- * Constants used in the implementation.
- *
+ * Constants used for Dawg house automation *
  * @author  priyanka
  */
-
 public class DawgHouseConstants {
-
     /**
-     * Defines test context constant for  Web driver
+     * Defines various test context variables
      */
     public static final String CONTEXT_WEB_DRIVER = "driver";
+    public static final String CONTEXT_SAUCE_DRIVER = "saucedriver";
+    public static final String CONTEXT_SCENARIO = "scenario";
+    public static final String CONTEXT_USERNAME = "username";
+    public static final String CONTEXT_PASSWORD = "password";
 
     /**
-     * Defines test context constant for Sauce driver
+     * Defines various constants used in dawg-house automation
      */
-    public static final String CONTEXT_SAUCE_DRIVER = "saucedriver";
-    
-    /**
-     * Defines test context constant for Scenario     */
-    
-    public static final String CONTEXT_SCENARIO = "scenario";
-    
-    public static final String CONTEXT_USERNAME ="username";
-    
-    public static final String CONTEXT_PASSWORD ="password";  
-    
-    public static final String INVALID_LOGIN_MSG ="Invalid credentials";
+    public static final String INVALID_LOGIN_MSG = "Invalid credentials";
+    public static final String INVALID_USERNAME = "$$$$$";
+    public static final String INVALID_PASSWORD = "password";
 
 }

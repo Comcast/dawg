@@ -26,8 +26,8 @@ import org.testng.Assert;
 
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.DawgHousePageElements;
-import com.comcast.dawg.helper.LoginHelper;
-import com.comcast.dawg.utils.ImageCapture;
+import com.comcast.dawg.helper.DawgLoginHelper;
+import com.comcast.dawg.utils.SeleniumImgGrabber;
 import com.comcast.zucchini.TestContext;
 
 import cucumber.api.java.en.Given;
@@ -49,11 +49,12 @@ public class DawgCommonGlue {
      */
     @Given("^I am on the Log In page of dawg house portal$")
     public void launchDawgLoginPage() {
-        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);        
-        driver.get(LoginHelper.getDawgUrl()); 
-        ImageCapture.addImage();
+        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
+        driver.get(DawgLoginHelper.getDawgUrl());
+        SeleniumImgGrabber.addImage();
         // Verify login page displayed
         WebElement loginFormElement = driver.findElementByXPath(DawgHousePageElements.LOGIN_FORM_XPATH);
+        Assert.assertNotNull(loginFormElement, "Login form element is null");
         Assert.assertTrue(loginFormElement.isDisplayed(), "Failed to display dawg house login page");
     }
 
@@ -63,7 +64,8 @@ public class DawgCommonGlue {
      */
     @When("^I enter correct username and password$")
     public void enterUserNamePassword() {
-        LoginHelper.getInstance().enterLoginCredentials(LoginHelper.getDawgUserName(), LoginHelper.getDawgPassword());
+        DawgLoginHelper.getInstance().enterLoginCredentials(DawgLoginHelper.getDawgUserName(),
+            DawgLoginHelper.getDawgPassword());
     }
 
     /**
@@ -73,14 +75,14 @@ public class DawgCommonGlue {
     @Then("^I should see the Dawg House home page$")
     public void verifyHomePageDisplayed() {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-        String expectedNewPageUrl = LoginHelper.getDawgUrl() + LoginHelper.getDawgUserName();
+        String expectedNewPageUrl = DawgLoginHelper.getDawgUrl() + DawgLoginHelper.getDawgUserName();
         //Verify dawg home page displayed       
         Assert.assertEquals(driver.getCurrentUrl(), expectedNewPageUrl);
         WebElement userInfo = driver.findElementByClassName(DawgHousePageElements.USER_SECTION_CLASS);
         List<WebElement> spans = userInfo.findElements(By.tagName(Tag.SPAN.toString()));
         Assert.assertFalse(spans.isEmpty());
         WebElement userDisplaySpan = spans.get(0); // the first span should show the user name
-        Assert.assertEquals(userDisplaySpan.getText(), LoginHelper.getDawgUserName());
+        Assert.assertEquals(userDisplaySpan.getText(), DawgLoginHelper.getDawgUserName());
     }
 
 }

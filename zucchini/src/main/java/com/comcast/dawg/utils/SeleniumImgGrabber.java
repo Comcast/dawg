@@ -25,10 +25,10 @@ import com.comcast.zucchini.TestContext;
 import cucumber.api.Scenario;
 
 /**
- *Capture screen shot using web driver 
+ *Class which captures UI screenshots using web driver and embedding to cucumber reports
  *@author priyanka.sl
  */
-public class ImageCapture {
+public class SeleniumImgGrabber {
 
     /**
      * Captures the UI screenshot and attaching to cucumber report        

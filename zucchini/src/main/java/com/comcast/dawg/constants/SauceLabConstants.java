@@ -22,7 +22,7 @@ package com.comcast.dawg.constants;
  *
  * @author  Priyanka 
  *  */
-public class SauceConstants {
+public class SauceLabConstants {
 
 
     /** Constant to run tests in saucelabs. */

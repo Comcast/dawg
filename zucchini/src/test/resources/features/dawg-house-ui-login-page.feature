@@ -7,11 +7,11 @@ Background:
 
 Scenario: Login in to dawg house with valid credentials
 	When I enter correct username and password
-	And I click Sign In button
+	And I select Sign In button
 	Then I should see the Dawg House home page
 
 Scenario: Login in to dawg house with invalid credentials
 	When I enter incorrect credentials
-	And  I click Sign In button
+	And  I select Sign In button
 	Then I should see the error message "Invalid credentials"
 	

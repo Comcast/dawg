@@ -10,16 +10,16 @@ import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.zucchini.TestContext;
 
 /**
- * Helper functionalities for Dawg House login 
+ * Helper functionalities for verifying Dawg House login page
  * @author priyanka.sl
  */
-public class LoginHelper {
+public class DawgLoginHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DawgLoginHelper.class);
 
     /** lock object */
     private static Object lock = new Object();
-    private static LoginHelper loginHelper;
+    private static DawgLoginHelper loginHelper;
     private static String username = null;
     private static String password = null;
     private static String dawgUrl = null;
@@ -28,10 +28,10 @@ public class LoginHelper {
      * Creates single instance of loginHelper
      * @return loginHelper
      */
-    public static LoginHelper getInstance() {
+    public static DawgLoginHelper getInstance() {
         synchronized (lock) {
             if (null == loginHelper) {
-                loginHelper = new LoginHelper();
+                loginHelper = new DawgLoginHelper();
             }
         }
         return loginHelper;
@@ -49,7 +49,7 @@ public class LoginHelper {
     }
 
     /**
-     * Get dawg -houselogin password  
+     * Get dawg-house login password  
      * @return String - Password
      */
     public static String getDawgPassword() {
@@ -60,7 +60,7 @@ public class LoginHelper {
     }
 
     /**
-     * Get dawg -house url  
+     * Get dawg-house url  
      * @return String - dawg url
      */
     public static String getDawgUrl() {

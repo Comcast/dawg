@@ -30,7 +30,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.comcast.dawg.DawgTestException;
 import com.comcast.dawg.config.SauceLabConfig;
 import com.comcast.dawg.constants.DawgHouseConstants;
-import com.comcast.dawg.constants.SauceConstants;
+import com.comcast.dawg.constants.SauceLabConstants;
 import com.comcast.dawg.constants.TestConstants;
 import com.comcast.magicwand.builders.PhoenixDriverBuilder;
 import com.comcast.magicwand.builders.PhoenixDriverIngredients;
@@ -44,14 +44,13 @@ import com.comcast.zucchini.TestContext;
 import com.comcast.dawg.selenium.Browser;
 
 /**
- * Main Dawg house Test manager class for running ui tests in local or sauce Labs
- * @author Priyanka
- *
+ * Controller class for running all UI test cases both in local or sauce Labs
+ * @author Priyanka 
  */
-public class DawgTestManager {
+public class DawgDriverController {
 
     /** Logger for the DawgTestManager class. */
-    private static final Logger LOGGER = Logger.getLogger(DawgTestManager.class);
+    private static final Logger LOGGER = Logger.getLogger(DawgDriverController.class);
 
     /** Chrome browser setting arguments. */
     private static final List<String> CHROME_OPTION_ARGUMENTS = Collections.unmodifiableList(Arrays.asList(
@@ -63,24 +62,23 @@ public class DawgTestManager {
 
 
     /**
-     * Method returns the list of testContexts based on the test mode selected(Sauce Labs or Local Vms)
-     * @param browser The browser to get a driver for
-     * @return remote web driver
+     * Method returns the list of testContexts based on the test mode selected(Sauce Labs or Local Vms)    
+     * @return List of TestContext
      * @throws IOException
      * @throws DawgTestException 
      */
-    public static List<TestContext> getDriverTextContexts() throws IOException, DawgTestException {
+    public static List<TestContext> getDriverTestContexts() throws IOException, DawgTestException {
         List<TestContext> contexts = new ArrayList<TestContext>();
         String browser = Browser.chrome.name();
         TestContext testContext = new TestContext(browser);
         RemoteWebDriver webDriver = null;
-        if (null != testMode && SauceConstants.SAUCE.equals(testMode)) {
+        if (SauceLabConstants.SAUCE.equals(testMode)) {
             SaucePhoenixDriver sauceDriver = createSauceRemoteDriver(browser);
             webDriver = (RemoteWebDriver) sauceDriver.getDriver();
             testContext.set(DawgHouseConstants.CONTEXT_SAUCE_DRIVER, sauceDriver);
 
         } else {
-            //If not sauce run locally
+            //To run tests in Local Machine
             PhoenixDriver pDriver = null;
             if ("chrome".equals(browser)) {
                 PhoenixDriverIngredients ingredients = new PhoenixDriverIngredients();
@@ -89,10 +87,14 @@ public class DawgTestManager {
                 options.addArguments(CHROME_OPTION_ARGUMENTS);
                 ingredients.addDriverCapability(ChromeOptions.CAPABILITY, options);
                 pDriver = new PhoenixDriverBuilder().forCustom(new ChromeWizardFactory()).withIngredients(ingredients).build();
+            } else {
+                throw new DawgTestException("Invalid browser type" + browser);
             }
             webDriver = (RemoteWebDriver) pDriver.getDriver();
         }
-
+        if (null == webDriver) {
+            throw new DawgTestException("Failed to Start Web Driver");
+        }
         testContext.set(DawgHouseConstants.CONTEXT_WEB_DRIVER, webDriver);
         contexts.add(testContext);
         return contexts;
@@ -107,11 +109,11 @@ public class DawgTestManager {
     private static SaucePhoenixDriver createSauceRemoteDriver(String browser) throws DawgTestException {
         String osVersion = null;
         String platformtype = SauceLabConfig.getSaucePlatform();
-        if (SauceConstants.WINDOWS.equals(platformtype)) {
+        if (SauceLabConstants.WINDOWS.equals(platformtype)) {
             osVersion = SauceLabConfig.getWinOsVersion();
-        } else if (SauceConstants.MAC.equals(platformtype)) {
+        } else if (SauceLabConstants.MAC.equals(platformtype)) {
             osVersion = SauceLabConfig.getMacOsVersion();
-        } else if (SauceConstants.LINUX.equals(platformtype)) {
+        } else if (SauceLabConstants.LINUX.equals(platformtype)) {
             //There is no specific linux os version in saucelabs
             osVersion = "";
         } else {
@@ -134,17 +136,17 @@ public class DawgTestManager {
      */
     private static PhoenixDriverIngredients buildSauceDriverIngredients(String browserType, String browserVersion, OSType platform, String osVersion) {
 
-        String vpnOptions = " -i " + SauceConstants.DAWG_TEST;
+        String vpnOptions = " -i " + SauceLabConstants.DAWG_TEST;
         // @formatter:off
         PhoenixDriverIngredients pid = new PhoenixDriverIngredients()
          .addCustomDriverConfiguration(SauceProvider.USERNAME, sauceUsername)
          .addCustomDriverConfiguration(SauceProvider.API_KEY, sauceKey)
-         .addCustomDriverConfiguration(SauceProvider.URL, SauceConstants.SAUCE_URL)
+         .addCustomDriverConfiguration(SauceProvider.URL, SauceLabConstants.SAUCE_URL)
          .addBrowser(browserType)
          .addDesktopOS(new DesktopOS(platform, osVersion))
          .addDriverCapability(CapabilityType.VERSION, browserVersion)
-         .addDriverCapability(SauceConstants.NAME, SauceConstants.DAWG_TEST_INFO)
-         .addDriverCapability(SauceConstants.TUNNEL_IDENTIFIER,SauceConstants.DAWG_TEST)
+         .addDriverCapability(SauceLabConstants.NAME, SauceLabConstants.DAWG_TEST_INFO)
+         .addDriverCapability(SauceLabConstants.TUNNEL_IDENTIFIER,SauceLabConstants.DAWG_TEST)
         //Enable Sauce Connect
         .addCustomDriverConfiguration(SauceProvider.VPN, Boolean.valueOf(true))
         // disable verbosity
@@ -165,9 +167,9 @@ public class DawgTestManager {
     public static void shutdown() {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         SaucePhoenixDriver sauceDriver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_SAUCE_DRIVER);
-        if (null != driver) {          
+        if (null != driver) {
             driver.quit();
-            if (null != testMode && SauceConstants.SAUCE.equals(testMode)) {
+            if (SauceLabConstants.SAUCE.equals(testMode)) {
                 sauceDriver.closeVPNConnection();
             }
         }

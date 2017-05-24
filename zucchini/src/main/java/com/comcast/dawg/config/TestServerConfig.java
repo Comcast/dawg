@@ -18,10 +18,10 @@ package com.comcast.dawg.config;
 import com.comcast.video.dawg.common.Config;
 
 /**
- * Provides locations of the serversthat are to be tested on. This will look up system properties for
- * the various serversand apply defaults to the -dev servers if they are not set
+ * Provides locations of the servers that are to be tested on. This will look up system properties for
+ * the various servers and apply defaults to the dev servers if they are not set
+ * 
  * @author Kevin Pearson
- *
  */
 public class TestServerConfig {
     public static final String DAWG_HOUSE_KEY = "dawg.house.url";
@@ -77,6 +77,7 @@ public class TestServerConfig {
         String password = getValue(DAWG_HOUSE_PASSWORD, DEFAULT_DAWG_HOUSE_PASSWORD);
         return password.substring(0, password.length() - 1);
     }
+
     /**
      * Get values, if  system properties are not set then fetch default values from config file
      * @param property key
