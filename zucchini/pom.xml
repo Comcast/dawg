@@ -13,7 +13,7 @@
 	<packaging>jar</packaging>
 
 	<name>(Comcast) ${project.artifactId}</name>
-	<description>DAWG testing</description>
+	<description>Dawg House functional testing</description>
 	<properties>
 		<package>com/comcast/dawg/selenium/chromedriver</package>
 		<magic-wand.version>4.0.3</magic-wand.version>

@@ -42,18 +42,16 @@ public class SauceLabConfig {
     /**
      * Constants to keep default values from config file
      */
-    private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "default-test-mode", "local");
-    private static final String DEFAULT_SAUCE_PLATFORM = Config.get("saucelab", "default-sauce-platform", "windows");
-    private static final String DEFAULT_WIN_VERSION = Config.get("saucelab", "default-sauce-win-version", "Windows 8.1");
-    private static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "default-sauce-mac-version", "macOS 10.12");
-    private static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "default-chrome-version", "46");
-    private static final String DEFAULT_SAUCE_URL = Config.get("saucelab", "default-sauce-url",
-        "ondemand.saucelabs.com:80/wd/hub");
-
+    private static final String DEFAULT_TEST_MODE = Config.get("saucelab", "default-test-mode");
+    private static final String DEFAULT_SAUCE_PLATFORM = Config.get("saucelab", "default-sauce-platform");
+    private static final String DEFAULT_WIN_VERSION = Config.get("saucelab", "default-sauce-win-version");
+    private static final String DEFAULT_MAC_VERSION = Config.get("saucelab", "default-sauce-mac-version");
+    private static final String DEFAULT_CHROME_VERSION = Config.get("saucelab", "default-chrome-version");
+    private static final String DEFAULT_SAUCE_URL = Config.get("saucelab", "default-sauce-url");
 
     /**
      * Gets the test mode to run tests in local or in SauceLabs
-     * @return
+     * @return - Test mode (sauce or local)
      */
     public static final String getTestMode() {
         return getData(TEST_MODE, DEFAULT_TEST_MODE);
@@ -61,7 +59,7 @@ public class SauceLabConfig {
 
     /**
      * Gets the sauce URL
-     * @return
+     * @return -Sauce Url
      */
     public static final String getSauceURl() {
         return getData(SAUCE_URL, DEFAULT_SAUCE_URL);
@@ -69,7 +67,7 @@ public class SauceLabConfig {
 
     /**
      * Gets the sauce lab key
-     * @return
+     * @return - Sauce Key
      */
     public static final String getSauceKey() {
         return System.getProperty(SAUCE_KEY);
@@ -77,7 +75,7 @@ public class SauceLabConfig {
 
     /**
      * Gets the username of saucelab
-     * @return
+     * @return - Sauce User name
      */
     public static final String getSauceUserName() {
         return System.getProperty(SAUCE_USERNAME);
@@ -85,7 +83,7 @@ public class SauceLabConfig {
 
     /**
      * Gets the sauce port
-     * @return
+     * @return - Sauce Port
      */
     public static final String getSaucePort() {
         return System.getProperty(SAUCE_PORT);
@@ -93,7 +91,7 @@ public class SauceLabConfig {
 
     /**
      * Gets the sauce platform to be test run
-     * @return
+     * @return - Sauce platform
      */
     public static final String getSaucePlatform() {
         return getData(SAUCE_PLATFORM, DEFAULT_SAUCE_PLATFORM);
@@ -101,7 +99,7 @@ public class SauceLabConfig {
 
     /**
      * Gets the sauce platform version for windows
-     * @return
+     * @return - Win Os version
      */
     public static final String getWinOsVersion() {
         return getData(SAUCE_WIN_VERSION, DEFAULT_WIN_VERSION);
@@ -109,15 +107,15 @@ public class SauceLabConfig {
 
     /**
      *  Gets the sauce platform version for Mac OSX
-     * @return
+     * @return - Mac Os version
      */
     public static final String getMacOsVersion() {
         return getData(SAUCE_MAC_VERSION, DEFAULT_MAC_VERSION);
     }
 
     /**
-     *  Get chrome version for running test in sauce labs.
-     * @return
+     * Get chrome version for running test in sauce labs.
+     * @return chrome version
      */
     public static final String getChromeVersion() {
         return getData(CHROME_VERSION, DEFAULT_CHROME_VERSION);
@@ -127,7 +125,7 @@ public class SauceLabConfig {
      * Get values, if  system properties are not set then fetch default values from config file
      * @param property key
      * @param default value
-     * @return
+     * @return corresponding system property value or config value
      */
     private static final String getData(String propKey, String defaultVal) {
         return System.getProperty(propKey, defaultVal);

@@ -30,60 +30,60 @@ public class TestServerConfig {
     public static final String DAWG_HOUSE_USERNAME = "dawg.house.username";
     public static final String DAWG_HOUSE_PASSWORD = "dawg.house.password";
 
-    public static final String DEFAULT_DAWG_HOUSE = Config.get("testing", "default-dawg-house",
-        "http://localhost/dawg-house/");
-    public static final String DEFAULT_DAWG_POUND = Config.get("testing", "default-dawg-pound",
-        "http://localhost/dawg-pound/");
-    public static final String DEFAULT_DAWG_SHOW = Config.get("testing", "default-dawg-show",
-        "http://localhost/dawg-show/");
-    public static final String DEFAULT_DAWG_HOUSE_USERNAME = Config.get("testing", "default-dawg-house-username",
-        "qatests/");
-    public static final String DEFAULT_DAWG_HOUSE_PASSWORD = Config.get("testing", "default-dawg-house-password",
-        "qa3030!/");
+    public static final String DEFAULT_DAWG_HOUSE = Config.get("testing", "default-dawg-house");
+    public static final String DEFAULT_DAWG_POUND = Config.get("testing", "default-dawg-pound");
+    public static final String DEFAULT_DAWG_SHOW = Config.get("testing", "default-dawg-show");
+    public static final String DEFAULT_DAWG_HOUSE_USERNAME = Config.get("testing", "default-dawg-house-username");
+    public static final String DEFAULT_DAWG_HOUSE_PASSWORD = Config.get("testing", "default-dawg-house-password");
 
     /**
      * Gets the url to the dawg-house server to be tested on
-     * @return
+     * @return - dawg house url
      */
     public static final String getHouse() {
-        return getUrl(DAWG_HOUSE_KEY, DEFAULT_DAWG_HOUSE);
+        return getValue(DAWG_HOUSE_KEY, DEFAULT_DAWG_HOUSE);
     }
 
     /**
      * Gets the url to the dawg-pound server to be tested on
-     * @return
+     * @return - dawg pound url
      */
     public static final String getPound() {
-        return getUrl(DAWG_POUND_KEY, DEFAULT_DAWG_POUND);
+        return getValue(DAWG_POUND_KEY, DEFAULT_DAWG_POUND);
     }
 
     /**
      * Gets the url to the dawg-show server to be tested on
-     * @return
+     * @return - dawg show url
      */
     public static final String getShow() {
-        return getUrl(DAWG_SHOW_KEY, DEFAULT_DAWG_SHOW);
+        return getValue(DAWG_SHOW_KEY, DEFAULT_DAWG_SHOW);
     }
 
     /**
      * Gets the dawg house username to login in 
-     * @return
+     * @return - dawg house login user name
      */
     public static final String getUsername() {
-        String username = getUrl(DAWG_HOUSE_USERNAME, DEFAULT_DAWG_HOUSE_USERNAME);
+        String username = getValue(DAWG_HOUSE_USERNAME, DEFAULT_DAWG_HOUSE_USERNAME);
         return username.substring(0, username.length() - 1);
     }
 
     /**
      * Gets the dawg house password to login in 
-     * @return
+     * @return - dawg house login password
      */
     public static final String getPassword() {
-        String password = getUrl(DAWG_HOUSE_PASSWORD, DEFAULT_DAWG_HOUSE_PASSWORD);
+        String password = getValue(DAWG_HOUSE_PASSWORD, DEFAULT_DAWG_HOUSE_PASSWORD);
         return password.substring(0, password.length() - 1);
     }
-
-    private static final String getUrl(String propKey, String defaultVal) {
+    /**
+     * Get values, if  system properties are not set then fetch default values from config file
+     * @param property key
+     * @param default value
+     * @return corresponding system property value or config value
+     */
+    private static final String getValue(String propKey, String defaultVal) {
         String propVal = System.getProperty(propKey, defaultVal);
         return propVal + (propVal.endsWith("/") ? "" : "/");
     }
