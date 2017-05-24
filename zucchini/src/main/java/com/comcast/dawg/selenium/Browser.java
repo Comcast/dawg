@@ -21,5 +21,5 @@ package com.comcast.dawg.selenium;
  *
  */
 public enum Browser {
-    chrome
+    CHROME
 }

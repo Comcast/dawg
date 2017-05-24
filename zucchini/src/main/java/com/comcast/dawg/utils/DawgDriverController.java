@@ -69,7 +69,7 @@ public class DawgDriverController {
      */
     public static List<TestContext> getDriverTestContexts() throws IOException, DawgTestException {
         List<TestContext> contexts = new ArrayList<TestContext>();
-        String browser = Browser.chrome.name();
+        String browser = Browser.CHROME.name().toLowerCase();
         TestContext testContext = new TestContext(browser);
         RemoteWebDriver webDriver = null;
         if (SauceLabConstants.SAUCE.equals(testMode)) {
