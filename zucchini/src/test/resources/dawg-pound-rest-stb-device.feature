@@ -81,5 +81,5 @@ Scenario: Unreserve an STB device which is already reserved via POST request wit
     | id        | token       |
     | poundrest | reservetest |
     Then I should receive status code 200  
-    Given I send POST request to unreserve same STB with invalid device id
+    When I send POST request to unreserve same STB with invalid device id
     Then I verify that the response as empty
