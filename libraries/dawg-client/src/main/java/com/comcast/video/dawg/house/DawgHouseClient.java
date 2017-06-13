@@ -23,13 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.comcast.cereal.CerealException;
 import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.drivethru.exception.HttpException;
+import com.comcast.drivethru.exception.HttpStatusException;
 import com.comcast.drivethru.utils.Method;
 import com.comcast.drivethru.utils.RestRequest;
 import com.comcast.drivethru.utils.RestResponse;
@@ -42,7 +39,6 @@ import com.comcast.video.dawg.exception.HttpRuntimeException;
 
 public class DawgHouseClient extends DawgClient implements IDawgHouseClient<MetaStb> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DawgHouseClient.class);
     private static final String DEFAULT_BASE_URL = Config.get("dawg", "dawg-house-url", "http://localhost/dawg-house");
     private JsonCerealEngine cerealEngine = new JsonCerealEngine();
 
@@ -74,6 +70,26 @@ public class DawgHouseClient extends DawgClient implements IDawgHouseClient<Meta
     private void httpdelete(String path) {
         try {
             client.delete(path);
+        } catch (HttpException e) {
+            throw new HttpRuntimeException(e);
+        }
+    }
+    
+    public void login(String username, String password) {
+        try {
+            URL url = new URL().setPath("/login");
+            url.addQuery("username", username);
+            url.addQuery("password", password);
+            RestRequest request = new RestRequest(url, Method.POST);
+
+            RestResponse response = client.execute(request);
+            if (response.getStatusCode() != 302) {
+                throw new HttpStatusException(response.getStatusCode(), response.getStatusMessage());
+            }
+            String location = response.getHeaderValue("Location");
+            if (location.endsWith("?error")) {
+                throw new HttpException("Login failed for user '" + username + "'");
+            }
         } catch (HttpException e) {
             throw new HttpRuntimeException(e);
         }
