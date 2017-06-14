@@ -29,6 +29,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,14 +61,18 @@ public class DawgCorsFilter implements Filter {
         if (this.domainWhitelist != null) {
             HttpServletRequest request = (HttpServletRequest) req;
             String origin = request.getHeader("Origin");
-            if (origin != null) {
+            if (!StringUtils.isEmpty(origin)) {
                 try {
                     String originHost = new URI(origin).getHost(); 
-                    for (String domain : domainWhitelist) {
-                        if (originHost.endsWith(domain)) {
-                            allowOrigin = origin;
-                            break;
+                    if (originHost != null) {
+                        for (String domain : domainWhitelist) {
+                            if (originHost.endsWith(domain)) {
+                                allowOrigin = origin;
+                                break;
+                            }
                         }
+                    } else {
+                        LOGGER.warn("Invalid host for origin '" + origin + "'");
                     }
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
