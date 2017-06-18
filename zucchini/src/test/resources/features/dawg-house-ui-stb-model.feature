@@ -10,12 +10,11 @@ Scenario Outline: Add a new model property on model configuration page
 	When I add a new <property> name to the model overlay 
 	Then the <property> name added displayed in model overlay 
 	When I reopen the model overlay page 
-	Then I should see the <<property> name persists on model overlay page 
+	Then I should see the <property> name persists on model overlay page 
 	Examples: 
 		|property  |  
 		|capability|		
 		|family    |
-		
 Scenario Outline: Verify the alert message while trying to add a duplicate enty 
 	Given I am on model overlay 
 	When I add an already existing <property> name to model overlay page 
@@ -25,7 +24,7 @@ Scenario Outline: Verify the alert message while trying to add a duplicate enty
 		|capability|		
 		|family    |
 		|model     |			
-		
+@stbModel 
 Scenario: Add a new model on model configuration page 
 	Given I am on model overlay 
 	When I add a new model with capability and family name 
@@ -43,10 +42,8 @@ Scenario: Delete a model from the model configuration page
 	Then an alert message 'Are you sure you want to delete' should be displayed 
 	And I select ok on the alert box 
 	Then the model will be removed from the configuration page 
-	#new scenario
-	
-Scenario: 
-	Verify the select status of Model properties(Capabilities and family) in model overlay 
+	#new scenario	
+Scenario: Verify the select status of Model properties(Capabilities and family) in model overlay 
 	Given I choose a model from the model configuration page 
 	Then model overlay page is displayed 
 	And I should see model properties are displayed as selected 

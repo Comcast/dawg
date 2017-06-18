@@ -58,7 +58,6 @@ public class DawgLoginPageGlue {
                 deleteButton.click();
             } else {
                 throw new DawgTestException("Invalid button " + button);
-
             }
         } catch (NoSuchElementException e) {
             throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());

@@ -72,7 +72,7 @@ public class DawgStbModelPageGlue {
         List<String> propertyList = DawgModelPageHelper.getInstance().getConfigPropertyList(property);
         Assert.assertTrue(0 < propertyList.size(), property + "not listed in model overlay page");
         try {
-            if (DawgHouseConstants.FAMILY.equals(property)) {
+            if (DawgHouseConstants.FAMILY.contains(property)) {
                 // Verify one family name get selected in drop down list
                 RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
                 Select select = new Select(driver.findElementById(DawgHousePageElements.FAMILY_SELECT_ELEMENT_ID));
@@ -82,6 +82,7 @@ public class DawgStbModelPageGlue {
         } catch (NoSuchElementException e) {
             throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
         }
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_PROPERTY_LIST, propertyList);
 
     }
 
@@ -93,9 +94,9 @@ public class DawgStbModelPageGlue {
     @When("^I add a new (.*) name to the model overlay$")
     public void addNewCapability(String propertyName) throws DawgTestException {
         String addProperty = null;
-        if (DawgHouseConstants.FAMILY.equals(propertyName)) {
+        if (DawgHouseConstants.FAMILY.contains(propertyName)) {
             addProperty = Family.NEW_TEST_FAMILY.name();
-        } else if (DawgHouseConstants.CAPABILITY.equals(propertyName)) {
+        } else if (DawgHouseConstants.CAPABILITY.contains(propertyName)) {
             addProperty = Capability.NEW_TEST_CAP.name();
         } else {
             LOGGER.error("Invalid Property {}", propertyName);
@@ -124,11 +125,11 @@ public class DawgStbModelPageGlue {
         // Validating the new capability/family added available on the model overlay        
         Assert.assertTrue(propertyList.contains(newPropertyAdded),
             "Failed to add new " + property + "  on model overlay page.");
-        if (DawgHouseConstants.FAMILY.equals(property)) {
+        if (DawgHouseConstants.FAMILY.contains(property)) {
             // Verify family name added get selected in the dropdown list      
             Assert.assertTrue(DawgModelPageHelper.getInstance().isFamilyNameSelected(newPropertyAdded),
                 property + " name added not get selected in dropdownlist ");
-        } else if (DawgHouseConstants.CAPABILITY.equals(property)) {
+        } else if (DawgHouseConstants.CAPABILITY.contains(property)) {
             // Verify capability added displayed as checked in model overlay
             Assert.assertTrue(DawgModelPageHelper.getInstance().isCapabilitiesSelected(newPropertyAdded),
                 "Added " + property + " not displayed as selected");
@@ -166,7 +167,25 @@ public class DawgStbModelPageGlue {
      */
     @Then("^I should see the (.*) name persists on model overlay page$")
     public void verifyFamilyNameAddedPersists(String property) throws DawgTestException {
-        verifyFamilyNameAdded(property);
+        List<String> propertyList = DawgModelPageHelper.getInstance().getConfigPropertyList(property);
+        String newPropertyAdded = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_NEW_PROPERTY_ADDED);
+        // Validating the new capability/family added available on the model overlay        
+        Assert.assertTrue(propertyList.contains(newPropertyAdded),
+            "Failed to add new " + property + "  on model overlay page.");
+        
+        if (DawgHouseConstants.FAMILY.contains(property)) {
+            // Verify family name added get selected in the dropdown list      
+            Assert.assertTrue(DawgModelPageHelper.getInstance().isFamilyNameSelected(newPropertyAdded),
+                property + " name added not get selected in dropdownlist ");
+        } else if (DawgHouseConstants.CAPABILITY.contains(property)) {
+            // Verify the capability lists displayed are not selected
+            Assert.assertFalse(DawgModelPageHelper.getInstance().isCapabilitiesSelected(newPropertyAdded),
+                "Added " + property + " displayed as selected");
+        } else {
+            throw new DawgTestException("Invalid property " + property);
+        }
+        
+        
     }
 
     /**
@@ -179,13 +198,13 @@ public class DawgStbModelPageGlue {
         List<String> propertyList = DawgModelPageHelper.getInstance().getConfigPropertyList(property);
         // Get an already existing property
         String alreadyExistingProperty = propertyList.get(0);
-        if (DawgHouseConstants.MODEL.equals(property)) {
+        if (DawgHouseConstants.MODEL.contains(property)) {
             // Add a family name and capability for this model            
             String familyName = Family.NEW_TEST_FAMILY2.name();
             String capabilityName = Capability.NEW_TEST_CAP2.name();
             DawgModelPageHelper.getInstance().addModelViaModelOverlay(alreadyExistingProperty, familyName,
                 capabilityName);
-        } else if (DawgHouseConstants.FAMILY.equals(property) || DawgHouseConstants.CAPABILITY.equals(property)) {
+        } else if (DawgHouseConstants.FAMILY.contains(property) || DawgHouseConstants.CAPABILITY.contains(property)) {
             DawgModelPageHelper.getInstance().addCapabilityOrFamily(alreadyExistingProperty, property);
         } else {
             throw new DawgTestException("Invalid property" + property);
@@ -418,7 +437,7 @@ public class DawgStbModelPageGlue {
         StringBuilder caps = new StringBuilder();
         // cap list from model overlay     
         List<String> capabilitiesInModelPage = Arrays.asList(properties.get(DawgHouseConstants.CAPABILITY).split(
-            "\\s*,\\s*"));
+            DawgHouseConstants.SPLIT_REGEX));
         List<String> checkedCapabiities = DawgModelPageHelper.getInstance().selectedCapablities();
         for (String capability : capabilitiesInModelPage) {
             if (!checkedCapabiities.contains(capability)) {

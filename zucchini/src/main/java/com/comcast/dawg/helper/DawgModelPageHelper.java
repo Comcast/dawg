@@ -119,12 +119,12 @@ public class DawgModelPageHelper {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
 
             List<WebElement> elementList = null;
-            if (DawgHouseConstants.FAMILY.equals(propertyName)) {
+            if (DawgHouseConstants.FAMILY.contains(propertyName)) {
                 elementList = driver.findElementsByXPath(DawgHousePageElements.MODEL_FAMILY_OPTIONS_XPATH);
-            } else if (DawgHouseConstants.CAPABILITY.equals(propertyName)) {
+            } else if (DawgHouseConstants.CAPABILITY.contains(propertyName)) {
                 WebElement capabilityListDiv = driver.findElement(By.id(DawgHousePageElements.CAPABILITY_LIST_DIV_ID));
                 elementList = capabilityListDiv.findElements(By.tagName(DawgHousePageElements.DIV_TAG_NAME));
-            } else if (DawgHouseConstants.MODEL.equals(propertyName)) {
+            } else if (DawgHouseConstants.MODEL.contains(propertyName)) {
                 elementList = driver.findElementsByXPath(DawgHousePageElements.MODEL_NAME_TD_XPATH);
             } else {
                 throw new DawgTestException("Invalid Property " + propertyName);
@@ -152,10 +152,10 @@ public class DawgModelPageHelper {
         String propertyTextFieldXpath = null;
         String propertyBtnXpath = null;
         try {
-            if (DawgHouseConstants.FAMILY.equals(property)) {
+            if (DawgHouseConstants.FAMILY.contains(property)) {
                 propertyTextFieldXpath = DawgHousePageElements.ADD_FAMILY_TEXT_INPUT_XPATH;
                 propertyBtnXpath = DawgHousePageElements.ADD_FAMILY_BUTTON_XPATH;
-            } else if (DawgHouseConstants.CAPABILITY.equals(property)) {
+            } else if (DawgHouseConstants.CAPABILITY.contains(property)) {
                 propertyTextFieldXpath = DawgHousePageElements.ADD_CAP_XPATH;
                 propertyBtnXpath = DawgHousePageElements.ADD_CAP_BUTTON_XPATH;
             } else {
