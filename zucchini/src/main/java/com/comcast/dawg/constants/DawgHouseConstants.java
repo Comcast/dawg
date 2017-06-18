@@ -16,7 +16,7 @@
 package com.comcast.dawg.constants;
 
 /**
- * Constants used for Dawg house automation *
+ * Constants used for Dawg house automation
  * @author  priyanka
  */
 public class DawgHouseConstants {
@@ -28,6 +28,27 @@ public class DawgHouseConstants {
     public static final String CONTEXT_SCENARIO = "scenario";
     public static final String CONTEXT_USERNAME = "username";
     public static final String CONTEXT_PASSWORD = "password";
+    public static final String CONTEXT_TAG1 = "tagOne";
+    public static final String CONTEXT_TAG2 = "tagTwo";
+    public static final String CONTEXT_TAG1_STBS = "tagOneStbs";
+    public static final String CONTEXT_TAG2_STBS = "tagTwoStbs";
+    public static final String CONTEXT_REST_RESPONSE = "response";
+    public static final String CONTEXT_DAWG_HOUSE_URL = "dawgHouseurl";
+    public static final String CONTEXT_DAWG_SHOW_URL = "dawgShowurl";
+    public static final String CONTEXT_DAWG_POUND_URL = "dawgPoundurl";
+    public static final String CONTEXT_TEST_STBS = "testStbs";
+    public static final String CONTEXT_TEST_TAGS = "testTags";
+    public static final String CONTEXT_TEST_STB_MODEL = "testStbModel";
+    public static final String CONTEXT_CACHED_TEST_STB_MODEL = "cachedStbModel"; 
+    public static final String CONTEXT_NEW_PROPERTY_ADDED = "newCapabilityAdded";
+    public static final String CONTEXT_PROPERTY_LIST = "capList";
+    public static final String CONTEXT_ALREADY_EXISTING_PROPERTY = "configProperty";
+    public static final String CONTEXT_NEW_STB_MODEL = "newModel";
+    public static final String CONTEXT_MODEL_PROPERTIES = "newCapability";
+    public static final String CONTEXT_AUTH_HEADER = "Authorization";
+    public static final String CONTEXT_ALERT = "alert";
+    public static final String CONTEXT_COOKIE = "cookie";
+
 
     /**
      * Defines various constants used in dawg-house automation
@@ -35,5 +56,28 @@ public class DawgHouseConstants {
     public static final String INVALID_LOGIN_MSG = "Invalid credentials";
     public static final String INVALID_USERNAME = "$$$$$";
     public static final String INVALID_PASSWORD = "password";
+    public static final String SECRET_KEY = "14C549805A5911368929D139C5C6282E66CE017F8E861C4EAC4D2975269BEA6F";
+    public static final String CONTENT_TYPE = "application/json";
+    public static final String COOKIE = "Cookie";
+    public static final String DAWG_COOKIE_PREFIX = "dawt=";
+    public static final String DAWG_COOKIE_PATTERN = "\\[name: dawt\\]\\[value: (.+?)\\]";
+    public static final String FAMILY = "family";
+    public static final String MODEL = "model";
+    public static final String CAPABILITY = "capability";
+    public static final String SIGN_IN_BUTTON = "signIn";
+    public static final String DELETE_MODEL_BUTTON = "delete model";
+    public static final String ADD_OR_UPDATE_MODEL = "Add or update model";
+    public static final String GET_MODEL = "Get model";
+    public static final String ASSIGN_MODEL = "Add or update model";
+    public static final String ADD_OR_REMOVE_TAG = "Update tag";
+    public static final String ADD_OR_REMOVE_STB = "Add or remove STB";
+    public static final String DAWG_ROLES_STR = "roles";
+    public static final String DEVICE_IDS = "deviceIds";
+    public static final String CREDENTIALS = "creds";
+    public static final String DAWG_USER_STR = "dawguser";
+    public static final String DAWG_HOUSE_STR = "dawg-house";
+    public static final String MODEL_CONFIG = "modelConfig";
+    public static final String SPLIT_REGEX = "\\s*,\\s*";
+
 
 }

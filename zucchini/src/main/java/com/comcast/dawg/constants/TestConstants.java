@@ -15,97 +15,112 @@
  */
 package com.comcast.dawg.constants;
 
-import com.comcast.dawg.config.TestServerConfig;
+import java.util.HashSet;
+
+import com.google.common.collect.Sets;
 
 /**
  * Test constant class.
  *
- * @author  Pratheesh TK
+ * @author Pratheesh TK
  */
 public class TestConstants {
 
-    /** Count of STBs to be tagged to tag one. */
-    public static final int UNIQUE_TAG_ONE_STB_COUNT = 2;
+	/** Array of test STB count to add **/
+	public static final Integer[] STB_TEST_COUNT = { 1, 2, 3, 4 };
 
-    /** Count of STBs to be tagged to tag two. */
-    public static final int UNIQUE_TAG_TWO_STB_COUNT = 3;
+	/** Alert message while trying to duplicate family. */
+	public static final String FAMILY_EXIST_ALERT_MSG_SUFFIX = " already exists";
 
-    /** Count of STBs to be added to delete tag one. */
-    public static final int DELETE_TAG_ONE_STB_COUNT = 3;
+	/** Alert message when no device is selected. */
+	public static final String NO_DEVICE_SELECTED_ALERT_MSG = "No devices selected";
 
-    /** Alert message while trying to duplicate family. */
-    public static final String FAMILY_EXIST_ALERT_MSG_SUFFIX = " already exists";
+	/** Alert message while trying to add a duplicate model. */
+	public static final String MODEL_EXIST_ALERT_MSG_SUFFIX = " already exists";
 
-    /** Alert message when no device is selected. */
-    public static final String NO_DEVICE_SELECTED_ALERT_MSG = "No devices selected";
+	/** Delete alert message suffix. */
+	public static final String DELETE_ALERT_MSG_SUFFIX = "'?";
 
-    /** Alert message while trying to add a duplicate model. */
-    public static final String MODEL_EXIST_ALERT_MSG_SUFFIX = " already exists";
+	/** Delete alert message prefix. */
+	public static final String DELETE_ALERT_MSG_PREFIX = "Are you sure you want to delete '";
 
-    /** Delete alert message suffix. */
-    public static final String DELETE_ALERT_MSG_SUFFIX = "'?";
+	/** Alert message while trying to duplicate capability. */
+	public static final String CAPABILITY_EXIST_ALERT_MSG_SUFFIX = " already exists";
 
-    /** Delete alert message prefix. */
-    public static final String DELETE_ALERT_MSG_PREFIX = "Are you sure you want to delete '";
+	/** Empty string. */
+	public static final String EMPTY_STRING = "";
 
-    /** Alert message while trying to duplicate capability. */
-    public static final String CAPABILITY_EXIST_ALERT_MSG_SUFFIX = " already exists";
+	/** Model name prefix. */
+	public static final String MODEL_NAME_PREF = "testModel";
 
-    /** Empty string. */
-    public static final String EMPTY_STRING = "";
+	/** JSON content type header value. */
+	public static final String JSON_CONTENT_TYPE_HEADER_VALUE = "application/json; charset=utf-8";
 
-    /** Model name prefix. */
-    public static final String MODEL_NAME_PREF = "testModel";
+	/** Set-top id prefix. * */
+	public static final String STB_ID_PREF = "test";
 
-    /** JSON content type header value. */
-    public static final String JSON_CONTENT_TYPE_HEADER_VALUE = "application/json; charset=utf-8";
+	/** Tag name prefix. * */
+	public static final String TAG_NAME_PREF = "testTag";
 
-    /** Content type header. */
-    public static final String CONTENT_TYPE_HEADER_NAME = "Content-Type";
+	/** Remove operation for tag rest call. */
+	public static final String REMOVE_OPERATION_TAG_REST = "remove";
 
-    /** Set-top id prefix. * */
-    public static final String STB_ID_PREF = "test";
+	/** Add operation for tag rest call. */
+	public static final String ADD_OPERATION_TAG_REST = "add";
 
-    /** Tag name prefix. * */
-    public static final String TAG_NAME_PREF = "testTag";
+	/** Regular expression for tag name splitting. */
+	public static final String TAG_NAME_SPLIT_REGEX = " ";
 
-    /** Remove operation for tag rest call. */
-    public static final String REMOVE_OPERATION_TAG_REST = "remove";
+	/** Rest end point for add or update model configuration. */
+	public static final String ADD_OR_UPDATE_MODEL_URI = "models/";
 
-    /** Add operation for tag rest call. */
-    public static final String ADD_OPERATION_TAG_REST = "add";
+	/** Rest end point for GET model configuration. */
+	public static final String GET_STB_MODEL_URI = "models/?id=";
 
-    /** Regular expression for tag name splitting. */
-    public static final String TAG_NAME_SPLIT_REGEX = " ";
+	/** Rest end point for assign STB models. */
+	public static final String ASSIGN_MODELS = "assignmodels";
 
-    /** Rest URI for model configuration. */
-    public static final String MODEL_UPDATE_REST_URI = TestServerConfig.getHouse() + "models/";
+	/** Rest end point for update tags in tag cloud */
+	public static final String TAG_UPDATE_REST_URI = "devices/update/tags/";
 
-    /** Tag update rest URI. */
-    public static final String TAG_UPDATE_REST_URI = TestServerConfig.getHouse() + "devices/update/tags/";
+	/** Rest end point for add or update an stb to dawg house */
+	public static final String ADD_OR_REMOVE_STB_REST_URI = "devices/id/";
 
-    /** The user name used for the integration tests. */
-    public static final String USER = "integrationuser";
-    
-    /** Constant for chromeDriverVersion */
-    public static final String CHROME_DRIVER_VERSION = "chromeDriverVersion";
-    
-    /** Constant for version no */
-    public static final String VERSION = "2.28";
-    
-    /**
-     * Test STB capability.
-     */
-    public static enum Capability {
+	/** Rest end point for model confguration page uri. */
+	public static final String MODEL_CONFIG_URI = "modelsConfig/";
 
-        AVAILABLE_TEST_CAP, NEW_TEST_CAP1, NEW_TEST_CAP2, NEVER_ADD_CAP
-    }
+	/** Constant for chromeDriverVersion */
+	public static final String CHROME_DRIVER_VERSION = "chromeDriverVersion";
 
-    /**
-     * Test STB families.
-     */
-    public static enum Family {
+	/** Constant for version no */
+	public static final String VERSION = "2.28";
 
-        AVAILABLE_TEST_FAMILY, NEW_TEST_FAMILY1, NEW_TEST_FAMILY2, NEVER_ADD_FAMILY
-    }
+	/** Configuration page loading time in seconds. */
+	public static final int MODEL_CONFIG_PAGE_LOAD_WAIT = 2;
+
+	/** Model delete completion wait in seconds. */
+	public static final int DELETE_MODEL_COMPLETION_WAIT = 2;
+
+	/** Model addition completion timeout in seconds. */
+	public static final int ADD_MODEL_COMPLETION_TIMEOUT = 3;
+
+	/** Map for dawg roles */
+	public static final HashSet<String> DAWG_ROLES = Sets.newHashSet(
+			"ROLE_COLLAR", "ROLE_HOUSE", "ROLE_POUND", "ROLE_SHOW");
+
+	/**
+	 * Test STB capability.
+	 */
+	public static enum Capability {
+
+		AVAILABLE_TEST_CAP, NEW_TEST_CAP1, NEW_TEST_CAP2, NEW_TEST_CAP
+	}
+
+	/**
+	 * Test STB families.
+	 */
+	public static enum Family {
+
+		AVAILABLE_TEST_FAMILY, NEW_TEST_FAMILY1, NEW_TEST_FAMILY2, NEW_TEST_FAMILY
+	}
 }
