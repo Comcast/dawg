@@ -138,9 +138,8 @@ public class DawgStbModelPageGlue {
         }
     }
 
-
     /**
-     * Reopen the model overlay page
+     * Re-open the model overlay page
      * OnZukeStep:"I reopen the model overlay page"    
      * @throws DawgTestException 
      */
@@ -148,10 +147,14 @@ public class DawgStbModelPageGlue {
     public void reOpnenModelOverlay() throws DawgTestException {
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-            driver.findElementByXPath(DawgHousePageElements.CLOSE_IMAGE_IMG_XPATH).click();
+            // Close the model overlay and verify it is closed 
+            WebElement closeImgElement = driver.findElementByXPath(DawgHousePageElements.CLOSE_IMAGE_IMG_XPATH);
+            Assert.assertTrue(closeImgElement.isDisplayed(), "Failed to find the close img icon in model overlay");
+            closeImgElement.click();
             //Verify model overlay closed
             Assert.assertFalse(DawgModelPageHelper.getInstance().isModelOverlayDisplayed(),
                 "Failed to close  model overlay page");
+            // re-open the overlay
             DawgModelPageHelper.getInstance().loadModelOverlay();
             Assert.assertTrue(DawgModelPageHelper.getInstance().isModelOverlayDisplayed(),
                 "Failed to reopen model overlay page");
@@ -172,7 +175,7 @@ public class DawgStbModelPageGlue {
         // Validating the new capability/family added available on the model overlay        
         Assert.assertTrue(propertyList.contains(newPropertyAdded),
             "Failed to add new " + property + "  on model overlay page.");
-        
+
         if (DawgHouseConstants.FAMILY.contains(property)) {
             // Verify family name added get selected in the dropdown list      
             Assert.assertTrue(DawgModelPageHelper.getInstance().isFamilyNameSelected(newPropertyAdded),
@@ -184,8 +187,8 @@ public class DawgStbModelPageGlue {
         } else {
             throw new DawgTestException("Invalid property " + property);
         }
-        
-        
+
+
     }
 
     /**

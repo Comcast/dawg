@@ -77,7 +77,7 @@ public class DawgCommonRestUtils {
             cookie = DawgHouseConstants.DAWG_COOKIE_PREFIX + matcher.group(1);
 
         } finally {
-           // IOUtils.closeQuietly(dawgHouseClient);
+            IOUtils.closeQuietly(dawgHouseClient);
         }
         return cookie;
     }
