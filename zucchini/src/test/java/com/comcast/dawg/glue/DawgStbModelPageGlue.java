@@ -95,9 +95,9 @@ public class DawgStbModelPageGlue {
     public void addNewCapability(String propertyName) throws DawgTestException {
         String addProperty = null;
         if (DawgHouseConstants.FAMILY.contains(propertyName)) {
-            addProperty = Family.NEW_TEST_FAMILY.name();
+            addProperty = Family.NEW_TEST_FAMILY1.name();
         } else if (DawgHouseConstants.CAPABILITY.contains(propertyName)) {
-            addProperty = Capability.NEW_TEST_CAP.name();
+            addProperty = Capability.NEW_TEST_CAP1.name();
         } else {
             LOGGER.error("Invalid Property {}", propertyName);
         }
@@ -144,7 +144,7 @@ public class DawgStbModelPageGlue {
      * @throws DawgTestException 
      */
     @Then("^I reopen the model overlay page$")
-    public void reOpnenModelOverlay() throws DawgTestException {
+    public void reOpenModelOverlay() throws DawgTestException {
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
             // Close the model overlay and verify it is closed 
@@ -203,8 +203,8 @@ public class DawgStbModelPageGlue {
         String alreadyExistingProperty = propertyList.get(0);
         if (DawgHouseConstants.MODEL.contains(property)) {
             // Add a family name and capability for this model            
-            String familyName = Family.NEW_TEST_FAMILY2.name();
-            String capabilityName = Capability.NEW_TEST_CAP2.name();
+            String familyName = Family.NEW_TEST_FAMILY3.name();
+            String capabilityName = Capability.NEW_TEST_CAP3.name();
             DawgModelPageHelper.getInstance().addModelViaModelOverlay(alreadyExistingProperty, familyName,
                 capabilityName);
         } else if (DawgHouseConstants.FAMILY.contains(property) || DawgHouseConstants.CAPABILITY.contains(property)) {
@@ -244,8 +244,8 @@ public class DawgStbModelPageGlue {
     @When("^I add a new model with capability and family name$")
     public void addNewModel() throws DawgTestException {
         String newTestModel = DawgStbModelUIUtils.getInstance().createNewTestModel();
-        String newCapability = Capability.NEW_TEST_CAP1.name();
-        String newFamily = Family.NEW_TEST_FAMILY1.name();
+        String newCapability = Capability.NEW_TEST_CAP2.name();
+        String newFamily = Family.NEW_TEST_FAMILY2.name();
         DawgModelPageHelper.getInstance().addModelViaModelOverlay(newTestModel, newFamily, newCapability);
 
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_NEW_STB_MODEL, newTestModel);
@@ -384,8 +384,8 @@ public class DawgStbModelPageGlue {
     @Then("^I modify all the editable text fields in the dialog box$")
     public void modifyProperties() throws DawgTestException {
         // Add new capability
-        String newCapability = Capability.NEW_TEST_CAP2.name();
-        String newFamily = Family.NEW_TEST_FAMILY2.name();
+        String newCapability = Capability.NEW_TEST_CAP3.name();
+        String newFamily = Family.NEW_TEST_FAMILY3.name();
         DawgModelPageHelper.getInstance().editModelProperties(newFamily, newCapability);
         // keeping the model properties in text context for further validations.
         Map<String, String> modelProperties = new HashMap<String, String>();

@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.testng.annotations.Test;
 
 import com.comcast.dawg.utils.DawgDriverController;
 import com.comcast.zucchini.AbstractZucchiniTest;
@@ -31,8 +30,7 @@ import cucumber.api.CucumberOptions;
 public class DawgHouseTest extends AbstractZucchiniTest {
 
     /** Logger for the DawgHouseTest class. */
-    private static final Logger LOGGER = Logger.getLogger(DawgHouseTest.class);
-   @Test
+    private static final Logger LOGGER = Logger.getLogger(DawgHouseTest.class); 
     @Override
     public List<TestContext> getTestContexts() {
         

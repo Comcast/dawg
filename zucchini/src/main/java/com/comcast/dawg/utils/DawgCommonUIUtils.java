@@ -15,7 +15,6 @@
  */
 package com.comcast.dawg.utils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,16 +66,29 @@ public class DawgCommonUIUtils {
     }
 
     /**
-     * Remove all the added test STB's via Dawghouseclient   
+     * Remove all the added test STB's.
+     * @return true if all STBs removed, false otherwise
      * @throws DawgTestException 
-     * @throws IOException 
      */
     public boolean deleteAllStbs() throws DawgTestException {
-        List<String> testStbIds = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STBS);
+        StringBuilder stbIds = new StringBuilder();
+        Map<String, MetaStb> testStbs = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STBS);
         try {
-            if (null != testStbIds && !testStbIds.isEmpty()) {
-                for (String id : testStbIds) {
-                    removeStbs(id);
+            if (null != testStbs && !testStbs.isEmpty()) {
+                for (Entry<String, MetaStb> entry : testStbs.entrySet()) {
+                    String stbId = entry.getKey();
+                    int statusCode = removeStbViaRestReq(stbId);
+                    if (HttpStatus.SC_OK == statusCode) {
+                        LOGGER.info("Succesfully deleted STB {} from dawg house", stbId);
+                    } else {
+                        stbIds = stbIds.append(stbId).append(",");
+                    }
+                }
+                if (0 == stbIds.toString().trim().length()) {
+                    return true;
+                } else {
+                    LOGGER.error("Failed to delete STBs {} from dawg house", stbIds);
+                    return false;
                 }
             }
         } finally {
@@ -216,26 +228,37 @@ public class DawgCommonUIUtils {
      * Add the STB content and cache it for later deletion after completion of test execution.  
      * @param  stb  Meta stb object to be added.
      * @throws DawgTestException 
-     */
+     */  
     protected void addSTBToDawg(MetaStb stb) throws DawgTestException {
+        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_REMOVE_STB).buildURL() + stb.getId();
+        // To cache the test STBs for later deletion.
         List<String> testStbs = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STBS);
         if (null == testStbs) {
             testStbs = new ArrayList<String>();
         }
-        dawgHouseClient.add(stb);
-        testStbs.add(stb.getId());
-        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STBS, testStbs);
+        String reqBody = new String("{\"macAddress\":\"" + stb.getMacAddress() + "\", \"name\":\"" + stb.getId() + "\"}");
+        DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.PUT);     
+        dawgReqRunner.setContentType(DawgHouseConstants.CONTENT_TYPE).setRequestBody(reqBody);  
+        Response response = DawgCommonRestUtils.getInstance().getRestResponse(dawgReqRunner);
+        if (response.getStatusCode() == HttpStatus.SC_OK) {
+            testStbs.add(stb.getId());
+            TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STBS, testStbs);
+        } else {
+            LOGGER.error("Failed to add STB {} ", stb.getId());
+        }
     }
 
     /**
      * Remove the added test STBs from dawg house  
      * @param  id stb Id
      * @throws DawgTestException 
-     * @throws IOException 
      */
-    private void removeStbs(String id) throws DawgTestException {
-        dawgHouseClient.login(TestServerConfig.getUsername(), TestServerConfig.getPassword());
-        dawgHouseClient.delete(id);
+    private int removeStbViaRestReq(String id) throws DawgTestException {
+        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_UPDATE_MODEL).buildURL() + id;
+        DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.DELETE);
+        dawgReqRunner.setContentType(DawgHouseConstants.CONTENT_TYPE);        
+        return DawgCommonRestUtils.getInstance().getRestResponse(dawgReqRunner).getStatusCode();
+
     }
 
     /**

@@ -405,7 +405,7 @@ public class DawgModelPageHelper {
         }
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         // Select specified capabilities and family name from model overlay       
-        if (!(selectCapabilitiesFromModelOverlay(capabilities) && selectFamilyFromModelOverlay(family))) {
+        if (!selectCapabilitiesFromModelOverlay(capabilities) || !selectFamilyFromModelOverlay(family)) {
             throw new DawgTestException("Failed to select provided capabilities/Family name from model overlay");
         }
         try {

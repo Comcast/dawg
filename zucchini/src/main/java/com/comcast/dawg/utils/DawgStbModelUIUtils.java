@@ -74,7 +74,6 @@ public class DawgStbModelUIUtils {
         if (null == cachedDawgModelNames) {
             cachedDawgModelNames = new ArrayList<String>();
         }
-        System.out.println();
         DawgModel dawgModel = new DawgModel();
         dawgModel.setName(MetaStbBuilder.getUID(TestConstants.MODEL_NAME_PREF));
         dawgModel.setFamily(Family.AVAILABLE_TEST_FAMILY.name());
