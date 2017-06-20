@@ -15,23 +15,19 @@
  */
 package com.comcast.dawg.constants;
 
-import com.comcast.dawg.config.TestServerConfig;
+import java.util.HashSet;
+
+import com.google.common.collect.Sets;
 
 /**
  * Test constant class.
  *
- * @author  Pratheesh TK
+ * @author Pratheesh TK
  */
 public class TestConstants {
 
-    /** Count of STBs to be tagged to tag one. */
-    public static final int UNIQUE_TAG_ONE_STB_COUNT = 2;
-
-    /** Count of STBs to be tagged to tag two. */
-    public static final int UNIQUE_TAG_TWO_STB_COUNT = 3;
-
-    /** Count of STBs to be added to delete tag one. */
-    public static final int DELETE_TAG_ONE_STB_COUNT = 3;
+    /** Array of test STB count to add **/
+    public static final Integer[] STB_TEST_COUNT = {1, 2, 3, 4 };
 
     /** Alert message while trying to duplicate family. */
     public static final String FAMILY_EXIST_ALERT_MSG_SUFFIX = " already exists";
@@ -60,9 +56,6 @@ public class TestConstants {
     /** JSON content type header value. */
     public static final String JSON_CONTENT_TYPE_HEADER_VALUE = "application/json; charset=utf-8";
 
-    /** Content type header. */
-    public static final String CONTENT_TYPE_HEADER_NAME = "Content-Type";
-
     /** Set-top id prefix. * */
     public static final String STB_ID_PREF = "test";
 
@@ -78,27 +71,49 @@ public class TestConstants {
     /** Regular expression for tag name splitting. */
     public static final String TAG_NAME_SPLIT_REGEX = " ";
 
-    /** Rest URI for model configuration. */
-    public static final String MODEL_UPDATE_REST_URI = TestServerConfig.getHouse() + "models/";
+    /** Rest end point for add or update model configuration. */
+    public static final String ADD_OR_UPDATE_MODEL_URI = "models/";
 
-    /** Tag update rest URI. */
-    public static final String TAG_UPDATE_REST_URI = TestServerConfig.getHouse() + "devices/update/tags/";
+    /** Rest end point for GET model configuration. */
+    public static final String GET_STB_MODEL_URI = "models/?id=";
 
-    /** The user name used for the integration tests. */
-    public static final String USER = "integrationuser";
-    
+    /** Rest end point for assign STB models. */
+    public static final String ASSIGN_MODELS = "assignmodels";
+
+    /** Rest end point for update tags in tag cloud */
+    public static final String TAG_UPDATE_REST_URI = "devices/update/tags/";
+
+    /** Rest end point for add or update an stb to dawg house */
+    public static final String ADD_OR_REMOVE_STB_REST_URI = "devices/id/";
+
+    /** Rest end point for model confguration page uri. */
+    public static final String MODEL_CONFIG_URI = "modelsConfig/";
+
     /** Constant for chromeDriverVersion */
     public static final String CHROME_DRIVER_VERSION = "chromeDriverVersion";
-    
+
     /** Constant for version no */
     public static final String VERSION = "2.28";
-    
+
+    /** Configuration page loading time in seconds. */
+    public static final int MODEL_CONFIG_PAGE_LOAD_WAIT = 2;
+
+    /** Model delete completion wait in seconds. */
+    public static final int DELETE_MODEL_COMPLETION_WAIT = 2;
+
+    /** Model addition completion timeout in seconds. */
+    public static final int ADD_MODEL_COMPLETION_TIMEOUT = 3;
+
+    /** Map for dawg roles */
+    public static final HashSet<String> DAWG_ROLES = Sets.newHashSet("ROLE_COLLAR", "ROLE_HOUSE", "ROLE_POUND",
+        "ROLE_SHOW");
+
     /**
      * Test STB capability.
      */
     public static enum Capability {
 
-        AVAILABLE_TEST_CAP, NEW_TEST_CAP1, NEW_TEST_CAP2, NEVER_ADD_CAP
+        AVAILABLE_TEST_CAP, NEW_TEST_CAP2, NEW_TEST_CAP3, NEW_TEST_CAP1
     }
 
     /**
@@ -106,6 +121,6 @@ public class TestConstants {
      */
     public static enum Family {
 
-        AVAILABLE_TEST_FAMILY, NEW_TEST_FAMILY1, NEW_TEST_FAMILY2, NEVER_ADD_FAMILY
+        AVAILABLE_TEST_FAMILY, NEW_TEST_FAMILY2, NEW_TEST_FAMILY3, NEW_TEST_FAMILY1
     }
 }

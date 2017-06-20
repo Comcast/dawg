@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 package com.comcast.dawg.constants;
+
 /**
- * Constant class for SauceLabs automation  
- *
+ * Constant class for SauceLabs automation
  * @author  Priyanka 
- *  */
+ */
 public class SauceLabConstants {
 
     /** Constant to run tests in saucelabs. */
@@ -47,6 +47,6 @@ public class SauceLabConstants {
      */
     public static final String WINDOWS = "windows";
     public static final String MAC = "mac";
-    public static final String LINUX = "linux"; 
+    public static final String LINUX = "linux";
 
 }

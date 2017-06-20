@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -32,6 +31,7 @@ import com.comcast.dawg.config.SauceLabConfig;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.SauceLabConstants;
 import com.comcast.dawg.constants.TestConstants;
+import com.comcast.dawg.selenium.Browser;
 import com.comcast.magicwand.builders.PhoenixDriverBuilder;
 import com.comcast.magicwand.builders.PhoenixDriverIngredients;
 import com.comcast.magicwand.drivers.PhoenixDriver;
@@ -41,17 +41,13 @@ import com.comcast.magicwand.spells.saucelabs.SaucePhoenixDriver;
 import com.comcast.magicwand.spells.saucelabs.SauceProvider;
 import com.comcast.magicwand.spells.web.chrome.ChromeWizardFactory;
 import com.comcast.zucchini.TestContext;
-import com.comcast.dawg.selenium.Browser;
 
 /**
  * Controller class for Creating Web driver instances 
  * @author Priyanka 
  */
 public class DawgDriverController {
-
-    /** Logger for the DawgTestManager class. */
-    private static final Logger LOGGER = Logger.getLogger(DawgDriverController.class);
-
+    
     /** Chrome browser setting arguments. */
     private static final List<String> CHROME_OPTION_ARGUMENTS = Collections.unmodifiableList(Arrays.asList(
         "--start-maximized", "allow-running-insecure-content", "ignore-certificate-errors"));

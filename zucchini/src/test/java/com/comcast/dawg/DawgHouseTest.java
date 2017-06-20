@@ -25,14 +25,15 @@ import cucumber.api.CucumberOptions;
  * 
  * @author Priyanka
  */
-@CucumberOptions(glue = {"com.comcast.dawg.glue" }, features = {"src/test/resources/features/" }, tags = {"@uitest" })
+@CucumberOptions(glue = {"com.comcast.dawg.glue" }, features = {"src/test/resources/features/" }, tags = {"@uitest"})
+
 public class DawgHouseTest extends AbstractZucchiniTest {
 
     /** Logger for the DawgHouseTest class. */
-    private static final Logger LOGGER = Logger.getLogger(DawgHouseTest.class);
-   
+    private static final Logger LOGGER = Logger.getLogger(DawgHouseTest.class); 
     @Override
     public List<TestContext> getTestContexts() {
+        
         try {
             return DawgDriverController.getDriverTestContexts();
         } catch (DawgTestException | IOException e) {
@@ -40,7 +41,6 @@ public class DawgHouseTest extends AbstractZucchiniTest {
         }
         return null;
     }
-
     /**
      * Terminates the Web driver processes at the end of the test
      */

@@ -15,7 +15,6 @@
  */
 package com.comcast.dawg.constants;
 
-import com.comcast.dawg.config.TestServerConfig;
 
 /**
  * Holds all page element constants for dawg house UI
@@ -41,6 +40,9 @@ public class DawgHousePageElements {
 
     /** Xpath for toggle button element. */
     public static final String TOGGLE_BUTTON_XPATH = "//input[@class='toggle-all-checkbox']";
+    
+    /** Xpath for all the listed capabilities in mode overlay page. */
+    public static final String CAPBILITY_XPATH ="//div[@id='capList']//*";
 
     /** Xpath for getting the filter table div element. */
     public static final String FILTERED_TABLE_DIV_ELEMENT_XPATH = "//div[@class='filteredTable']";
@@ -125,6 +127,7 @@ public class DawgHousePageElements {
     public static final String FILTERED_TABLE = "filteredTable";
     public static final String COLLAPSABLE_ROW = "collapsableRow";
     public static final String CONDITION_TEXT = "conditionText";
+    public static final String SIGN_IN_BUTTON = "Sign In";
 
     /** Wait time in second for STB checkbox selection. */
     public static final int STB_CHECKBOX_SELECTION_WAIT = 2;
@@ -147,11 +150,8 @@ public class DawgHousePageElements {
     /** Identifier for model save button element. */
     public static final String SAVE_MODEL_BUTTON_IDENTIFIER = "bSave";
 
-    /** Time out in second for completion of family addition. */
-    public static final int FAMILY_ADDITION_TIMEOUT = 2;
-
-    /** Time out in second for capability addition. */
-    public static final int CAPABILITY_ADDITION_TIMEOUT = 2;
+    /** Time out in second for capability/family addition. */
+    public static final int PROPERTY_ADDITION_TIMEOUT = 2;
 
     /** Family select element. */
     public static final String FAMILY_SELECT_ELEMENT_ID = "modelFamily";
@@ -160,7 +160,7 @@ public class DawgHousePageElements {
     public static final String MODEL_FAMILY_OPTIONS_XPATH = "//select[@id='modelFamily']/option";
 
     /** Xapth for add family button element. */
-    public static final String ADD_FAMILY_BUTTON_INPUT_XPATH = "//input[@class='bAddFam']";
+    public static final String ADD_FAMILY_BUTTON_XPATH = "//input[@class='bAddFam']";
 
     /** Xpath for family text input element. */
     public static final String ADD_FAMILY_TEXT_INPUT_XPATH = "//input[@class='addFamInp']";
@@ -180,14 +180,11 @@ public class DawgHousePageElements {
     /** Capability input element identifier. */
     public static final String ADD_CAP_INPUT_IDENTIFIER = "addCapInp";
 
-    /** Model dialog box loading wait time in second. */
-    public static final int MODEL_DIALOG_BOX_WAIT = 5;
-
     /** Xpath of add capability button. */
-    public static final String ADD_CAP_BUTTON_INPUT_XPATH = "//input[@class='bAddCap']";
+    public static final String ADD_CAP_BUTTON_XPATH = "//input[@class='bAddCap']";
 
     /** Xpath of add capability text input element. */
-    public static final String ADD_CAP_TEXT_INPUT_XPATH = "//input[@class='addCapInp']";
+    public static final String ADD_CAP_XPATH = "//input[@class='addCapInp']";
 
     /** Model delete button identifier. */
     public static final String DELETE_BUTTON_TD_IDENTIFIER = "input.bDeleteModel";
@@ -202,18 +199,6 @@ public class DawgHousePageElements {
      * completion of Xpath.
      */
     public static final String STB_MODEL_TR_PAR_XPATH = "//td[text()='" + REPLACEABLE_ELEMENT + "']/..";
-
-    /** Configuration page loading time in seconds. */
-    public static final int MODEL_CONFIG_PAGE_LOAD_WAIT = 5;
-
-    /** Model configuration page URL. */
-    public static final String MODEL_CONFIG_URL = TestServerConfig.getHouse() + "modelsConfig/";
-
-    /** Model delete completion wait in seconds. */
-    public static final int DELETE_MODEL_COMPLETION_WAIT = 2;
-
-    /** Model addition completion timeout in seconds. */
-    public static final int ADD_MODEL_COMPLETION_TIMEOUT = 3;
 
     /**
      * Partial Xpath for identifying the capability check box element. Capability name to be placed
@@ -240,11 +225,17 @@ public class DawgHousePageElements {
     public static final String USER_INPUT_ID = "changeUserInput";
     /** The id of the div that appears when the user inputs an invalid user name */
     public static final String BAD_USER_MSG_ID = "badlogin";
-    
+
     /** xpath for login form **/
     public static final String LOGIN_FORM_XPATH = "//form[@name='loginForm']";
-    
+
     /** xpath for invalid login message **/
     public static final String INVALID_LOGIN_MSG_XPATH = "//div[@class='alert alert-danger']";
+    
+    /** Model overlay div element **/
+    public static final String MODEL_OVERLAY_DIV = "addModelDiv";
+    
+    /** Model config table **/
+    public static final String MODEL_CONFIG_TABLE_ID = "modelsTable";
 
 }
