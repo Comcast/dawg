@@ -66,7 +66,7 @@ public class DawgToggleAllGlue {
         //Verify all stb's in the filter table are selected
         if ("checked".equals(action)) {
             Assert.assertTrue(DawgIndexPageHelper.getInstance().isAllStbCheckboxesAreSelected(),
-                "All the STB check boxes are bot displayed as selected.");
+                "All the STB check boxes are not displayed as selected.");
         } else if ("unchecked".equals(action)) {
             Assert.assertTrue(DawgIndexPageHelper.getInstance().isAllStbCheckboxesAreDeselected(),
                 "Failed to uncheck all STB check boxes.");
