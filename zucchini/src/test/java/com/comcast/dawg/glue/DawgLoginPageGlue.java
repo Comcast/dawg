@@ -43,7 +43,7 @@ public class DawgLoginPageGlue {
      * OnZukeStep:"I select (.*) button"    
      * @throws DawgTestException 
      */
-    @When("^I select (.*) button$")
+    @When("^I select '(.*)' button$")
     public void selectButton(String button) throws DawgTestException {
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);

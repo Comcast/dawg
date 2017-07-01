@@ -72,11 +72,10 @@ public class DawgCommonUIUtils {
      */
     public boolean deleteAllStbs() throws DawgTestException {
         StringBuilder stbIds = new StringBuilder();
-        Map<String, MetaStb> testStbs = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STBS);
+        ArrayList<String> testStbs = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STBS);
         try {
             if (null != testStbs && !testStbs.isEmpty()) {
-                for (Entry<String, MetaStb> entry : testStbs.entrySet()) {
-                    String stbId = entry.getKey();
+                for (String stbId : testStbs) {
                     int statusCode = removeStbViaRestReq(stbId);
                     if (HttpStatus.SC_OK == statusCode) {
                         LOGGER.info("Succesfully deleted STB {} from dawg house", stbId);
@@ -254,7 +253,7 @@ public class DawgCommonUIUtils {
      * @throws DawgTestException 
      */
     private int removeStbViaRestReq(String id) throws DawgTestException {
-        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_UPDATE_MODEL).buildURL() + id;
+        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_REMOVE_STB).buildURL() + id;
         DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.DELETE);
         dawgReqRunner.setContentType(DawgHouseConstants.CONTENT_TYPE);        
         return DawgCommonRestUtils.getInstance().getRestResponse(dawgReqRunner).getStatusCode();
