@@ -37,9 +37,9 @@ Scenario: Edit a model from model configuration page
 	Then I should see the model name field is disabled 
 	And I modify all the editable text fields in the dialog box 
 	Then I should see the modified fields get reflected in the model page 
-	
+
 Scenario: Delete a model from the model configuration page 
-	When I select delete model button 
+	When I select 'delete model' button 
 	Then an alert message 'Are you sure you want to delete' should be displayed 
 	And I select ok on the alert box 
 	Then the model will be removed from the configuration page 
