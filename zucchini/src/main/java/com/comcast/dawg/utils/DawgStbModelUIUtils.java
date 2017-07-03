@@ -96,7 +96,7 @@ public class DawgStbModelUIUtils {
      */
     private int addStbModelViaRest(DawgModel model) throws DawgTestException {
         StringBuilder capabilities = this.getCapabilities(model);
-        String url = RestURIConfig.getReqURI(DawgHouseConstants.MODEL_CONFIG).buildURL() + model.getName();
+        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_UPDATE_MODEL).buildURL() + model.getName();
         String reqBody = "{\"name\": \"" + model.getName() + "\",\"capabilities\":[" + capabilities + "],\"family\": \"" + model.getFamily() + "\"}";
         DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.POST);
         dawgReqRunner.setContentType(DawgHouseConstants.CONTENT_TYPE).setRequestBody(reqBody);
@@ -158,7 +158,7 @@ public class DawgStbModelUIUtils {
      * @throws DawgTestException     
      */
     private int deleteStbModelViaRest(String modelName) throws DawgTestException {
-        String url = RestURIConfig.getReqURI(DawgHouseConstants.MODEL_CONFIG).buildURL() + modelName;
+        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_UPDATE_MODEL).buildURL() + modelName;
         DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.DELETE);
         dawgReqRunner.setContentType(TestConstants.JSON_CONTENT_TYPE_HEADER_VALUE);
         Response response = DawgCommonRestUtils.getInstance().getRestResponse(dawgReqRunner);

@@ -129,7 +129,7 @@ public class DawgToggleAllGlue {
                 stbs = stbs.append(stbId).append(",");
             }
         }
-        Assert.assertTrue(0 < stbs.toString().length(),
+        Assert.assertTrue((0 == stbs.toString().length()),
             String.format("Check box corresponding to STB(%s) is not checked.", stbs));
     }
 

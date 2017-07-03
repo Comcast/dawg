@@ -64,7 +64,7 @@ public class DawgHouseConstants {
     public static final String FAMILY = "family";
     public static final String MODEL = "model";
     public static final String CAPABILITY = "capability";
-    public static final String SIGN_IN_BUTTON = "signIn";
+    public static final String SIGN_IN_BUTTON = "Sign In";
     public static final String DELETE_MODEL_BUTTON = "delete model";
     public static final String ADD_OR_UPDATE_MODEL = "Add or update model";
     public static final String GET_MODEL = "Get model";

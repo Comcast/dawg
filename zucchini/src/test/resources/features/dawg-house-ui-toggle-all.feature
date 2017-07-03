@@ -15,7 +15,7 @@ Scenario: Verify the toggle all behaviour when single tag selected
 	When I select toggle all checkbox 
 	Then I should see all STB checkboxes as checked
 	And the delete option of tag should be displayed	
-	
+
 Scenario: Verify the toggle all behaviour when multiple tag selected 
 	Given I selected any tag element in tag cloud	
 	When I select toggle all checkbox 

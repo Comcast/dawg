@@ -315,7 +315,7 @@ public class DawgStbModelPageGlue {
      * @throws DawgTestException 
      */
 
-    @Then("^I select(.*) on the alert box$")
+    @Then("^I select (.*) on the alert box$")
     public void selectOkInAlertBox(String button) throws DawgTestException {
         Alert deleteAlert = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_ALERT);
         if ("OK".equals(button.toUpperCase())) {
