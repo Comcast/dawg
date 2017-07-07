@@ -39,7 +39,6 @@ public class DawgHouseConstants {
     public static final String CONTEXT_TEST_STBS = "testStbs";
     public static final String CONTEXT_TEST_TAGS = "testTags";
     public static final String CONTEXT_TEST_STB_MODEL = "testStbModel";
-    public static final String CONTEXT_CACHED_TEST_STB_MODEL = "cachedStbModel"; 
     public static final String CONTEXT_NEW_PROPERTY_ADDED = "newCapabilityAdded";
     public static final String CONTEXT_PROPERTY_LIST = "capList";
     public static final String CONTEXT_ALREADY_EXISTING_PROPERTY = "configProperty";
@@ -47,8 +46,14 @@ public class DawgHouseConstants {
     public static final String CONTEXT_MODEL_PROPERTIES = "newCapability";
     public static final String CONTEXT_AUTH_HEADER = "Authorization";
     public static final String CONTEXT_ALERT = "alert";
+    public static final String CONTEXT_FILTER_CONDITION = "filterCondition";
+    public static final String CONTEXT_EXPECTED_CONDITION = "expectedCondition";
+    public static final String CONTEXT_FILTER_COUNT = "filterCount";
     public static final String CONTEXT_COOKIE = "cookie";
-
+    public static final String CONTEXT_TEST_STB_ID = "advaceFilterStbId";
+    public static final String CONTEXT_CONDTN_BTNS = "condtnBtns";
+    public static final String CONTEXT_FILTER_TO_DELETE = "filterToDelete";
+    public static final String CONTEXT_FILTER_TO_NOT_DELETE = "filterToNotDelete";
 
     /**
      * Defines various constants used in dawg-house automation
@@ -78,6 +83,15 @@ public class DawgHouseConstants {
     public static final String DAWG_HOUSE_STR = "dawg-house";
     public static final String MODEL_CONFIG = "modelConfig";
     public static final String SPLIT_REGEX = "\\s*,\\s*";
-
-
+    public static final String REPLACE_REGEX = "[()]";
+    public static final String FILTER_REQ_PARAM = "testtoken" + System.currentTimeMillis() + "?q=return_nothing_query";
+    public static final String BTN_NAME_AND = "AND";
+    public static final String BTN_NAME_OR = "OR";
+    public static final String BTN_NAME_NOT = "NOT";
+    public static final String BTN_NAME_DELETE = "DEL";
+    public static final String BTN_NAME_BREAK = "BREAK";
+    public static final String BTN_NAME_SEARCH = "Search";
+    public static final String BTN_NAME_ADD = "Add";
+    public static final String CHECK_FILTERS = "check";
+    public static final String UNCHECK_FILTERS = "unCheck";
 }

@@ -36,7 +36,7 @@ import cucumber.api.java.en.When;
  * @author priyanka.sl 
  */
 public class DawgToggleAllGlue {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DawgStbModelPageGlue.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DawgToggleAllGlue.class);
 
     /**
      * Select the toggle all checkbox button 

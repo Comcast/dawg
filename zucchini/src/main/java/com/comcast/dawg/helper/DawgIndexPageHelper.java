@@ -16,12 +16,11 @@
 package com.comcast.dawg.helper;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
 import com.comcast.dawg.DawgTestException;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.DawgHousePageElements;
@@ -39,8 +38,7 @@ public class DawgIndexPageHelper {
     private static DawgIndexPageHelper indexPageHelper = null;
 
     /**
-     * Creates single instance of indexPageHelper
-     * 
+     * Creates single instance of indexPageHelper    
      * @return indexPageHelper
      */
     public static DawgIndexPageHelper getInstance() {
@@ -53,8 +51,7 @@ public class DawgIndexPageHelper {
     }
 
     /**
-     * Enter login credentials to dawg-house login form
-     * 
+     * Enter login credentials to dawg-house login form    
      * @param- username
      * @param -password
      * @throws DawgTestException
@@ -65,15 +62,14 @@ public class DawgIndexPageHelper {
             driver.findElement(By.name("username")).sendKeys(username);
             driver.findElement(By.name("password")).sendKeys(password);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            throw new DawgTestException("Failed to inspect the Webelement:" + e.getMessage());
         }
     }
 
     /**
-     * Select the tag name element in the tag cloud 
-     * @param tagName
-     *            tag name to be selected.
-     * @throws DawgTestException
+     *  Select the tag name element in the tag cloud    
+     * @param tagName tag name to be selected.
+     * @throws DawgTestException 
      */
     public void selectTagElement(String tagName) throws DawgTestException {
         try {
@@ -81,26 +77,27 @@ public class DawgIndexPageHelper {
             tagCloudDivElement.click();
             SeleniumWaiter.waitTill(DawgHousePageElements.BULK_TAG_CLICK_WAIT);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            throw new DawgTestException("Failed to inspect the Webelement:" + e.getMessage());
         }
     }
 
     /**
-     * Select the toggle all button   
+     * Select the toggle all button
      * @return returns true if toggle all button is selected, false otherwise
-     * @throws DawgTestException
+     * @throws DawgTestException 
      */
     public boolean selectToggleAllButton() throws DawgTestException {
-        WebElement toggleBtnelement = null;
+        WebElement toggleButton = null;
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-            toggleBtnelement = driver.findElementByXPath(DawgHousePageElements.TOGGLE_BUTTON_XPATH);
-            toggleBtnelement.click();
+            toggleButton = driver.findElementByXPath(DawgHousePageElements.TOGGLE_BUTTON_XPATH);
+            toggleButton.click();
             SeleniumWaiter.waitTill(DawgHousePageElements.TOGGLE_ALL_CHECKBOX_WAIT);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            throw new DawgTestException("Failed to inspect the Webelement:" + e.getMessage());
         }
-        return toggleBtnelement.isSelected();
+        return toggleButton.isSelected();
+
     }
 
     /**
@@ -123,38 +120,38 @@ public class DawgIndexPageHelper {
     }
 
     /**
-     * Return the tag delete div element.  
+     * Return the tag delete div element. 
      * @param tagName Name of the tag element.
      * @return delete div element of the tag.
      * @throws DawgTestException 
      */
     public WebElement getTagDeleteDivElement(String tagName) throws DawgTestException {
-        WebElement delDivElement = null;
+        WebElement element = null;
         try {
             WebElement tagDivElement = getTagCloudTagDivElement(tagName);
-            delDivElement = tagDivElement.findElement(By.className(DawgHousePageElements.TAG_DELETE_DIV_ELEMENT_IDENTIFIER));
-
+            element = tagDivElement.findElement(By.className(DawgHousePageElements.TAG_DELETE_DIV_ELEMENT_IDENTIFIER));
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            throw new DawgTestException("Failed to inspect the Webelement:" + e.getMessage());
         }
-        return delDivElement;
+        return element;
     }
 
+
     /**
-     * Provides all the list of STB check box element displayed. 
+     * Provides all the list of STB check box element displayed.
      * @return list of bulk checkbox displayed
      * @throws DawgTestException 
      */
     private List<WebElement> getAllStbCheckboxesInFilteredTable() throws DawgTestException {
-        List<WebElement> tblElements = null;
+        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
+        List<WebElement> elements = null;
         try {
-            RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
             WebElement filterTableElement = driver.findElementByXPath(DawgHousePageElements.FILTERED_TABLE_DIV_ELEMENT_XPATH);
-            tblElements = filterTableElement.findElements(By.xpath(DawgHousePageElements.BULK_CHECKBOX_INPUT_IDENTIFIER));
+            elements = filterTableElement.findElements(By.xpath(DawgHousePageElements.BULK_CHECKBOX_INPUT_IDENTIFIER));
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            throw new DawgTestException("Failed to inspect the Webelement:" + e.getMessage());
         }
-        return tblElements;
+        return elements;
     }
 
     /**
@@ -179,12 +176,12 @@ public class DawgIndexPageHelper {
             }
         } else {
             throw new DawgTestException("Failed to find STB checkbox element/s in filter table");
-
         }
         return isAllDeselected;
     }
 
     /**
+
      * Validate all the STB check box displayed to user is in selected state. 
      * @return true if all the displayed STB check boxes are checked, false if
      *         any of the displayed STB check box is not checked or none of the

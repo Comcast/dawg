@@ -19,32 +19,31 @@ import com.comcast.dawg.DawgTestException;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.TestConstants;
 
-
 /**
- * Enum defined for various REST request URIs in Dawg house/Dawg pound
+ * Enum defined for various REST request URLs in Dawg house/Dawg pound
  * @author priyanka.sl
  */
 public enum RestURIConfig {
-    
-   //@formatter:on
+    //@formatter:off
     ADD_UPDATE_MODEL_URI(DawgHouseConstants.ADD_OR_UPDATE_MODEL, TestConstants.ADD_OR_UPDATE_MODEL_URI),
     GET_STB_MODEL_URI(DawgHouseConstants.GET_MODEL, TestConstants.GET_STB_MODEL_URI),
     ASSIGN_MODELS_URI(DawgHouseConstants.ASSIGN_MODEL, TestConstants.GET_STB_MODEL_URI),
     UPDATE_TAG_REST_URI(DawgHouseConstants.ADD_OR_REMOVE_TAG, TestConstants.TAG_UPDATE_REST_URI), 
     ADD_REMOVE_STB_REST_URI(DawgHouseConstants.ADD_OR_REMOVE_STB, TestConstants.ADD_OR_REMOVE_STB_REST_URI),
     MODEL_CONFIG_PAGE_URI(DawgHouseConstants.MODEL_CONFIG,TestConstants.MODEL_CONFIG_URI);
-   //@formatter:off
-    
+   //@formatter:on
+
     private String operation;
 
     private String requestURI;
-    
+
     /**
      * Get the REST request URI for performing various dawg house operations
      * @param operation operations associated with various REST URI
      * @return RestURIConfig
      * @throws DawgTestException
-     */    
+     */
+
     public static RestURIConfig getReqURI(String operation) throws DawgTestException {
         RestURIConfig uriConfig = null;
         for (RestURIConfig url : RestURIConfig.values()) {
@@ -58,7 +57,7 @@ public enum RestURIConfig {
         }
         return uriConfig;
     }
-    
+
     /**
      * Enum constructor
      * 

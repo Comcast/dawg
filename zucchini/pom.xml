@@ -18,9 +18,10 @@
 		<package>com/comcast/dawg/selenium/chromedriver</package>
 		<magic-wand.version>4.0.3</magic-wand.version>
 		<zukes.version>[2.2,3)</zukes.version>
+
 	</properties>
 	<dependencies>
-	<dependency>
+		<dependency>
 			<groupId>com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<version>2.6.0</version>
@@ -47,9 +48,10 @@
 			<version>2.2-SNAPSHOT</version>
 		</dependency>
 
+
 		<dependency>
 			<groupId>com.comcast.video.dawg</groupId>
-			<artifactId>dawg-common</artifactId>
+			<artifactId>dawg-server-common</artifactId>
 			<version>2.2-SNAPSHOT</version>
 		</dependency>
 

@@ -69,8 +69,7 @@ public class DawgStbModelUIUtils {
      */
     public DawgModel createTestStbModelAndCache() throws DawgTestException {
         /** Cached model name for final deletion. */
-        List<String> cachedDawgModelNames = TestContext.getCurrent().get(
-            DawgHouseConstants.CONTEXT_CACHED_TEST_STB_MODEL);
+        List<String> cachedDawgModelNames = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_MODEL);
         if (null == cachedDawgModelNames) {
             cachedDawgModelNames = new ArrayList<String>();
         }
@@ -84,7 +83,7 @@ public class DawgStbModelUIUtils {
             throw new DawgTestException("Failed to add the model, the response returned is : " + response);
         }
         cachedDawgModelNames.add(dawgModel.getName());
-        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_CACHED_TEST_STB_MODEL, cachedDawgModelNames);
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STB_MODEL, cachedDawgModelNames);
         return dawgModel;
     }
 
@@ -116,8 +115,7 @@ public class DawgStbModelUIUtils {
                 if (0 < capabilities.length()) {
                     capabilities.append(',');
                 }
-                capabilities.append('"').append(capability).append('"');
-            }
+                capabilities.append('"').append(capability).append('"');            }
         }
         return capabilities;
     }
@@ -128,8 +126,7 @@ public class DawgStbModelUIUtils {
      */
     public boolean deleteAllTestSTBModels() throws DawgTestException {
         StringBuilder stbModels = new StringBuilder();
-        List<String> cachedDawgModelNames = TestContext.getCurrent().get(
-            DawgHouseConstants.CONTEXT_CACHED_TEST_STB_MODEL);
+        List<String> cachedDawgModelNames = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_MODEL);
         if (null != cachedDawgModelNames) {
             for (String modelName : cachedDawgModelNames) {
                 int responseCode = deleteStbModelViaRest(modelName);
@@ -171,8 +168,7 @@ public class DawgStbModelUIUtils {
      * @throws DawgTestException     
      */
     public String createNewTestModel() {
-        List<String> cachedDawgModelNames = TestContext.getCurrent().get(
-            DawgHouseConstants.CONTEXT_CACHED_TEST_STB_MODEL);
+        List<String> cachedDawgModelNames = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_MODEL);
         if (null == cachedDawgModelNames) {
             cachedDawgModelNames = new ArrayList<String>();
         }
@@ -180,6 +176,7 @@ public class DawgStbModelUIUtils {
         String newTestModel = MetaStbBuilder.getUID(TestConstants.MODEL_NAME_PREF);
         // Caching the model name for later deletion.
         cachedDawgModelNames.add(newTestModel);
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STB_MODEL, cachedDawgModelNames);
         return newTestModel;
     }
 }
