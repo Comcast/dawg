@@ -30,6 +30,7 @@ import com.comcast.dawg.constants.TestConstants;
 import com.comcast.dawg.selenium.SeleniumImgGrabber;
 import com.comcast.dawg.utils.DawgCommonUIUtils;
 import com.comcast.dawg.utils.DawgStbModelUIUtils;
+import com.comcast.video.dawg.common.MetaStb;
 import com.comcast.zucchini.TestContext;
 
 import cucumber.api.Scenario;
@@ -103,6 +104,16 @@ public class ZukeHook {
     }
 
     /**
+     * This method add test STBs for performing advanced filter search      
+     * @throws DawgTestException 
+     */
+    @Before("@advanceSearch")
+    public void createStbModelForAdvanceSearch() throws DawgTestException {
+        MetaStb stb = DawgCommonUIUtils.getInstance().addTestSTBToDawg(TestConstants.STB_ID_ADVACED_FILTER);
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STB_ID, stb.getId());
+    }
+
+    /**
      * This method embeds screenshots to cucumber reports when ever a step fails.
      * @param  scenario
      */
@@ -118,11 +129,12 @@ public class ZukeHook {
      * @throws DawgTestException 
      */
 
-    @After("@toggleall, @restest")
+    @After("@toggleall, @restest, @advanceSearch")
     public void clearAddedTags(Scenario s) throws DawgTestException {
         DawgCommonUIUtils.getInstance().removeAllTagsAddedInTest();
         DawgCommonUIUtils.getInstance().deleteAllStbs();
     }
+
     /**
      * This method clears all the added test STB models from dawg-house   
      * @throws DawgTestException 

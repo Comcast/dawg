@@ -16,7 +16,6 @@
 package com.comcast.dawg.constants;
 
 import java.util.HashSet;
-
 import com.google.common.collect.Sets;
 
 /**
@@ -62,6 +61,9 @@ public class TestConstants {
     /** Tag name prefix. * */
     public static final String TAG_NAME_PREF = "testTag";
 
+    /** Advanced filter name prefix. * */
+    public static final String STB_ID_ADVACED_FILTER = "advFilter";
+
     /** Remove operation for tag rest call. */
     public static final String REMOVE_OPERATION_TAG_REST = "remove";
 
@@ -101,8 +103,22 @@ public class TestConstants {
     /** Model delete completion wait in seconds. */
     public static final int DELETE_MODEL_COMPLETION_WAIT = 2;
 
-    /** Model addition completion timeout in seconds. */
-    public static final int ADD_MODEL_COMPLETION_TIMEOUT = 3;
+    /** Model overlay wait time in seconds. */
+    public static final int OVERLAY_LOAD_WAIT = 3;
+    /** STB test model name. */
+    public static final String TEST_MODEL = "TestModel";
+
+    /** STB test power name. */
+    public static final String TEST_POWER = "TestPower";
+
+    /** STB test Make name. */
+    public static final String TEST_MAKE = "TestMake";
+
+    /** STB test Capability name. */
+    public static final String TEST_CAPABILITY = "TestCap";
+
+    /** STB test prefix. */
+    public static final String TEST = "Test";
 
     /** Map for dawg roles */
     public static final HashSet<String> DAWG_ROLES = Sets.newHashSet("ROLE_COLLAR", "ROLE_HOUSE", "ROLE_POUND",
@@ -112,15 +128,15 @@ public class TestConstants {
      * Test STB capability.
      */
     public static enum Capability {
-
-        AVAILABLE_TEST_CAP, NEW_TEST_CAP2, NEW_TEST_CAP3, NEW_TEST_CAP1
+        AVAILABLE_TEST_CAP, NEW_TEST_CAP1, NEW_TEST_CAP2, NEW_TEST_CAP3
     }
 
     /**
      * Test STB families.
      */
     public static enum Family {
-
-        AVAILABLE_TEST_FAMILY, NEW_TEST_FAMILY2, NEW_TEST_FAMILY3, NEW_TEST_FAMILY1
+        AVAILABLE_TEST_FAMILY, NEW_TEST_FAMILY1, NEW_TEST_FAMILY2, NEW_TEST_FAMILY3
     }
+    /** list of valid search filter conditions,**/
+    public static final String[] VALID_FILTER_CONDITIONS = {"Model equals " + TEST_MODEL, "Make equals " + TEST_MAKE, "Capabilities equals " + TEST_CAPABILITY, "Capabilities contains " + TEST, "Make contains " + TEST };
 }

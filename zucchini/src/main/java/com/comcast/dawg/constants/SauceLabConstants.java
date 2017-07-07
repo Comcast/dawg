@@ -31,7 +31,7 @@ public class SauceLabConstants {
     public static final String SAUCE_URL = "http://ondemand.saucelabs.com:80/wd/hub";
 
     /** Constant for dawg test */
-    public static final String DAWG_TEST = "dawgtest";
+    public static final String DAWG_TEST = "dawgtest123";
 
     /** Constant for dawg test name for setting sauce capability */
     public static final String DAWG_TEST_INFO = "xDAWG Tests";

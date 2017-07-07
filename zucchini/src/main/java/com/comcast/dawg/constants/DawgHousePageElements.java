@@ -40,9 +40,9 @@ public class DawgHousePageElements {
 
     /** Xpath for toggle button element. */
     public static final String TOGGLE_BUTTON_XPATH = "//input[@class='toggle-all-checkbox']";
-    
+
     /** Xpath for all the listed capabilities in mode overlay page. */
-    public static final String CAPBILITY_XPATH ="//div[@id='capList']//*";
+    public static final String CAPBILITY_XPATH = "//div[@id='capList']//*";
 
     /** Xpath for getting the filter table div element. */
     public static final String FILTERED_TABLE_DIV_ELEMENT_XPATH = "//div[@class='filteredTable']";
@@ -124,6 +124,7 @@ public class DawgHousePageElements {
     public static final String BTN_DEL = "btnDel";
     public static final String BTN_BREAK = "btnBreak";
     public static final String BTN_SEARCH = "btnSearch";
+    public static final String BTN_ADD = "btnAddCondition";
     public static final String FILTERED_TABLE = "filteredTable";
     public static final String COLLAPSABLE_ROW = "collapsableRow";
     public static final String CONDITION_TEXT = "conditionText";
@@ -231,11 +232,14 @@ public class DawgHousePageElements {
 
     /** xpath for invalid login message **/
     public static final String INVALID_LOGIN_MSG_XPATH = "//div[@class='alert alert-danger']";
-    
+
     /** Model overlay div element **/
     public static final String MODEL_OVERLAY_DIV = "addModelDiv";
-    
+
     /** Model config table **/
     public static final String MODEL_CONFIG_TABLE_ID = "modelsTable";
+    
+    /** Device list xpath **/
+    public static final String DEVICE_LIST_XPATH = "//input[contains(@class, collapsableRow)]";
 
 }
