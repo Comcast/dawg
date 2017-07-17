@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.comcast.video.dawg</groupId>
+		<artifactId>dawg</artifactId>
+		<version>2.2-SNAPSHOT</version>
+	</parent>
+	<artifactId>dawg-zucchini-tests</artifactId>
+	<version>2.2-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>(Comcast) ${project.artifactId}</name>
+	<description>Dawg House functional testing</description>
+	<properties>
+		<package>com/comcast/dawg/selenium/chromedriver</package>
+		<magic-wand.version>4.0.3</magic-wand.version>
+		<jayway-restassured.version>2.4.0</jayway-restassured.version>		
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.comcast.zucchini</groupId>
+			<artifactId>zucchini</artifactId>
+			<version>[2.2, 3)</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${jayway-restassured.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comcast.video.dawg</groupId>
+			<artifactId>dawg-client</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comcast.video.dawg</groupId>
+			<artifactId>dawg-common</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comcast.video</groupId>
+			<artifactId>stb-io-api</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		<dependency>
+            <groupId>org.ini4j</groupId>
+            <artifactId>ini4j</artifactId>
+			<version>0.5.4</version>
+        </dependency>
+		<dependency>
+			<groupId>com.comcast.magic-wand</groupId>
+			<artifactId>core</artifactId>
+			<version>${magic-wand.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comcast.magic-wand</groupId>
+			<artifactId>chrome</artifactId>
+			<version>${magic-wand.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comcast.magic-wand</groupId>
+			<artifactId>saucelabs</artifactId>
+			<version>${magic-wand.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<artifactId>selenium-remote-driver</artifactId>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<version>3.0.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
