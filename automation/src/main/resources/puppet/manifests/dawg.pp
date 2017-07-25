@@ -8,6 +8,11 @@ class dawg::dawg {
         source_url => $tomcatSrc,
     }
 
+    exec {'remove-packaged-apps':
+        command => "/usr/bin/rm -Rf /opt/tomcat/webapps/*",
+        require => Tomcat::Install['/opt/tomcat'],
+    }
+
     file { '/etc/init.d/tomcat':
         content => hiera('tomcat.init'),
         mode => '0755',
@@ -79,19 +84,19 @@ class dawg::dawg {
    tomcat::war { "${dsArtifactId}.war":
         catalina_base => '/opt/tomcat',
         war_source    => "/tmp/${dsArtifactId}-${version}.war",
-        require => [Nexus::Artifact[$dsArtifactId], Config_file::Config_file['dawg.ini']],
+        require => [Nexus::Artifact[$dsArtifactId], Config_file::Config_file['dawg.ini'], Exec['remove-packaged-apps']],
    }
 
    tomcat::war { "${dhArtifactId}.war":
         catalina_base => '/opt/tomcat',
         war_source    => "/tmp/${dhArtifactId}-${version}.war",
-        require => [Nexus::Artifact[$dhArtifactId], Config_file::Config_file['dawg.ini']],
+        require => [Nexus::Artifact[$dhArtifactId], Config_file::Config_file['dawg.ini'], Exec['remove-packaged-apps']],
    }
 
    tomcat::war { "${dpArtifactId}.war":
         catalina_base => '/opt/tomcat',
         war_source    => "/tmp/${dpArtifactId}-${version}.war",
-        require => [Nexus::Artifact[$dpArtifactId], Config_file::Config_file['dawg.ini']],
+        require => [Nexus::Artifact[$dpArtifactId], Config_file::Config_file['dawg.ini'], Exec['remove-packaged-apps']],
    }
 
 }
