@@ -4,11 +4,11 @@
     <parent>
         <groupId>com.comcast.video.dawg</groupId>
         <artifactId>dawg</artifactId>
-        <version>2.2-SNAPSHOT</version>
+        <version>2.2.6</version>
     </parent>
 
     <artifactId>libraries</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2.6</version>
     <packaging>pom</packaging>
 
     <name>(Comcast) ${project.artifactId}</name>
