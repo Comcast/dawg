@@ -1,5 +1,5 @@
-@uitestI
-Feature: Various button(Add, Search, AND, OR, NOT, DEL, BREAK) display verification in STB device Advanced Filter Overlay.
+@uitest
+Feature: Advanced Filter Overlay button(Add, Search, AND, OR, NOT, DEL, BREAK) display
 
 Background: 
 	Given I am on advanced filter overlay 

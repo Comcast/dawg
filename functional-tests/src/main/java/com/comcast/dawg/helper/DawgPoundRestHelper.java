@@ -67,4 +67,54 @@ public class DawgPoundRestHelper {
         Response response = dawgRestReqService.sendRequest();
         return (null != response) && (HttpStatus.SC_OK == response.getStatusCode());
     }
+
+    /**
+     * Send GET request for STB reservation details
+     * @param reserveToken 
+     *          STB reservation token
+     * @return boolean returns True if response is not null, have status code 200 and response contains reservation token
+     * @throws DawgTestException 
+     */
+    public boolean sendGetReqForReservationDetail(String reserveToken) throws DawgTestException {
+        String url = RestURIConfig.GET_STB_RESERVATION_DETAIL_URI.buildURL(TestServerConfig.getPound()) + reserveToken;
+        DawgRestRequestService dawgRestReqService = new DawgRestRequestService(url, Method.GET);
+
+        // Sending GET request
+        Response response = dawgRestReqService.sendRequest();
+        return (null != response) && (HttpStatus.SC_OK == response.getStatusCode()) && (response.asString().contains(
+            reserveToken));
+    }
+
+    /**
+     * Check if STB is reserved in dawg pound
+     * @param stbDeviceId 
+     *          STB device id
+     * @return boolean returns True if response is not null, have status code 200 and is not empty
+     * @throws DawgTestException 
+     */
+    public boolean isStbReserved(String stbDeviceId) throws DawgTestException {
+        String url = RestURIConfig.IS_STB_RESERVED_URI.buildURL(TestServerConfig.getPound()) + stbDeviceId;
+        DawgRestRequestService dawgRestReqService = new DawgRestRequestService(url, Method.GET);
+
+        // Sending GET request
+        Response response = dawgRestReqService.sendRequest();
+        return (null != response) && (HttpStatus.SC_OK == response.getStatusCode()) && (!response.asString().isEmpty());
+    }
+
+    /**
+     * Unreserve an STB in dawg pound via POST request
+     * @param stbDeviceId 
+     *          STB device id
+     * @return boolean returns True if response is not null, have status code 200 and response is not empty
+     * @throws DawgTestException 
+     */
+    public boolean unreserveStbInDawg(String stbDeviceId) throws DawgTestException {
+        String url = RestURIConfig.UNRESERVE_STB_URI.buildURL(TestServerConfig.getPound()) + stbDeviceId;
+        DawgRestRequestService dawgRestReqService = new DawgRestRequestService(url, Method.POST);
+
+        // Sending POST request
+        Response response = dawgRestReqService.sendRequest();
+        return (null != response) && (HttpStatus.SC_OK == response.getStatusCode());
+    }
+
 }

@@ -1,5 +1,5 @@
-@uitestI @toggleall
-Feature: Verify Dawg House's toggle all UIbehaviours 
+@uitest @toggleall
+Feature: Toggle all UIbehaviours 
 
 Background: 
 	Given I am on the dawg house home page 

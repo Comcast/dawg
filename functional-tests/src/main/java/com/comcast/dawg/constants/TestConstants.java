@@ -48,6 +48,12 @@ public class TestConstants {
     /** Alert message while trying to duplicate capability. */
     public static final String CAPABILITY_EXIST_ALERT_MSG_SUFFIX = " already exists";
 
+    /** String corresponding to dawg pound */
+    public static final String DAWG_POUND = "dawg-pound";
+
+    /** String corresponding to dawg house */
+    public static final String DAWG_HOUSE = "dawg-house";
+
     /** Empty string. */
     public static final String EMPTY_STRING = "";
 
@@ -55,7 +61,7 @@ public class TestConstants {
     public static final String MODEL_NAME_PREF = "testModel";
 
     /** STB Model capabilties. */
-    public static final String INIT_MODEL_CAPS = "CAP";
+    public static final String INIT_MODEL_CAPS = "[\"CAP\"]";
 
     /** STB Model family. */
     public static final String INIT_MODEL_FAMILY = "FAMILY";
@@ -74,6 +80,11 @@ public class TestConstants {
 
     /** Advanced filter name prefix. * */
     public static final String STB_ID_ADVACED_FILTER = "advfilter";
+    
+    /** Bulk tag name prefix. * */
+    public static final String STB_ID_BULK_TAG = "bulk";	
+    /** Edit Device name prefix. * */
+    public static final String STB_ID_EDIT_DEVICE = "editdevice";
 
     /** Remove operation for tag rest call. */
     public static final String REMOVE_OPERATION_TAG_REST = "remove";
@@ -110,12 +121,24 @@ public class TestConstants {
 
     /** Rest end point for reserve STB in dawg pound. */
     public static final String RESERVE_STB_URI = "reservations/reserve";
+    
+    /** Rest end point to unreserve STB in dawg pound. */
+    public static final String UNRESERVE_STB_URI = "reservations/unreserve/";
+
+    /** Rest end point for get STB reservation details in dawg pound. */
+    public static final String GET_STB_RESERVATION_DETAIL_URI = "reservations/reserved/token/";
+    
+    /** Rest end point to check if STB is reserved in dawg pound. */
+    public static final String IS_STB_RESERVED_URI = "reservations/reserved/id/";
+
+    /** Rest end point to get reserved STB list in dawg pound. */
+    public static final String GET_STB_RESERVATION_LIST_URI = "reservations/list";
 
     /** Rest end point for add, update and remove an STB to dawg house */
     public static final String ADD_OR_REMOVE_STB_REST_URI = "devices/id/";
 
     /** Rest end point for remove an STB by query from dawg house */
-    public static final String REMOVE_STB_BY_QUERY_URI = "devices/id/";
+    public static final String REMOVE_STB_BY_QUERY_URI = "devices/delete?id=";
 
     /** Rest end point for update STB parameters in dawg house */
     public static final String UPDATE_STB_DEVICE_URI = "devices/update?id=";
@@ -172,7 +195,7 @@ public class TestConstants {
     public static enum Family {
         AVAILABLE_TEST_FAMILY, NEW_TEST_FAMILY1, NEW_TEST_FAMILY2, NEW_TEST_FAMILY3
     }
-    
+
     /** list of valid search filter conditions,**/
     public static final String[] VALID_FILTER_CONDITIONS = {"Model equals " + TEST_MODEL, "Make equals " + TEST_MAKE, "Capabilities equals " + TEST_CAPABILITY, "Capabilities matches " + TEST, "Make matches " + TEST };
 

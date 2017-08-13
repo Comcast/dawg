@@ -16,7 +16,7 @@
 	<properties>
 		<package>com/comcast/dawg/selenium/chromedriver</package>
 		<magic-wand.version>4.0.3</magic-wand.version>
-		<jayway-restassured.version>2.4.0</jayway-restassured.version>		
+		<jayway-restassured.version>2.4.0</jayway-restassured.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,23 +37,23 @@
 		<dependency>
 			<groupId>com.comcast.video.dawg</groupId>
 			<artifactId>dawg-client</artifactId>
-			<version>2.2.4</version>
+			<version>[2.2.4,)</version>
 		</dependency>
 		<dependency>
 			<groupId>com.comcast.video.dawg</groupId>
 			<artifactId>dawg-common</artifactId>
-			<version>2.2.4</version>
+			<version>[2.2.4,)</version>
 		</dependency>
 		<dependency>
 			<groupId>com.comcast.video</groupId>
 			<artifactId>stb-io-api</artifactId>
-			<version>2.2.4</version>
+			<version>[2.2.4,)</version>
 		</dependency>
 		<dependency>
-            <groupId>org.ini4j</groupId>
-            <artifactId>ini4j</artifactId>
+			<groupId>org.ini4j</groupId>
+			<artifactId>ini4j</artifactId>
 			<version>0.5.4</version>
-        </dependency>
+		</dependency>
 		<dependency>
 			<groupId>com.comcast.magic-wand</groupId>
 			<artifactId>core</artifactId>

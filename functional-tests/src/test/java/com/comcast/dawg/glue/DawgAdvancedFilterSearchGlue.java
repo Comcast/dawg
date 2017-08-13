@@ -19,11 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
-
 import com.comcast.dawg.DawgTestException;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.DawgHousePageElements;
@@ -31,6 +26,11 @@ import com.comcast.dawg.helper.DawgAdvancedFilterPageHelper;
 import com.comcast.dawg.selenium.SeleniumImgGrabber;
 import com.comcast.dawg.selenium.SeleniumWaiter;
 import com.comcast.zucchini.TestContext;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -53,34 +53,34 @@ public class DawgAdvancedFilterSearchGlue {
         String buttonsNotSelected = DawgAdvancedFilterPageHelper.getInstance().verifyBtnSelected(buttons);
         Assert.assertTrue(0 == buttonsNotSelected.trim().length(),
             "Failed to select condition button/s" + buttonsNotSelected);
-        SeleniumWaiter.waitTill(5);
+        SeleniumWaiter.waitTill(DawgHousePageElements.DEFAULT_WAIT); 
     }
 
     /**
      * Verify the search results displayed based on the search criteria applied
      * @param condition 
-     * @throws DawgTestException
+     * @throws DawgTestException 
      */
     @Then("^I should see the search results displayed ?(for NOT condition)? in the filter table$")
     public void verifySearchResults(String condition) throws DawgTestException {
-        String testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_ID);
+        String testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_ADVACE_FILTER);
+        SeleniumImgGrabber.addImage();
         //verify test STB listed in the search results displayed
         String filterCondtn = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_EXPECTED_CONDITION);
-        SeleniumImgGrabber.addImage();
         Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().isResultsDisplayed(filterCondtn, testStb),
             "Failed to find search results in filter table");
     }
 
     /**
      * Verify the conditions(AND, OR, NOT )applied to filter values
-     * @param conditionBtn - List of condition buttons       
-     * @throws DawgTestException     
+     * @param conditionBtn - List of condition buttons
      */
     @Then("^I should see condition '(.*)' applied (?:for all|to) filter values$")
-    public void verifyCondtitonApplied(List<String> conditionBtn) throws DawgTestException {
+    public void verifyCondtitonApplied(List<String> conditionBtn) {
         List<String> addedFilters = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();
         String expectedFilterCondtn = DawgAdvancedFilterPageHelper.getInstance().getExpectedFilterCondtions(
             conditionBtn, addedFilters);
+        SeleniumImgGrabber.addImage();
         Assert.assertTrue(addedFilters.contains(expectedFilterCondtn),
             "Failed to find filter condition" + expectedFilterCondtn + "in condition list");
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_EXPECTED_CONDITION, expectedFilterCondtn);
@@ -90,14 +90,13 @@ public class DawgAdvancedFilterSearchGlue {
      * Enter filter values(fields, option,value) in advanced filter overlay  
      * @param filed
      * @param option
-     * @param value      
-     * @throws DawgTestException     
+     * @param value 
      */
     @Given("^there is an advanced filter with \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"$")
-    public void addFilterConditions(String field, String option, String value) throws DawgTestException {
+    public void addFilterConditions(String field, String option, String value) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         if ("testId".equals(value)) {
-            value = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_ID);
+            value = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_ADVACE_FILTER);
         }
         DawgAdvancedFilterPageHelper.getInstance().selectFilterCondition(field, option, value);
         //Verify filter values are get selected in dropdownlist 
@@ -113,13 +112,12 @@ public class DawgAdvancedFilterSearchGlue {
      * Verify filter values(fields, option,value) added in advanced filter overlay  
      * @param filed
      * @param option
-     * @param value      
-     * @throws DawgTestException     
+     * @param value 
      */
     @Then("^I should see filter \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\" values added in filter overlay$")
-    public void verifyFilterValuesAdded(String field, String option, String value) throws DawgTestException {
+    public void verifyFilterValuesAdded(String field, String option, String value) {
         if ("testId".equals(value)) {
-            value = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_ID);
+            value = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_ADVACE_FILTER);
         }
         StringBuilder condition = new StringBuilder();
         String expectedFilter = null;
@@ -130,10 +128,12 @@ public class DawgAdvancedFilterSearchGlue {
         if (filterConditions.size() == 1 && filterConditions.get(0).contains("!")) {
             expectedFilter = condition.insert(0, "!").toString();
         }
+        SeleniumImgGrabber.addImage();
         expectedFilter = condition.toString();
         Assert.assertTrue(!filterConditions.isEmpty(), "Failed to find filter conditions in advanced filter overlay");
         // Verify the conditions added in filter overlay
-        Assert.assertTrue(filterConditions.contains(expectedFilter), "Filter condition not added in the filter overlay");
+        Assert.assertTrue(filterConditions.contains(expectedFilter),
+            "Filter condition not added in the filter overlay");
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_FILTER_CONDITION, filterConditions);
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_EXPECTED_CONDITION, expectedFilter);
     }
@@ -153,8 +153,7 @@ public class DawgAdvancedFilterSearchGlue {
         boolean isApplied = false;
         List<String> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();
         int filterCount = filterConditions.size();
-        Assert.assertTrue(
-            filterCount > count,
+        Assert.assertTrue(filterCount > count,
             "Atleast 3 filter conditions should be available to apply " + condition + "to" + position + "two filter values");
 
         filtersToDeSelect = filterConditions.subList(count, filterCount);
@@ -180,12 +179,12 @@ public class DawgAdvancedFilterSearchGlue {
         } else {
             throw new DawgTestException("Invalid position" + position);
         }
+        SeleniumImgGrabber.addImage();
         //Tick the filter values to select
-        DawgAdvancedFilterPageHelper.getInstance().checkOrUncheckFilterValues(filtersToSelect,
-            DawgHouseConstants.CHECK_FILTERS);
+        DawgAdvancedFilterPageHelper.getInstance().checkOrUncheckFilterValues(filtersToSelect, DawgHouseConstants.CHECK);
         //Uncheck  filter values if they are checked
         DawgAdvancedFilterPageHelper.getInstance().checkOrUncheckFilterValues(filtersToDeSelect,
-            DawgHouseConstants.UNCHECK_FILTERS);
+            DawgHouseConstants.UNCHECK);
         //Click search buton
         selectBtnFmFilterOverlay(condition);
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_FILTER_CONDITION, filterConditions);
@@ -198,33 +197,26 @@ public class DawgAdvancedFilterSearchGlue {
     /**
      * Verify conditions AND/OR/NOT applied to first/last filter values
      * @param condition - AND/OR/NOT 
-     * @param position - Last or first position  
-     * @throws DawgTestException     
+     * @param position - Last or first position         
      */
 
     @Then("^I should see '(.*)' condition applied for (.*) two values$")
-    public void verifyCondtnApplied(List<String> condition, String pos) throws DawgTestException {
+    public void verifyCondtnApplied(List<String> condition, String pos) {
+        SeleniumImgGrabber.addImage();
         // Get the expected filter condition
         String expectedFilter = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_EXPECTED_CONDITION);
-        Map<String, Boolean> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterCondnWithCheckedStatus();
-        Assert.assertTrue(!filterConditions.isEmpty(), "Failed to find filter conditions");
-        boolean isFound = false;
-        for (Map.Entry<String, Boolean> entry : filterConditions.entrySet()) {
-            //Verify the expected filter condition matches with the filter value found 
-            if (expectedFilter.equals(entry.getKey()) && entry.getValue()) {
-                isFound = true;
-            }
-        }
-        Assert.assertTrue(isFound, condition + "condition is not applied to two filter values");
+        //Verify filter condition applied       
+        Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().isFilterDisplayed(expectedFilter),
+            condition + "condition is not applied to two filter values");
+
     }
 
     /**
      * Add filter values specified in the data table
-     * @param filterValues to add    
-     * @throws DawgTestException     
+     * @param filterValues to add
      */
     @Given("^I added following filter values to advanced filter overlay$")
-    public void addFilterValues(DataTable filterValues) throws DawgTestException {
+    public void addFilterValues(DataTable filterValues) {
         List<List<String>> data = filterValues.raw();
         List<String> addedFilters = new ArrayList<String>();
         for (List<String> filtersToAdd : data) {
@@ -241,11 +233,10 @@ public class DawgAdvancedFilterSearchGlue {
 
     /**
      * Verify condition button applied for the filter values
-     * @param buttons    
-     * @throws DawgTestException     
+     * @param buttons  
      */
     @Then("^I should see '(.*)' condition applied for the filter values$")
-    public void verifyGroupCondtn(List<String> buttons) throws DawgTestException {
+    public void verifyGroupCondtn(List<String> buttons) {
         Map<String, Boolean> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterCondnWithCheckedStatus();
         Assert.assertTrue(!filterConditions.isEmpty(), "Failed to find filter conditions");
         List<String> filterValues = new ArrayList<String>(filterConditions.keySet());
@@ -261,15 +252,14 @@ public class DawgAdvancedFilterSearchGlue {
 
     /**
      * Select the filter values 
-     * @param buttons    
-     * @throws DawgTestException     
+     * @param buttons 
      */
     @When("^I select both filter values with group condition applied$")
-    public void selectFilterValues() throws DawgTestException {
+    public void selectFilterValues() {
         Map<String, Boolean> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterCondnWithCheckedStatus();
         //Tick the filter values to select
         DawgAdvancedFilterPageHelper.getInstance().checkOrUncheckFilterValues(
-            new ArrayList<String>(filterConditions.keySet()), DawgHouseConstants.CHECK_FILTERS);
+            new ArrayList<String>(filterConditions.keySet()), DawgHouseConstants.CHECK);
         filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterCondnWithCheckedStatus();
         //Verify filter values are selected or not       
         Assert.assertTrue(!filterConditions.isEmpty(), "Failed to find filter conditions");
@@ -279,15 +269,15 @@ public class DawgAdvancedFilterSearchGlue {
                 message.append(entry).append(",");
             }
         }
+        SeleniumImgGrabber.addImage();
         Assert.assertTrue(message.toString().length() == 0, message + "is not displayed as checked");
     }
 
     /**
-     * Select first filter value to delete  
-     * @throws DawgTestException     
+     * Select first filter value to delete        
      */
     @When("^I select first filter value to delete$")
-    public void selectFilterForDelete() throws DawgTestException {
+    public void selectFilterForDelete() {
         //Get the filter values added in filter overlay
         List<String> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();
 
@@ -300,10 +290,10 @@ public class DawgAdvancedFilterSearchGlue {
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_FILTER_CONDITION, filterConditions);
         //Tick the first filter value to delete
         DawgAdvancedFilterPageHelper.getInstance().checkOrUncheckFilterValues(filterConditions.subList(0, 1),
-            DawgHouseConstants.CHECK_FILTERS);
+            DawgHouseConstants.CHECK);
         //Uncheck  remaining filter values if they are checked
         DawgAdvancedFilterPageHelper.getInstance().checkOrUncheckFilterValues(filtersToNotDelete,
-            DawgHouseConstants.UNCHECK_FILTERS);
+            DawgHouseConstants.UNCHECK);
     }
 
     /**
@@ -321,7 +311,8 @@ public class DawgAdvancedFilterSearchGlue {
         } else if ("selected".equals(type)) {
             //Delete selected filter values
             String filterDeleted = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_FILTER_TO_DELETE);
-            List<String> filtersBeforeDelete = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_FILTER_CONDITION);
+            List<String> filtersBeforeDelete = TestContext.getCurrent().get(
+                DawgHouseConstants.CONTEXT_FILTER_CONDITION);
             // Verify filter value removed from filter overlay
             Assert.assertTrue(
                 !filterConditions.contains(filterDeleted) && filterConditions.size() == filtersBeforeDelete.size() - 1,
@@ -333,8 +324,7 @@ public class DawgAdvancedFilterSearchGlue {
     }
 
     /**
-     * Verify second filter value remains in filter overlay after the deletion of first filter value    
-     * @throws DawgTestException     
+     * Verify second filter value remains in filter overlay after the deletion of first filter value 
      */
     @Then("^second filter value remains in filter overlay$")
     public void verifyFilterNotRemoved() {
@@ -361,16 +351,16 @@ public class DawgAdvancedFilterSearchGlue {
 
     /**
      * Verify filter conditions splitted
-     * @param filterCountSplitted  
-     * @throws DawgTestException     
+     * @param filterCountSplitted         
      */
     @Then("^each filter conditions splitted as (\\d+)$")
-    public void verifyFiltersSplitted(int filterCountSplitted) throws DawgTestException {
+    public void verifyFiltersSplitted(int filterCountSplitted) {
         //Get the filters before applying BREAK condition
         List<String> buttonApplied = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_CONDTN_BTNS);
         List<String> currentFilters = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();
         //Verify the splitted filters does not contain applied condition
         StringBuilder message = new StringBuilder();
+        SeleniumImgGrabber.addImage();
         for (String btn : buttonApplied) {
             //Verify filter values applied with specified conditions.
             if (currentFilters.toString().contains(btn.toLowerCase())) {

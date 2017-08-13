@@ -1,7 +1,7 @@
 @dawg_rest
-Feature: Covers various test cases related to STB device (addition/updation/removal of STB device from Dawg House)
+Feature: REST verification STB device operations-1(addition/updation/removal of STB device from Dawg House)
 
-@rest_stb_add
+@rest_stb_add @dawg_rest
 Scenario Outline: Add an STB to dawg house via PUT request with invalid model params
 	When I send PUT request to 'add an STB' with STB device id <id>, mac address <mac>, STB model name <model>, model capabilities <caps> and model family <family>
 	Then I should receive status code 200
@@ -29,7 +29,7 @@ Scenario Outline: <endpoint> STB details from dawg house via <rest_method> reque
 	Examples:
 	| rest_method | endpoint |
 	| GET         | get      |
-	| DELETE      | delete   |
+	#| DELETE      | delete   |
 	| POST        | retrieve |
 	
 Scenario: Remove STB details from dawg house via GET request with invalid device id specified as query param	
@@ -74,8 +74,8 @@ Scenario Outline: Retrieve STB details from dawg house via GET request with inva
 	Examples:
 	|model|
 	|?refresh=true|
-	|%3Frefresh%3Dtrue|
-
+	#|%3Frefresh%3Dtrue|
+@disabled
 Scenario Outline: Retrieve STB details from dawg house via GET request with illegal model name specified as query param
 	When I send GET request to 'get STB' with illegal model name <model> as query param
 	Then I should receive status code 404

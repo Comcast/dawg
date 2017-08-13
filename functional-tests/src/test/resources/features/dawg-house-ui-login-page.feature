@@ -1,5 +1,5 @@
-@uitestI
-Feature: Log In
+@uitest
+Feature: Dawg house Log In
 	Verify the log in behaviour of the dawg house portal
 
 Background:

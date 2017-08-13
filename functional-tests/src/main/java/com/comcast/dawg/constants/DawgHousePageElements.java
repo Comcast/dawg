@@ -15,7 +15,6 @@
  */
 package com.comcast.dawg.constants;
 
-
 /**
  * Holds all page element constants for dawg house UI
  *
@@ -33,9 +32,6 @@ public class DawgHousePageElements {
     public static final String TAG_ID_PARENT_DIV_XPATH = TAG_ID_DIV_XPATH + "/..";
 
     /** Xpath for STB filter checkbox row element. */
-    public static final String STB_FILTER_DIV_XPATH = "//div[@data-deviceid='" + REPLACEABLE_ELEMENT + "']";
-
-    /** Xpath for STB filter checkbox row element. */
     public static final String STB_FILTER_CHECKBOX_XPATH = "//input[@data-deviceid='" + REPLACEABLE_ELEMENT + "']";
 
     /** Xpath for toggle button element. */
@@ -45,16 +41,10 @@ public class DawgHousePageElements {
     public static final String CAPBILITY_XPATH = "//div[@id='capList']//*";
 
     /** Xpath for getting the filter table div element. */
-    public static final String FILTERED_TABLE_DIV_ELEMENT_XPATH = "//div[@class='filteredTable']";
+    public static final String FILTERED_TABLE_DIV_ELEMENT_XPATH = "//div[@class='filteredTable']/*";
 
-    /** Xpath for getting the filtered table successor div elements. */
-    public static final String FILTERED_TABLE_SUCCESSOR_DIV_ELEMENTS_XPATH = FILTERED_TABLE_DIV_ELEMENT_XPATH + "/div";
-
-    /** Class attribute value for tag highlight. * */
-    public static final String TAG_HIGHLIGHT_CLASS_ATTRIBUTE_VALUE = "tagContainerSelected";
-
-    /** Name of value attribute element. */
-    public static final String VALUE_ATTRIBUTE_ELEMENT = "value";
+    /** Class attribute value for tag highlight color. **/
+    public static final String TAG_HIGHLIGHT_COLOUR = "rgba(255, 255, 0, 1)";
 
     /** Beginning char for opacity. */
     public static final char OPACITY_BEGINNING_CHAR = ' ';
@@ -62,23 +52,14 @@ public class DawgHousePageElements {
     /** Ending char for opacity. */
     public static final char OPACITY_ENDING_CHAR = ';';
 
-    /** Time out in second for index page load. * */
-    public static final int INDEX_PAGE_LOAD_TIMEOUT = 120;
-
-    /** Waiting time in second for bulk tag select or deselect to happen. * */
-    public static final int BULK_TAG_CLICK_WAIT = 4;
-
-    /** Time out in second for tag element to get removed. */
-    public static final int TAG_DELETION_TIMEOUT = 10;
+    /** Waiting time in second * */
+    public static final int DEFAULT_WAIT = 4;
 
     /** Waiting time in second for toggle all check box selection/deselection. */
     public static final int TOGGLE_ALL_CHECKBOX_WAIT = 1;
 
     /** The class of the &lt;section&gt; tag that holds the user information. */
     public static final String USER_SECTION_CLASS = "user";
-
-    /** The class of the &lt;checkbox&gt; that is used to select for tagging. */
-    public static final String BULK_CHECK_BOX = "bulk-checkbox";
 
     /** Filtered table device id attribute name. */
     public static final String FILTERED_TABLE_DEVICE_ID_ATTRIBUTE = "data-deviceid";
@@ -88,12 +69,6 @@ public class DawgHousePageElements {
 
     /** Tag delete div element identifier attribute value. */
     public static final String TAG_DELETE_DIV_ELEMENT_IDENTIFIER = "tagDelete";
-
-    /** Class attribute name of parent element of the tag div element in the tag cloud. */
-    public static final String TAG_CLOUD_PARENT_TAG_DIV_CLASS_ATTRIBUTE = "class";
-
-    /** Tag cloud tag text element identifier attribute value. */
-    public static final String TAG_CLOUD_TAG_TEXT_ELEMENT_IDENTIFIER = "tagText";
 
     /** Bulk check box identifier. */
     public static final String BULK_CHECKBOX_INPUT_IDENTIFIER = ".//input[@class='bulk-checkbox']";
@@ -108,8 +83,6 @@ public class DawgHousePageElements {
     public static final String BULK_TAG_BTN_ID = "bulkTagButton";
 
     /** The check box attribute name that uniquely identifies the check box. */
-    public static final String DEVICE_ID_ATTR = "data-deviceId";
-
     public static final String ADV_SEARCH_BUTTON = "advSearchBtn";
     public static final String FIELD_SELECT = "fieldSelect";
     public static final String OP_SELECT = "opSelect";
@@ -125,22 +98,16 @@ public class DawgHousePageElements {
     public static final String BTN_BREAK = "btnBreak";
     public static final String BTN_SEARCH = "btnSearch";
     public static final String BTN_ADD = "btnAddCondition";
-    public static final String FILTERED_TABLE = "filteredTable";
-    public static final String COLLAPSABLE_ROW = "collapsableRow";
     public static final String CONDITION_TEXT = "conditionText";
-    public static final String SIGN_IN_BUTTON = "Sign In";
-
-    /** Wait time in second for STB checkbox selection. */
-    public static final int STB_CHECKBOX_SELECTION_WAIT = 2;
+    public static final String MODIFIED_ICON = "modIcon";
+    public static final String MODIFIED_ICON_CLASS = "modifiedIcon";
+    public static final String NEW_PROP_KEY = "newPropKey";
+    public static final String CB_NEW_PROP_SET = "cbNewPropSet";
+    public static final String BTN_ADD_PROP = "btnAddProp";
+    public static final String SAVE_BTN_CLASS = "btnSave";
 
     /** Wait time in second for STB checkbox element to be displayed. */
-    public static final int STB_CHECKBOX_ELEMENT_WAIT = 8;
-
-    /** Predefined wait in second for ensuring the load of index page. */
-    public static final int INDEX_PAGE_LOAD_COMPLETION_WAIT = 5;
-
-    /** Timeout in second for verifying the presence of alert during deletion of tag. */
-    public static final int TAG_DELETION_ALERT_PRESENCE_TIMEOUT = 2;
+    public static final int STB_CHECKBOX_ELEMENT_WAIT = 5;
 
     /** Identifier for family TD element. */
     public static final String MODEL_FAMILY_TD_IDENTIFIER = "tModelFamily";
@@ -150,9 +117,6 @@ public class DawgHousePageElements {
 
     /** Identifier for model save button element. */
     public static final String SAVE_MODEL_BUTTON_IDENTIFIER = "bSave";
-
-    /** Time out in second for capability/family addition. */
-    public static final int PROPERTY_ADDITION_TIMEOUT = 2;
 
     /** Family select element. */
     public static final String FAMILY_SELECT_ELEMENT_ID = "modelFamily";
@@ -201,45 +165,46 @@ public class DawgHousePageElements {
      */
     public static final String STB_MODEL_TR_PAR_XPATH = "//td[text()='" + REPLACEABLE_ELEMENT + "']/..";
 
-    /**
-     * Partial Xpath for identifying the capability check box element. Capability name to be placed
-     * for completion of Xpath.
-     */
-    public static final String CAPABILITY_CHECK_BOX_PAR_XPATH = "//input[@id='" + REPLACEABLE_ELEMENT + "']";
-
-    /**
-     * Partial Xpath for identifying the capability div element. Capability name to be placed for
-     * completion of Xpath.
-     */
-    public static final String CAPABILITY_DIV_PAR_XPATH = "//div[text()='" + REPLACEABLE_ELEMENT + "']";
-
-    /**
-     * Partial Xpath for identifying the family option element. Family name need to be placed for
-     * completion of Xpath.
-     */
-    public static final String FAMILY_OPTION_PAR_XPATH = "//option[text()='" + REPLACEABLE_ELEMENT + "']";
-
-    /** Login user. */
-    public String userName = null;
-
-    /** The id of the text field that the user inputs the name of the user they want to use to log in to for dawg-house */
-    public static final String USER_INPUT_ID = "changeUserInput";
-    /** The id of the div that appears when the user inputs an invalid user name */
-    public static final String BAD_USER_MSG_ID = "badlogin";
-
     /** xpath for login form **/
     public static final String LOGIN_FORM_XPATH = "//form[@name='loginForm']";
 
     /** xpath for invalid login message **/
     public static final String INVALID_LOGIN_MSG_XPATH = "//div[@class='alert alert-danger']";
 
-    /** Model overlay div element **/
-    public static final String MODEL_OVERLAY_DIV = "addModelDiv";
-
     /** Model config table **/
     public static final String MODEL_CONFIG_TABLE_ID = "modelsTable";
-    
-    /** Device list xpath **/
-    public static final String DEVICE_LIST_XPATH = "//input[contains(@class, collapsableRow)]";
 
+    /** Link for editing STB properties displayed on right click at index page STB. */
+    public static final String EDIT_DEVICE_LINK = "Edit";
+
+    /** Xpath of mine button selected **/
+    public static final String MINE_BTN_XPATH = "//button[contains(@class,'btnMine btnSelected')]";
+
+    /** Xpath of history div **/
+    public static final String HISTORY_DIV_XPATH = "//ol[@id='searchHistorySelectable']//*";
+
+    public static final String MODIFIED_ICON_XPATH = "//div[contains(@class,'modIcon')]";
+    /**
+     * Partial Xpath for identifying STB row element from index webpage. Content inside row need to be placed for
+     * completion of Xpath.
+     */
+    public static final String STB_ROW_PAR_XPATH = "//div[@data-deviceid='" + REPLACEABLE_ELEMENT + "']";
+
+    /** Xpath for getting the edit device overlay div element. */
+    public static final String EDIT_DEVICE_OVERLAY_XPATH = "//div[contains(@class, 'editDeviceOverlay ui-dialog-content')]";
+
+    /** Xpath for getting the edit device overlay properties row elements. */
+    public static final String EDIT_DEVICE_OVERLAY_PROPS_TD_XPATH = "//td[@class='editKeyCell']";
+
+    /** Xpath for getting the close button in device overlay. */
+    public static final String CLOSE_BTN_XPATH = "//button[contains(@class,'ui-button-icon-only ui-dialog-titlebar-close')]";
+
+    /** Selected search history filter xpath **/
+    public static final String SELECTED_SEARCH_HISTORY_ENTRY = "//li[contains(@class ,'searchSelected')]";
+
+    /** xpath for advance search overlay **/
+    public static final String ADVANCE_SEARCH_OVERLAY_XPATH = "//div[contains(@class ,'advSearchOverlay ui-dialog-content')]";
+
+    /** xpath for modified cell in edit device overlay **/
+    public static final String MODIFIED_CELL_XPATH = "//td[@class='modifiedCell']/*";
 }

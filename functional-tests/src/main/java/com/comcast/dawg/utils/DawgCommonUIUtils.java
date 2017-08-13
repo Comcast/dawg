@@ -16,10 +16,15 @@
 package com.comcast.dawg.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.comcast.cereal.CerealException;
 import com.comcast.cereal.engines.JsonCerealEngine;
@@ -32,18 +37,16 @@ import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.TestConstants;
 import com.comcast.dawg.helper.DawgHouseRestHelper;
 import com.comcast.video.dawg.common.MetaStb;
+import com.comcast.video.dawg.house.DawgHouseClient;
+import com.comcast.video.stbio.meta.Program;
 import com.comcast.zucchini.TestContext;
 import com.jayway.restassured.internal.http.Method;
 import com.jayway.restassured.response.Response;
 
-import org.apache.http.HttpStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Utility class for handling STB operations in dawg index page
  *
- * @author  Pratheesh TK
+ * @author  Priyanka
  */
 public class DawgCommonUIUtils {
 
@@ -72,13 +75,13 @@ public class DawgCommonUIUtils {
      * @return true if all entities removed, false otherwise
      * @throws DawgTestException 
      */
+
     @SuppressWarnings("unchecked")
-    public boolean deleteSTBsOrModelsFromList(String contextKey) throws DawgTestException {
+    public boolean deleteTestSTBsOrModels(String contextKey) throws DawgTestException {
         StringBuilder entityIds = new StringBuilder();
         Object testEntities = TestContext.getCurrent().get(contextKey);
         if (null != testEntities) {
-            if (!DawgHouseConstants.CONTEXT_TEST_STBS.equals(
-                contextKey) && !DawgHouseConstants.CONTEXT_TEST_STB_MODELS.equals(contextKey)) {
+            if (!DawgHouseConstants.CONTEXT_TEST_STBS.equals(contextKey) && !DawgHouseConstants.CONTEXT_TEST_STB_MODELS.equals(contextKey)) {
                 throw new DawgTestException("Context key is not handled");
             }
             if (!(testEntities instanceof ArrayList<?>)) {
@@ -100,8 +103,9 @@ public class DawgCommonUIUtils {
             if (0 == entityIds.toString().trim().length()) {
                 entityList.clear();
                 TestContext.getCurrent().set(contextKey, entityList);
-                TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STB_ID, null);
-                TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STB_MODEL, null);
+                //Clear the test STBs/STB models created stored in text context.
+                clearTextContextValues(DawgHouseConstants.STBS);
+                clearTextContextValues(DawgHouseConstants.STB_MODELS);
                 return true;
             } else {
                 LOGGER.error("Failed to delete " + contextKey + " {} from dawg house", entityIds);
@@ -134,6 +138,9 @@ public class DawgCommonUIUtils {
                 }
             }
             if (0 == tags.toString().trim().length()) {
+                tagsToBeCleared.clear();
+                // If test tags deleted from dawg house, then clear all the test tag values stored in text context.
+                this.clearTextContextValues(DawgHouseConstants.TAGS);
                 return true;
             } else {
                 LOGGER.error("Failed to remove added tags {} from dawg house", tags);
@@ -168,14 +175,18 @@ public class DawgCommonUIUtils {
      */
     public MetaStb addTestSTBToDawg(String testPreferenceId) throws DawgTestException {
         MetaStb testStb = null;
-        MetaStbBuilder testStbBuider = MetaStbBuilder.build().uid(testPreferenceId).model(
-            TestConstants.TEST_MODEL).caps(new String[]{TestConstants.TEST_CAPABILITY }).make(
-                TestConstants.TEST_MAKE).power(TestConstants.TEST_POWER);
+        MetaStbBuilder testStbBuider = MetaStbBuilder.build().uid(testPreferenceId).model(TestConstants.TEST_MODEL).caps(
+            new String[]{TestConstants.TEST_CAPABILITY }).make(TestConstants.TEST_MAKE).power(TestConstants.TEST_POWER);
         if (TestConstants.STB_ID_ADVACED_FILTER.equals(testPreferenceId)) {
             testStb = testStbBuider.rackName("TestRack").controllerIpAddress("TestIpAddress").hardwareRevision(
                 "TestHardwareRevision").slotName("TestSlotName").irBlasterType("TestIrBlasterType").stb();
-        } else if (TestConstants.STB_ID_PREF.equals(testPreferenceId)) {
+        } else if (TestConstants.STB_ID_PREF.equals(testPreferenceId) || TestConstants.STB_ID_BULK_TAG.equals(testPreferenceId)) {
             testStb = testStbBuider.stb();
+        } else if (TestConstants.STB_ID_EDIT_DEVICE.equals(testPreferenceId)) {
+            testStb = testStbBuider.family("TestFamily").rackName("TestRack").controllerIpAddress("TestIpAddress").hardwareRevision(
+                "TestHardwareRevision").remote("TestRemoteType").tags("TestTag").slotName("TestSlotName").irBlasterType(
+                "TestIrBlasterType").stb();
+            testStb.setProgram(Program.valueOf("TestProgram"));
         } else {
             throw new DawgTestException("Invalid test preference Id" + testPreferenceId);
         }
@@ -229,8 +240,7 @@ public class DawgCommonUIUtils {
             stbList.append('"').append(stbId).append('"');
         }
         LOGGER.info(String.format("About to %s tag (%s) with stb list [%s].", operation, tagName, stbList));
-        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_REMOVE_TAG).buildURL(
-            TestServerConfig.getHouse()) + operation;
+        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_REMOVE_TAG).buildURL(TestServerConfig.getHouse()) + operation;
         String reqBody = new String("{\"id\": [" + stbList + "],\"tag\":[\"" + tagName + "\"]}");
         DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.POST);
         return dawgReqRunner.setContentType(DawgHouseConstants.CONTENT_TYPE).setRequestBody(reqBody).sendRequest();
@@ -258,9 +268,8 @@ public class DawgCommonUIUtils {
      * @param  stb  Meta stb object to be added.
      * @throws DawgTestException 
      */
-    protected void addSTBToDawg(MetaStb stb) throws DawgTestException {
-        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_REMOVE_STB).buildURL(
-            TestServerConfig.getHouse()) + stb.getId();
+    private void addSTBToDawg(MetaStb stb) throws DawgTestException {
+        String url = RestURIConfig.getReqURI(DawgHouseConstants.ADD_OR_REMOVE_STB).buildURL(TestServerConfig.getHouse()) + stb.getId();
         JsonCerealEngine cerealEngine = new JsonCerealEngine();
         // To cache the test STBs for later deletion.
         List<String> testStbs = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STBS);
@@ -269,7 +278,7 @@ public class DawgCommonUIUtils {
         }
 
         DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.PUT);
-        Response response;
+        Response response = null;
         try {
             response = dawgReqRunner.setContentType(DawgHouseConstants.CONTENT_TYPE).setRequestBody(
                 cerealEngine.writeToString(stb.getData())).sendRequest();
@@ -287,22 +296,60 @@ public class DawgCommonUIUtils {
     /**
      * For adding test tag with specified no.of STBs in tag cloud
      * @param int - STB count to add
+     * @param 
      * @return Map returns test tag name and STB ids
      * @throws DawgTestException
      */
-    public Map<String, String[]> addTestTagForNSTBs(int stbCount) throws DawgTestException {
-        Map<String, String[]> tagStbMap = new HashMap<String, String[]>();
+    public Map<String, List<String>> addTestTagForNSTBs(int stbCount, String... stbArray) throws DawgTestException {
+        Map<String, List<String>> tagStbMap = new HashMap<String, List<String>>();
         // Create dynamic tag names
         String tagName = MetaStbBuilder.getUID(TestConstants.TAG_NAME_PREF);
-        String[] stbArray = createRequestedTestStbs(stbCount, TestConstants.STB_ID_PREF);
+        if (null == stbArray || 0 == stbArray.length) {
+            stbArray = createRequestedTestStbs(stbCount, TestConstants.STB_ID_PREF);
+        }
         Response response = addTagViaRestRequest(tagName, stbArray);
         if (response.getStatusCode() == HttpStatus.SC_OK) {
-            tagStbMap.put(tagName, stbArray);
+            tagStbMap.put(tagName, Arrays.asList(stbArray));
             bufferTheTagsToBeCleared(tagName, stbArray);
         } else {
             LOGGER.error("Failed to add test tag {} with STBs {} to dawgHouse. Response received {}", tagName,
                 stbArray.toString(), response.getStatusCode());
         }
         return tagStbMap;
+    }
+
+    /**
+     * Clean up all the created test tags/STBs, stored in text context   
+     * @param type - tags or stbs 
+     * @throws DawgTestException 
+     */
+    private void clearTextContextValues(String type) throws DawgTestException {
+        String[] valuesStoredInContext = null;
+        if (DawgHouseConstants.TAGS.equals(type)) {
+            valuesStoredInContext = DawgHouseConstants.TEST_TAGS_STORED_IN_CONTEXT;
+        } else if (DawgHouseConstants.STBS.equals(type)) {
+            valuesStoredInContext = DawgHouseConstants.TEST_STBS_STORED_IN_CONTEXT;
+        } else if (DawgHouseConstants.STB_MODELS.equals(type)) {
+            valuesStoredInContext = DawgHouseConstants.TEST_STB_MODELS_STORED_IN_CONTEXT;
+        } else {
+            throw new DawgTestException("Invalid type" + type);
+        }
+        //Clear all the test tags/STBs/STB models stored in corresponding context key
+        for (String contextKey : valuesStoredInContext) {
+            TestContext.getCurrent().set(contextKey, null);
+        }
+    }
+
+    /**
+     * Get all the STB meta data tags from backend.    
+     * @param stbId
+     * @return  all the tags to which stb is tagged.
+     */
+    public List<String> getStbMetaDataTags(String stbId) {
+        @SuppressWarnings("resource")
+        DawgHouseClient dawgHouseClient = new DawgHouseClient(TestServerConfig.getHouse());
+        dawgHouseClient.login(TestServerConfig.getUsername(), TestServerConfig.getPassword());
+        MetaStb metaStb = dawgHouseClient.getById(stbId);
+        return new ArrayList<String>(metaStb.getTags());
     }
 }

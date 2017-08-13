@@ -24,9 +24,6 @@ public class SauceLabConstants {
     /** Constant to run tests in saucelabs. */
     public static final String SAUCE = "sauce";
 
-    /** Constant to run tests in saucelabs. */
-    public static final String LOCAL = "local";
-
     /** sauce url constant. */
     public static final String SAUCE_URL = "http://ondemand.saucelabs.com:80/wd/hub";
 

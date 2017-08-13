@@ -21,12 +21,13 @@ import com.comcast.cereal.CerealException;
 import com.comcast.cereal.engines.JsonCerealEngine;
 import com.comcast.dawg.DawgRestRequestService;
 import com.comcast.dawg.DawgTestException;
+import com.comcast.dawg.MetaStbBuilder;
 import com.comcast.dawg.config.RestURIConfig;
 import com.comcast.dawg.config.TestServerConfig;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.TestConstants;
+import com.comcast.dawg.utils.DawgCommonUIUtils;
 import com.comcast.video.dawg.common.MetaStb;
-import com.comcast.dawg.MetaStbBuilder;
 import com.comcast.zucchini.TestContext;
 import com.jayway.restassured.internal.http.Method;
 import com.jayway.restassured.response.Response;
@@ -79,8 +80,7 @@ public class DawgHouseRestHelper {
         ArrayList<String> testStbModels = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_MODELS);
         String url = RestURIConfig.ADD_UPDATE_MODEL_URI.buildURL(TestServerConfig.getHouse()) + modelName;
         DawgRestRequestService dawgRestReqService = new DawgRestRequestService(url, Method.POST);
-        String reqBody = new String("{\"name\":\"" + modelName + "\",\"capabilities\":[\"" + capabilities + "\"],\"family\":\"" + family + "\"}");
-
+        String reqBody = new String("{\"name\":\"" + modelName + "\",\"capabilities\":" + capabilities + ",\"family\":\"" + family + "\"}");        
         // Setting content type and request body for POST
         Response response = dawgRestReqService.setContentType(DawgHouseConstants.CONTENT_TYPE).setRequestBody(
             reqBody).sendRequest();
@@ -266,8 +266,7 @@ public class DawgHouseRestHelper {
         if (null == testStbs) {
             testStbs = new ArrayList<String>();
         }
-        if ((null != response) && (HttpStatus.SC_OK == response.getStatusCode()) && ("true".equals(
-            response.asString()))) {
+        if ((null != response) && (HttpStatus.SC_OK == response.getStatusCode()) ) {
             // Storing added STBs to test context
             testStbs.add(id);
             TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_TEST_STBS, testStbs);
@@ -336,19 +335,29 @@ public class DawgHouseRestHelper {
     public boolean removeStbFromDawg(String deviceId) throws DawgTestException {
         String url = RestURIConfig.ADD_REMOVE_STB_REST_URI.buildURL(TestServerConfig.getHouse()) + deviceId;
         DawgRestRequestService dawgReqRunner = new DawgRestRequestService(url, Method.DELETE);
-
+        LOGGER.info("Going to remove the test STB{}", deviceId);
         // Sending DELETE request
         Response response = dawgReqRunner.setContentType(DawgHouseConstants.CONTENT_TYPE).sendRequest();
         return (null != response) && (HttpStatus.SC_OK == response.getStatusCode());
     }
 
     /**
-     * Get list of STB devices available in dawg house via GET request
+     * Get list of STB devices available in dawg (house/pound) via GET request
+     * @param dawgServer
+     *          Whether list belong to dawg (house/pound) server
      * @return boolean returns True if response is not null and have status code 200
      * @throws DawgTestException
      */
-    public boolean sendGetReqForSTBDeviceList() throws DawgTestException {
-        String url = RestURIConfig.GET_STB_DEVICE_LIST_URI.buildURL(TestServerConfig.getHouse());
+    public boolean sendGetReqForSTBDeviceList(String dawgServer) throws DawgTestException {
+        RestURIConfig restUriConfig = null;
+        if (dawgServer.contains(TestConstants.DAWG_HOUSE)) {
+            // Configuring URI to get STB device list from dawg house
+            restUriConfig = RestURIConfig.GET_STB_DEVICE_LIST_URI;
+        } else if (dawgServer.contains(TestConstants.DAWG_POUND)) {
+            // Configuring URI to get STB reservation list from dawg pound
+            restUriConfig = RestURIConfig.GET_STB_RESERVATION_LIST_URI;
+        }
+        String url = restUriConfig.buildURL(dawgServer);
         DawgRestRequestService dawgRestReqService = new DawgRestRequestService(url, Method.GET);
 
         // Sending GET request
@@ -390,6 +399,34 @@ public class DawgHouseRestHelper {
         } catch (CerealException e) {
             throw new DawgTestException("Failed to convert STB data to string");
         }
+        return (null != response) && (HttpStatus.SC_OK == response.getStatusCode());
+    }
+    
+    /**
+     * Add/Update the tag associated with the STB using POST request.
+     * @param  tagName  
+     *          Tag name to be added/updated.
+     * @param  stbId 
+     *          STB device id 
+     * @return boolean returns True if response is not null and have status code 200
+     * @throws DawgTestException
+     */
+    public boolean sendPostReqToAddStbTags(String tagName, String stbId) throws DawgTestException{
+        Response response = DawgCommonUIUtils.getInstance().addTagViaRestRequest(tagName, stbId);
+        return (null != response) && (HttpStatus.SC_OK == response.getStatusCode());
+    }
+    
+    /**
+     * Remove the tag associated with the STB using POST request.
+     * @param  tagName  
+     *          Tag name to be removed.
+     * @param  stbId 
+     *          STB device id 
+     * @return boolean returns True if response is not null and have status code 200
+     * @throws DawgTestException
+     */
+    public boolean sendPostReqToRemoveStbTags(String tagName, String stbId) throws DawgTestException{
+        Response response = DawgCommonUIUtils.getInstance().removeTagViaRestReq(tagName, stbId);
         return (null != response) && (HttpStatus.SC_OK == response.getStatusCode());
     }
 

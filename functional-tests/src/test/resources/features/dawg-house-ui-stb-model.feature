@@ -1,5 +1,5 @@
-@uitestI @stbModel
-Feature: Verify UI behaviours for Dawg house's STB model 
+@uitest @stbModel 
+Feature: STB model UI behaviours
 
 Background: 
 	Given I am on the model configuration page 
@@ -14,8 +14,7 @@ Scenario Outline: Add a new model property on model configuration page
 	Examples: 
 		|property  |  
 		|capability|		
-		|family    |
-		
+		|family    |	
 Scenario Outline: Verify the alert message while trying to add a duplicate enty 
 	Given I am on model overlay 
 	When I add an already existing <property> name to model overlay page 
@@ -42,7 +41,7 @@ Scenario: Delete a model from the model configuration page
 	When I select 'delete model' button 
 	Then an alert message 'Are you sure you want to delete' should be displayed 
 	And I select ok on the alert box 
-	Then the model will be removed from the configuration page 
+	Then the model will be removed from the configuration page 	
 	
 #new scenario
 Scenario: Verify the select status of Model properties(Capabilities and family) in model overlay 

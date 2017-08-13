@@ -17,10 +17,15 @@ package com.comcast.dawg.glue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
 
 import javax.swing.text.html.HTML.Tag;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Assert;
 
 import com.comcast.dawg.DawgTestException;
 import com.comcast.dawg.config.TestServerConfig;
@@ -30,16 +35,11 @@ import com.comcast.dawg.constants.TestConstants;
 import com.comcast.dawg.helper.DawgAdvancedFilterPageHelper;
 import com.comcast.dawg.helper.DawgIndexPageHelper;
 import com.comcast.dawg.helper.DawgModelPageHelper;
+import com.comcast.dawg.helper.DawgTagCloudHelper;
 import com.comcast.dawg.selenium.SeleniumImgGrabber;
 import com.comcast.dawg.selenium.SeleniumWaiter;
 import com.comcast.zucchini.TestContext;
 import com.jayway.restassured.response.Response;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.Assert;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -53,31 +53,20 @@ public class DawgCommonGlue {
 
     /**
      * Login to dawg-house portal   
-     * OnZukeStep:"I am on the Log In page of dawg house portal"    
-     * @throws DawgTestException 
-     * @throws InterruptedException 
+     * OnZukeStep:"I am on the Log In page of dawg house portal"
      */
     @Given("^I am on the Log In page of dawg house portal$")
-    public void launchDawgLoginPage() throws DawgTestException {
-        try {
-            RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-            driver.get(TestServerConfig.getHouse());
-            SeleniumImgGrabber.addImage();
-            // Verify login page displayed
-            WebElement loginFormElement = driver.findElementByXPath(DawgHousePageElements.LOGIN_FORM_XPATH);
-            Assert.assertTrue(loginFormElement.isDisplayed(), "Failed to display dawg house login page");
-        } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
-        }
+    public void launchDawgLoginPage() {       
+        Assert.assertTrue(DawgIndexPageHelper.getInstance().isLoginFormDisplayed(),
+            "Failed to display dawg house login page");
     }
 
     /**
      * Enter login credentials to dawg-house login form   
-     * OnZukeStep:"I enter correct username and password"    
-     * @throws DawgTestException 
+     * OnZukeStep:"I enter correct username and password" 
      */
     @When("^I enter correct username and password$")
-    public void enterUserNamePassword() throws DawgTestException {
+    public void enterUserNamePassword() {
         DawgIndexPageHelper.getInstance().enterLoginCredentials(TestServerConfig.getUsername(),
             TestServerConfig.getPassword());
     }
@@ -120,7 +109,10 @@ public class DawgCommonGlue {
         driver.getKeyboard().pressKey(Keys.ENTER);
         //Verify dawg home page displayed
         verifyHomePageDisplayed();
+        // Uncheck mine reservation if it is selected
+        DawgIndexPageHelper.getInstance().checkOrUncheckMineBtn(DawgHouseConstants.UNCHECK);
     }
+
 
     /**
     * Step definition to verify the status code received in xDawg response.
@@ -154,53 +146,34 @@ public class DawgCommonGlue {
             modelURL.equals(driver.getCurrentUrl()) && DawgModelPageHelper.getInstance().isModelPageDisplayed(),
             "Model configuration page is not loaded.");
     }
-     /**
-     * Navigate to dawg house advanced filter overlay         
-     * @throws DawgTestException      
-     */
+
+    /**
+    * Navigate to dawg house advanced filter overlay         
+    * @throws DawgTestException      
+    */
     @Given("^I am on advanced filter overlay$")
     public void verifyAdvancedFilterOverlay() throws DawgTestException {
-
         // Launch and Login the dawg house page and verify home page displayed
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         launchDawgHomePage();
         // Navigate to advanced filter overlay page
         driver.get(TestServerConfig.getHouse() + DawgHouseConstants.FILTER_REQ_PARAM);
-        WebElement searchBtnElement = driver.findElementByClassName(DawgHousePageElements.ADV_SEARCH_BUTTON);
-        if (searchBtnElement.isDisplayed()) {
-            searchBtnElement.click();
-        } else {
-            throw new DawgTestException("Failed to find the seach button in advanced filter overlay");
-        }
-    }    
+        Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().selectAdvancedBtn(),
+            "Failed to select the advanced button to navigate to filter overlay.");
+    }
+
 
     /**
-     * Add filter conditions to advanced filter overlay
-     * @throws DawgTestException
+     * Add filter conditions to advanced filter overlay   
      */
     @Given("^I added (\\d+) filter (?:value|values|value/s) to advanced filter overlay$")
-    public void addFilterValues(int filterCountToAdd) throws DawgTestException {
-        // Add a filter condition        
-        int filterCountAdded = 0;
-        int maxRetry = 0;
-        List<String> filters = new ArrayList<String>();
-        // Add filter conditions
-        while (filterCountToAdd != filterCountAdded || maxRetry >= TestConstants.VALID_FILTER_CONDITIONS.length * 2) {
-            //Randomly pick valid conditions from valid filter condition array
-            int random = new Random().nextInt(TestConstants.VALID_FILTER_CONDITIONS.length);
-            String filterToAdd = (TestConstants.VALID_FILTER_CONDITIONS[random]);
-            List<String> filterList = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();            
-            if (!filterList.contains(filterToAdd)) {
-                filters.add(filterToAdd);
-                String[] conditions = filterToAdd.split(" ");
-                DawgAdvancedFilterPageHelper.getInstance().addFilterCondition(conditions[0], conditions[1],
-                    conditions[2]);
-                filterCountAdded++;
-            }
-        }
+    public void addFilterValues(int filterCountToAdd) {
+        // Add a filter condition  
+        List<String> addedFilters = DawgAdvancedFilterPageHelper.getInstance().addFilterValues(filterCountToAdd);
         SeleniumWaiter.waitTill(TestConstants.OVERLAY_LOAD_WAIT);
-        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_FILTER_CONDITION, filters);
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_FILTER_CONDITION, addedFilters);
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_FILTER_COUNT, filterCountToAdd);
+        SeleniumImgGrabber.addImage();
     }
 
     /**
@@ -215,16 +188,14 @@ public class DawgCommonGlue {
             "Failed to select condition button/s" + buttonsNotSelected);
     }
 
-
     /**
-     * Verify filter values added in the filter overlay       
-     * @throws DawgTestException 
+     * Verify filter values added in the filter overlay 
      */
     @Then("^I should see filter (?:value|values|value/s) added in filter overlay$")
-    public void verifyFilterValueAdded() throws DawgTestException {
+    public void verifyFilterValueAdded() {
         StringBuilder filtersNotAdded = new StringBuilder();
         List<String> addedFilters = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_FILTER_CONDITION);
-        List<String> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();       
+        List<String> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();
         Assert.assertFalse(filterConditions.isEmpty(), "Failed to find filter conditions in advanced filter overlay");
         // Verify filter values added
         int filterCountAdded = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_FILTER_COUNT);
@@ -235,10 +206,40 @@ public class DawgCommonGlue {
                 filtersNotAdded.append(filter).append(", ");
             }
         }
+        SeleniumImgGrabber.addImage();
         // Verify the conditions added in filter overlay
         Assert.assertTrue(0 == filtersNotAdded.toString().trim().length(),
             "Filter condition/s '" + filtersNotAdded + "' not added in the filter overlay");
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_FILTER_CONDITION, filterConditions);
     }
 
+    /**
+     * Select tag element from tag cloud
+     * OnZukeStep:"I select another tag element in tag cloud" 
+     * @throws DawgTestException  
+     */
+    @Then("^I (?:select|selected) (.*) tag (?:element|elements) in tag cloud$")
+    public void selectAnotherTag(String type) throws DawgTestException {
+        List<String> tagNames = new ArrayList<String>();
+        StringBuilder message = new StringBuilder();
+        if ("any".equals(type)) {
+            tagNames.add(TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_TAG1).toString());
+        } else if ("another".equals(type)) {
+            tagNames.add(TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_TAG2).toString());
+        } else if ("both".equals(type) || "two".equals(type)) {
+            tagNames.add(TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_TAG1).toString());
+            tagNames.add(TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_TAG2).toString());
+
+        } else {
+            throw new DawgTestException("Invalid type" + type);
+        }       
+        // check the tags are selected or not
+        for (String tagName : tagNames) {
+            if (!DawgTagCloudHelper.getInstance().selectTag(tagName)) {
+                message.append(tagName).append(",");
+            }
+        }        
+        Assert.assertTrue((0 == message.toString().length()), String.format("Failed to select Tag(%s).", message));
+        SeleniumImgGrabber.addImage();
+    }
 }

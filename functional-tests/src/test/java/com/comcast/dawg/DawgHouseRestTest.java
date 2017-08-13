@@ -22,7 +22,7 @@ import cucumber.api.CucumberOptions;
  * 
  * @author Priyanka
  */
-@CucumberOptions(glue = {"com.comcast.dawg.glue" }, features = {"src/test/resources/features/" }, tags = {"@dawg_rest" })
+@CucumberOptions(glue = {"com.comcast.dawg.glue" }, features = {"src/test/resources/features/" }, tags = {"@dawg_rest","~@disabled" })
 public class DawgHouseRestTest extends AbstractZucchiniTest {
 
     /**
