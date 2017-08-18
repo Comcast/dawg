@@ -142,7 +142,8 @@ public class DawgDriverController {
          .addDesktopOS(new DesktopOS(platform, osVersion))
          .addDriverCapability(CapabilityType.VERSION, browserVersion)
          .addDriverCapability(SauceLabConstants.NAME, SauceLabConstants.DAWG_TEST_INFO)
-         .addDriverCapability(SauceLabConstants.TUNNEL_IDENTIFIER,SauceLabConstants.DAWG_TEST)
+         .addDriverCapability("maxDuration",3600)
+          .addDriverCapability(SauceLabConstants.TUNNEL_IDENTIFIER,SauceLabConstants.DAWG_TEST)
         //Enable Sauce Connect
         .addCustomDriverConfiguration(SauceProvider.VPN, Boolean.valueOf(true))
         // disable verbosity

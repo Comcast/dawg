@@ -138,7 +138,7 @@ public class ZukeHook {
     @Before("@deleteTag")
     public void addTestTagsToDoDeletion(Scenario scenario) throws DawgTestException {
 
-        Entry<String, List<String>> tagoneEntry = null;
+        Entry<String, List<String>> tagOneEntry = null;
         // Create delete test tag to perform delete tag operation
         if (null == getValue(DawgHouseConstants.CONTEXT_DELETE_TAG1) && null == TestContext.getCurrent().get(
             DawgHouseConstants.CONTEXT_DELETE_TAG1_STBS)) {
@@ -146,9 +146,9 @@ public class ZukeHook {
             Map<String, List<String>> testTagOneForDeletion = DawgCommonUIUtils.getInstance().addTestTagForNSTBs(2,
                 null);
             if (!testTagOneForDeletion.isEmpty()) {
-                tagoneEntry = testTagOneForDeletion.entrySet().iterator().next();
-                TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_DELETE_TAG1, tagoneEntry.getKey());
-                TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_DELETE_TAG1_STBS, tagoneEntry.getValue());
+                tagOneEntry = testTagOneForDeletion.entrySet().iterator().next();
+                TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_DELETE_TAG1, tagOneEntry.getKey());
+                TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_DELETE_TAG1_STBS, tagOneEntry.getValue());
             } else {
                 LOGGER.error("Failed to add test tag three with STBs {}", 2);
             }
@@ -157,7 +157,7 @@ public class ZukeHook {
             DawgHouseConstants.CONTEXT_DELETE_TAG2_STBS)) {
             //  Create test tag2(to perform tag deletion ui checking) which hold any one of STBs of tag1.  
             Map<String, List<String>> testTagTwoForDeletion = DawgCommonUIUtils.getInstance().addTestTagForNSTBs(0,
-                tagoneEntry.getValue().get(0));
+                tagOneEntry.getValue().get(0));
             if (!testTagTwoForDeletion.isEmpty()) {
                 Entry<String, List<String>> tagTwoEntry = testTagTwoForDeletion.entrySet().iterator().next();
                 TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_DELETE_TAG2, tagTwoEntry.getKey());
@@ -253,7 +253,7 @@ public class ZukeHook {
      * This method clears all the added test tags and deletes the added test STBs from dawg-house   
      * @throws DawgTestException 
      */
-    @After("@rest_stb_add, @bulkTagwithSTB, @bulkTag, @editDevice, @deleteTag")
+    @After("@rest_stb_add, @dawg_pound, @bulkTagwithSTB, @bulkTag, @editDevice, @deleteTag")
     public void clearAddedTagsAndStbs() throws DawgTestException {
         DawgCommonUIUtils.getInstance().removeAllTagsAddedInTest();
         DawgCommonUIUtils.getInstance().deleteTestSTBsOrModels(DawgHouseConstants.CONTEXT_TEST_STBS);

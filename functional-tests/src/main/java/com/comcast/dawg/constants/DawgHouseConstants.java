@@ -139,8 +139,8 @@ public class DawgHouseConstants {
     public static final String BTN_SAVE = "Save";
     public static final String BTN_NAME_ADD = "Add";
     public static final String JSON_RES_FIELD_VALUE = "#@#";
-    public static final String STB_ID_KEY_VAL_PAIR = "\"id\":\"" + JSON_RES_FIELD_VALUE + "\"";
-    public static final String STB_MAC_KEY_VAL_PAIR = "\"macAddress\":\"" + JSON_RES_FIELD_VALUE + "\""; 
+    public static final String STB_ID_KEY_VAL_PAIR = "\"id\": \"" + JSON_RES_FIELD_VALUE + "\"";
+    public static final String STB_MAC_KEY_VAL_PAIR = "\"macAddress\": \"" + JSON_RES_FIELD_VALUE + "\"";    
     public static final long VALID_EXPIRATION_TIME = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365);
     public static final long INVALID_EXPIRATION_TIME = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(365);
     public static final String CHECK = "check";

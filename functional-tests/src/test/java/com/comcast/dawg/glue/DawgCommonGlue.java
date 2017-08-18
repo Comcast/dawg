@@ -120,7 +120,7 @@ public class DawgCommonGlue {
     */
     @Then("I should receive status code (\\d+)$")
     public void verifyStatusCode(int statCode) {
-        Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
+        Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);     
         Assert.assertNotNull(response, "Received null response from TestContext");
         Assert.assertEquals(response.getStatusCode(), statCode,
             "Failed to verify the status code " + "(Status Code Received: " + response.getStatusCode() + ").");
@@ -160,6 +160,11 @@ public class DawgCommonGlue {
         driver.get(TestServerConfig.getHouse() + DawgHouseConstants.FILTER_REQ_PARAM);
         Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().selectAdvancedBtn(),
             "Failed to select the advanced button to navigate to filter overlay.");
+        // Verifying whether search overlay is displayed or not
+        Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().isSearchFilterOverlayDisplayed(),
+            "Failed to display search results");
+        
+        
     }
 
 

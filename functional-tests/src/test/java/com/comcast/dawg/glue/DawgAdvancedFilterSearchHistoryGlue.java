@@ -23,10 +23,15 @@ import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.DawgHousePageElements;
 import com.comcast.dawg.constants.TestConstants;
 import com.comcast.dawg.helper.DawgAdvancedFilterPageHelper;
+import com.comcast.dawg.helper.DawgEditDevicePageHelper;
 import com.comcast.dawg.selenium.SeleniumImgGrabber;
 import com.comcast.dawg.selenium.SeleniumWaiter;
 import com.comcast.zucchini.TestContext;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import cucumber.api.java.en.Given;
@@ -40,6 +45,7 @@ import cucumber.api.java.en.When;
  * @author priyanka.sl
  */
 public class DawgAdvancedFilterSearchHistoryGlue {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DawgEditDevicePageHelper.class);
 
     /**
      * Choose one filter value to perform search 
@@ -52,6 +58,7 @@ public class DawgAdvancedFilterSearchHistoryGlue {
         //At a time search can be perform using single filter value.So select one filter value among the list. 
         if (1 < availableFilters.size()) {
             //un check all the selected filter values
+
             DawgAdvancedFilterPageHelper.getInstance().checkOrUncheckFilterValues(availableFilters,
                 DawgHouseConstants.UNCHECK);
             //Get the first entry
@@ -112,11 +119,13 @@ public class DawgAdvancedFilterSearchHistoryGlue {
         List<String> oldSearchHistoryList = DawgAdvancedFilterPageHelper.getInstance().getSearchHistoryList();
         int existingFilterCount = oldSearchHistoryList.size();
         List<String> searchHistoryList = new ArrayList<String>();
+        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);        
         if (count < existingFilterCount) {
             // Deleting additional search histories if count < search history list size
             for (String filter : oldSearchHistoryList.subList(0, existingFilterCount - count)) {
                 DawgAdvancedFilterPageHelper.getInstance().deleteSearchHistory(filter);
             }
+            searchHistoryList = DawgAdvancedFilterPageHelper.getInstance().getSearchHistoryList();
         } else if (count > existingFilterCount) {
             // Adding search history details equal to count in advanced filter overlay.
             int maxRetry = 0;
@@ -128,12 +137,18 @@ public class DawgAdvancedFilterSearchHistoryGlue {
                 selectAdvButton();
                 searchHistoryList = DawgAdvancedFilterPageHelper.getInstance().getSearchHistoryList();
                 maxRetry++;
-                if ((searchHistoryList.size() == count || maxRetry >= TestConstants.VALID_FILTER_CONDITIONS.length * 2)) {
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                js.executeScript("arguments[0].scrollTop = arguments[1];",
+                    driver.findElementByXPath(DawgHousePageElements.ADVANCE_SEARCH_OVERLAY_XPATH), 200);
+                SeleniumImgGrabber.addImage();
+                if ((searchHistoryList.size() == count || maxRetry >= TestConstants.VALID_FILTER_CONDITIONS.length * 3)) {
+                    LOGGER.info("searchHistoryList :::" + searchHistoryList.size() + "Count::" + count);
                     break;
                 }
             } while (true);
         }
-        SeleniumImgGrabber.addImage();
+        //Verify search history list in advanced filter overlay.
+        Assert.assertEquals(searchHistoryList.size(), count, "Failed to find " + count + " search history details");
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_SEARCH_HISTORY, searchHistoryList);
     }
 
@@ -228,7 +243,7 @@ public class DawgAdvancedFilterSearchHistoryGlue {
         SeleniumImgGrabber.addImage();
         String filterEntry = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_SEARCH_HISTORY_ENTRY);
         //Verify filter entry row is highlighted in history list
-        Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().isHistoryFilterhighlighted(filterEntry),
+        Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().isHistoryFilterHighlighted(filterEntry),
             type + "filter entry'" + filterEntry + "' is not get highlighted in history list");
         //Verify filter entry selected from history list also get selected/displayed in filter list        
         Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().isFilterDisplayed(filterEntry),

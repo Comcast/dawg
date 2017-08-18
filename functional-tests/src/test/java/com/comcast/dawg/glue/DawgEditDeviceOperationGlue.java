@@ -91,12 +91,12 @@ public class DawgEditDeviceOperationGlue {
             Assert.assertFalse(stbProperties.contains(capability) && stbProperties.contains(family),
                 "capability, Family are not null");
         } else {
-            String capabilityValFmUI = DawgEditDevicePageHelper.getInstance().getSTBPropertyValue(capability);
+            String capabilityValFmUi = DawgEditDevicePageHelper.getInstance().getSTBPropertyValue(capability);
             capabilityVal = capabilityVal.replaceAll("(?!\\s)\\W", "$0 ");
             Assert.assertEquals(
-                capabilityValFmUI,
+                capabilityValFmUi,
                 capabilityVal,
-                "Expected " + capability + " value/s" + capabilityVal + " not found in model overlay. Found" + capabilityValFmUI);
+                "Expected " + capability + " value/s" + capabilityVal + " not found in model overlay. Found" + capabilityValFmUi);
             String familyValFmUI = DawgEditDevicePageHelper.getInstance().getSTBPropertyValue(family);
             Assert.assertEquals(familyValFmUI, familyVal,
                 "Expected " + family + " value/s" + familyVal + " not found in model overlay. Found" + familyValFmUI);
@@ -202,9 +202,9 @@ public class DawgEditDeviceOperationGlue {
     @And("^I select Set checkbox$")
     public void selectChkBox() {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-        WebElement setCb = driver.findElement(By.className(DawgHousePageElements.CB_NEW_PROP_SET));
-        if (!setCb.isSelected()) {
-            setCb.click();
+        WebElement setCbElement = driver.findElement(By.className(DawgHousePageElements.CB_NEW_PROP_SET));
+        if (!setCbElement.isSelected()) {
+            setCbElement.click();
         }
     }
 

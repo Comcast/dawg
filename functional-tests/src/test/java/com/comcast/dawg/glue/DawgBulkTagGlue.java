@@ -256,8 +256,7 @@ public class DawgBulkTagGlue {
      */
     @Then("I should see the alert message '(.*)' on screen$")
     public void verifyAlertMessage(String message) {
-        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-        SeleniumImgGrabber.addImage();
+        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);       
         Assert.assertTrue(DawgIndexPageHelper.getInstance().isAlertPresent(), "No alert message displayed ");
         Alert deleteAlert = driver.switchTo().alert();
         // Validates the alert message.

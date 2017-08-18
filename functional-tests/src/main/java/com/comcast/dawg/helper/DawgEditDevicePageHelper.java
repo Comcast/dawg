@@ -114,10 +114,9 @@ public class DawgEditDevicePageHelper {
                 element = By.className(DawgHousePageElements.SAVE_BTN_CLASS);
             } else {
                 throw new DawgTestException("Invalid " + button + " button is passed");
-            }
-            List<WebElement> btnElement = driver.findElements(element);
+            }            
             // Checking if button displayed or not
-            for (WebElement ele : btnElement) {
+            for (WebElement ele : driver.findElements(element)) {
                 if (ele.isDisplayed()) {
                     ele.click();
                     return true;
@@ -136,7 +135,7 @@ public class DawgEditDevicePageHelper {
      */
     public void enterPropertyValue(String propKey, String propVal) {
         try {
-            WebElement valueInput = this.getpropertyValueElement(propKey);
+            WebElement valueInput = this.getPropertyValueElement(propKey);
             valueInput.clear();
             valueInput.sendKeys(propVal);
         } catch (NoSuchElementException e) {
@@ -152,7 +151,7 @@ public class DawgEditDevicePageHelper {
     public String getSTBPropertyValue(String propKey) {
         String value = "";
         try {
-            WebElement element = this.getpropertyValueElement(propKey);
+            WebElement element = this.getPropertyValueElement(propKey);
             value = element.getAttribute("value");
         } catch (NoSuchElementException e) {
             LOGGER.error("Failed to get property value for given property key" + propKey);
@@ -248,9 +247,9 @@ public class DawgEditDevicePageHelper {
     public boolean selectCheckBoxInDeviceOverlay() {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         try {
-            WebElement setCb = driver.findElement(By.className(DawgHousePageElements.CB_NEW_PROP_SET));
-            if (!setCb.isSelected()) {
-                setCb.click();
+            WebElement setCbElement = driver.findElement(By.className(DawgHousePageElements.CB_NEW_PROP_SET));
+            if (!setCbElement.isSelected()) {
+                setCbElement.click();
                 return true;
             }
         } catch (NoSuchElementException e) {
@@ -308,7 +307,7 @@ public class DawgEditDevicePageHelper {
      * @return - WebElement for property value 
      */
 
-    private WebElement getpropertyValueElement(String propKey) {
+    private WebElement getPropertyValueElement(String propKey) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         WebElement element = null;
         try {

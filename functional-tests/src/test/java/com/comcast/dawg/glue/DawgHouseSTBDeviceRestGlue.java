@@ -119,8 +119,8 @@ public class DawgHouseSTBDeviceRestGlue {
             case "delete":
                 // Sending (DELETE/GET) request to 'delete STB' by passing param as (path/query)
                 DawgHouseRestHelper restHelper = DawgHouseRestHelper.getInstance();
-                result = paramPassAs.contains("query") ? restHelper.removeSTBFromDawgByQuery(
-                    deviceId) : restHelper.removeStbFromDawg(deviceId);
+                result = null!= paramPassAs && paramPassAs.contains("query") ? restHelper.removeSTBFromDawgByQuery(
+                    deviceId) : restHelper.removeStbFromDawg(deviceId);                
                 break;
             case "retrieve":
                 // Sending POST request to 'retrieve STB'
@@ -128,7 +128,7 @@ public class DawgHouseSTBDeviceRestGlue {
                 break;
             default:
                 throw new DawgTestException("Received invalid Rest request " + restMethod);
-        }
+        }     
         Assert.assertTrue(("valid".equalsIgnoreCase(validity)) ? result : !result,
             "Failed to check " + restMethod + " with " + validity + " device id");
         LOGGER.info("Successfully sent {} request to {} STB with {} device id", httpMethod, restMethod, validity);
@@ -304,20 +304,7 @@ public class DawgHouseSTBDeviceRestGlue {
         Assert.assertTrue(result, "Failed to update STB parameters in dawg house");
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_STB_DEVICE, testStb);
         LOGGER.info("Successfully updated already existing STB parameters in dawg house");
-    }
-
-    /**
-     * Step definition to 'get STB device list' from dawg house via GET request 
-     * @throws DawgTestException
-     */
-    @When("^I send GET request to 'get STB device list'$")
-    public void sendGetReqForStbDevList() throws DawgTestException {
-        LOGGER.info("Going to send GET request to 'get STB device list'");
-        Assert.assertTrue(DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getHouse()),
-            "Failed to get STB device list");
-        LOGGER.info("Has successfully sent GET request to 'get STB device list'");
-    }
-  
+    } 
 
     /**
      * Step definition to verify removal of STB with given device id from dawg house 
@@ -327,8 +314,7 @@ public class DawgHouseSTBDeviceRestGlue {
     public void verifyStbRemovalFmDawg() throws DawgTestException {
         LOGGER.info("Going to verify removal of STB from dawg house");
         MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
-        boolean result = DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getHouse());
-        Assert.assertTrue(result, "Failed to get list of stbs from dawg house");
+        DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getHouse());       
         Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
         Assert.assertFalse(response.asString().contains(testStb.getId()),
             "Failed to verify removal of STB " + testStb.getId());
@@ -341,7 +327,7 @@ public class DawgHouseSTBDeviceRestGlue {
      *          DataTable with STB device details
      * @throws DawgTestException
      */
-    @When("^I send POST request to 'add tag to STB' with following details$")
+    @When("^I send POST request to 'add tag to STB' with below details$")
     public void sendPostReqForTagAdd(DataTable stbDetails) throws DawgTestException {
         LOGGER.info("Going to add tag for STB in dawg");
         List<String> stbParams = stbDetails.raw().get(1);
@@ -413,7 +399,7 @@ public class DawgHouseSTBDeviceRestGlue {
      *          DataTable with STB device details
      * @throws DawgTestException
      */
-    @When("^I send POST request to 'add tag to same STB' with following details$")
+    @When("^I send POST request to 'add tag to same STB' with below details$")
     public void sendPostReqToUpdateStbTag(DataTable stbDetails) throws DawgTestException {
         LOGGER.info("Going to update STB tag in dawg");
         List<String> stbParams = stbDetails.asList(String.class);

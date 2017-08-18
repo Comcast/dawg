@@ -3,7 +3,7 @@ Feature: STB model UI behaviours
 
 Background: 
 	Given I am on the model configuration page 
-
+@smoke
 Scenario Outline: Add a new model property on model configuration page 
 	Given I am on model overlay 
 	Then I should see <property> list displayed in model overlay 
@@ -15,6 +15,7 @@ Scenario Outline: Add a new model property on model configuration page
 		|property  |  
 		|capability|		
 		|family    |	
+@smoke
 Scenario Outline: Verify the alert message while trying to add a duplicate enty 
 	Given I am on model overlay 
 	When I add an already existing <property> name to model overlay page 
@@ -36,7 +37,7 @@ Scenario: Edit a model from model configuration page
 	Then I should see the model name field is disabled 
 	And I modify all the editable text fields in the dialog box 
 	Then I should see the modified fields get reflected in the model page 
-
+@smoke
 Scenario: Delete a model from the model configuration page 
 	When I select 'delete model' button 
 	Then an alert message 'Are you sure you want to delete' should be displayed 

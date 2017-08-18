@@ -3,13 +3,13 @@ Feature: Advanced Filter Search behaviours.
 
 Background: 
 	Given I am on advanced filter overlay 
-
+@smoke
 Scenario: Verify the search results using multiple filter values 
 	Given I added 1 filter value to advanced filter overlay 	 
 	Then I should see filter value added in filter overlay 
 	When I select 'Search' button in advanced filter overlay	
 	Then I should see the search results displayed in the filter table 	
-
+@smoke
 Scenario Outline: Verify the search results while selecting condition buttons (AND,OR,NOT) 
 	Given I added 2 filter values to advanced filter overlay 
 	And I should see filter values added in filter overlay 
@@ -31,7 +31,7 @@ Scenario: Verify the search results with singel filter value using NOT condition
 	Then I should see condition 'NOT' applied to filter values 
 	When I select 'Search' button in advanced filter overlay 
 	Then I should see the search results displayed in the filter table
-
+@smoke
 Scenario Outline: Verify the search results using single filter values 
 	Given there is an advanced filter with "<field>", "<option>", "<value>" 
 	When I select 'Add' button in advanced filter overlay 
@@ -125,7 +125,7 @@ Scenario Outline: Verify search results by applying group conditions (AND and OR
 		|AND     |		
 		|OR, NOT | 
 		|AND, NOT| 
-
+@smoke
 Scenario: Verify the deletion of single filter value 
 	Given I added 2 filter values to advanced filter overlay 
 	Then I should see filter values added in filter overlay 

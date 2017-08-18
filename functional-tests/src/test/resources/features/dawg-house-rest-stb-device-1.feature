@@ -1,7 +1,7 @@
 @dawg_rest
-Feature: REST verification STB device operations-1(addition/updation/removal of STB device from Dawg House)
+Feature: REST verification STB device operations-1 in dawg house
 
-@rest_stb_add @dawg_rest
+@rest_stb_add @smoke
 Scenario Outline: Add an STB to dawg house via PUT request with invalid model params
 	When I send PUT request to 'add an STB' with STB device id <id>, mac address <mac>, STB model name <model>, model capabilities <caps> and model family <family>
 	Then I should receive status code 200
@@ -13,7 +13,7 @@ Scenario Outline: Add an STB to dawg house via PUT request with invalid model pa
 	| teststb3 | 00:00:00:00:00:CC | InvalidModel | ["CAPS"] ||             
 	| teststb4 | 00:00:00:00:00:DD | InvalidModel | ["CAPS"] | TEST FAMILY |
 
-@rest_stb_add
+@rest_stb_add @smoke
 Scenario Outline: Add multiple STBs to dawg house via PUT request
 	When I send PUT request to 'add an STB' with device id <id> and mac address <mac>
 	Then I should receive status code 200
@@ -22,21 +22,21 @@ Scenario Outline: Add multiple STBs to dawg house via PUT request
 	| id       | mac               |
 	| teststb1 | 11:22:33:44:55:66 |
 	| teststb2 | 66:55:44:33:22:11 |
-
+@smoke
 Scenario Outline: <endpoint> STB details from dawg house via <rest_method> request with invalid device id
 	When I send <rest_method> request to '<endpoint> STB' with invalid device id
 	Then I should receive status code 404
 	Examples:
 	| rest_method | endpoint |
 	| GET         | get      |
-	#| DELETE      | delete   |
+	| DELETE      | delete   |
 	| POST        | retrieve |
-	
+
 Scenario: Remove STB details from dawg house via GET request with invalid device id specified as query param	
     When I send GET request to 'delete STB' with invalid device id as query param
 	Then I should receive status code 404
 
-@rest_stb_add
+@rest_stb_add @smoke
 Scenario: Retrieve STB details from dawg house via GET request with model name specified as query param
 	Given I send PUT request to 'add an STB' with following details
 	| id       | model    |
@@ -102,7 +102,7 @@ Scenario: Populate device lists from dawg house via POST request with valid clie
 @disabled
 Scenario: Populate device lists from dawg house via POST request with invalid client token specified as path param
 	When I send POST request to 'populate' with invalid client token
-	Then I should receive response as '0'
+	Then I should receive response as 0
 
 @rest_stb_add
 Scenario: Update STB details on Dawg House via POST request with device details passed as request body

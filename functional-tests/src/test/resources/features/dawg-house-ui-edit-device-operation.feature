@@ -6,14 +6,14 @@ Background:
 	Then I selected one STB device from dawg house which has properties 'Name, Model, Capabilities, Controller Ip Address, Family, Hardware Revision, Ir Blaster Type, Make, Power Type, Program, Rack Name, Remote Type, Slot Name, Tags' 
 	And I opened edit device overlay 
 	Then I should see the STB properties
-		
+@smoke		
 Scenario: Verify device name modified
 	When I edit the STB device name value
 	And I select 'Save' button in edit device overlay 
 	Then edit device overlay is dismissed 
 	When I reopen edit device overlay 
 	Then I should see device name is modified in edit device overlay 
-
+@smoke
 Scenario: Verify device name not modified  
 	When I edit the STB device name value
 	And I select 'Close' button in edit device overlay 
@@ -90,13 +90,13 @@ Scenario: Add an empty STB device property in edit device overlay
 	Given I entered an empty device property in the text field
 	When I add the property name by pressing the ENTER key
 	Then I should see the property name is not added in edit device overlay 
-			
+@smoke			
 Scenario: Delete an existing STB device property from edit device overlay 
 	When I select delete button on any STB device property 
 	Then an alert pop up with message "Are you sure you want to remove property" is displayed 
 	When I select 'OK' button on alert message 
 	Then I should see the property name is removed from edit device overlay 	
-	
+@smoke	
 Scenario: Verify the STB device property is not removed while selecting Cancel button 
 	When I select delete button on any STB device property 
 	Then an alert pop up with message "Are you sure you want to remove property" is displayed 

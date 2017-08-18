@@ -58,10 +58,12 @@ public class DawgPoundSTBReservationRestGlue {
     public void sendGetReqForStbDevOrResList(String listType) throws DawgTestException {
         LOGGER.info("Going to send GET request to 'get STB {} list'", listType);
         if ("reservation".equals(listType)) {
-            Assert.assertTrue(DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getPound()),
+            Assert.assertTrue(
+                DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getPound()),
                 "Failed to display STB reservation list");
         } else if ("device".equals(listType)) {
-            Assert.assertTrue(DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getHouse()),
+            Assert.assertTrue(
+                DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getHouse()),
                 "Failed to display STB device list");
         }
         LOGGER.info("Has successfully sent GET request to 'get STB {} list'", listType);
@@ -86,12 +88,10 @@ public class DawgPoundSTBReservationRestGlue {
             // Setting reservation parameters
             String stbDeviceID = stbParams.get(0);
             String reserveToken = stbParams.get(1);
-            boolean forceReserve = false;
             if ((null != override) && (override.contains("politely"))) {
-                forceReserve = false;
                 TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_RESERVATION_TOKEN, reserveToken);
             }
-            Reservation reservation = new Reservation(stbDeviceID, reserveToken, DawgHouseConstants.VALID_EXPIRATION_TIME, forceReserve);
+            Reservation reservation = new Reservation(stbDeviceID, reserveToken, DawgHouseConstants.VALID_EXPIRATION_TIME, false);
             TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_RESERVATION, reservation);
             // Sending POST request for STB reservation
             result = DawgPoundRestHelper.getInstance().reserveStbInDawg(reservation);
@@ -193,7 +193,7 @@ public class DawgPoundSTBReservationRestGlue {
         Reservation reservation = null;
         MetaStb stbDevice = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
         switch (stbParam) {
-            case "device id":
+            case "device_id":
                 reservation = new Reservation(DawgHouseConstants.INVALID_STB_DEVICE_ID, DawgHouseConstants.VALID_CLIENT_TOKEN, DawgHouseConstants.VALID_EXPIRATION_TIME, true);
                 break;
             case "expiration time":
@@ -204,8 +204,8 @@ public class DawgPoundSTBReservationRestGlue {
                 break;
         }
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_RESERVATION, reservation);
-        boolean result = DawgPoundRestHelper.getInstance().reserveStbInDawg(reservation);
-        Assert.assertTrue(result, "Failed to send POST request to reserve STB in dawg pound");
+        Assert.assertTrue(DawgPoundRestHelper.getInstance().reserveStbInDawg(reservation),
+            "Failed to send POST request to reserve STB in dawg pound");
         LOGGER.info("Successfully sent POST request to reserve STB with invalid {} ", stbParam);
     }
 

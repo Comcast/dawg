@@ -3,7 +3,7 @@ Feature: Tag Cloud behaviours
 
 Background: 
 	Given I am on the dawg house home page 
-		
+@smoke		
 Scenario: Verify the tag highlight during tag selection 
 	When I select any tag element in tag cloud 
 	Then I should see the tag element highlighted 
@@ -17,7 +17,7 @@ Scenario: Verify the tag highlight during tag de-selection
 	And highlight remains on second tag element 
 	When I de-select second tag element 
 	Then I should see highlight removed from both tag elements 
-		
+@smoke		
 Scenario: Verify STB list displayed in filter table on tag selection 
 	When I select any tag element in tag cloud 
 	Then I should see STB list for the tag selected 
@@ -32,7 +32,7 @@ Scenario: Verify STB list displayed in filter table based on tag de-selection
 	And the STB list for second tag element remains same 
 	When I de-select second tag element 
 	Then I should see all available STBs in Dawg House 
-@commonStbs
+@commonStbs @smoke
 Scenario: De-selection of tags having common STB list 
 	Given I selected two tag elements having same STB list 
 	And the STB list of both tags are same 

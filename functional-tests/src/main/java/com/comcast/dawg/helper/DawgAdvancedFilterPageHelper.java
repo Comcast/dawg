@@ -222,10 +222,9 @@ public class DawgAdvancedFilterPageHelper {
      * @return Map storing the filter condition with checked status   
      */
     public Map<String, Boolean> getFilterCondnWithCheckedStatus() {
-        Map<String, Boolean> filterConditions = new HashMap<String, Boolean>();
-        List<WebElement> conditionElements = this.getConditionDivElement();
+        Map<String, Boolean> filterConditions = new HashMap<String, Boolean>();       
         try {
-            for (WebElement ele : conditionElements) {
+            for (WebElement ele : this.getConditionDivElement()) {
                 if (!ele.findElement(By.className(DawgHousePageElements.CONDITION_TEXT)).getText().isEmpty()) {
                     WebElement chckBoxEle = ele.findElement(By.className(DawgHousePageElements.CONDITION_CHECK_BOX));
                     filterConditions.put(ele.getText().replaceAll(DawgHouseConstants.REPLACE_REGEX, "").trim(),
@@ -455,9 +454,8 @@ public class DawgAdvancedFilterPageHelper {
     public boolean selectEntryFmSearchHistory(String entryToSelect) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         boolean isSelected = false;
-        try {
-            List<WebElement> elementw = driver.findElementsByClassName("searchHistoryConditionText");
-            for (WebElement ele : elementw) {
+        try {           
+            for (WebElement ele : driver.findElementsByClassName("searchHistoryConditionText")) {
                 if (entryToSelect.equals(ele.getText().replaceAll(DawgHouseConstants.REPLACE_REGEX, ""))) {
                     ele.click();
                     isSelected = true;
@@ -475,11 +473,10 @@ public class DawgAdvancedFilterPageHelper {
      * @param filterToCheckSelected - Search history entry to be selected   
      * @return true if search history entry selected , false otherwise    
      */
-    public boolean isHistoryFilterhighlighted(String filterToCheck) {
+    public boolean isHistoryFilterHighlighted(String filterToCheck) {
         boolean isSelected = false;
-        try {
-            List<WebElement> historyElements = getHistoryElement();
-            for (WebElement element : historyElements) {
+        try {            
+            for (WebElement element : getHistoryElement()) {
                 String filterEntry = element.getText().replaceAll(DawgHouseConstants.REPLACE_REGEX, "");
                 // Verify filter is highlighted
                 if (element.findElement(By.xpath(DawgHousePageElements.SELECTED_SEARCH_HISTORY_ENTRY)).isDisplayed() && !filterEntry.isEmpty() && filterEntry.equals(filterToCheck)) {

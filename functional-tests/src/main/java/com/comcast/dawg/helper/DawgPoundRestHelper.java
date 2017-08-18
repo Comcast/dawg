@@ -64,7 +64,7 @@ public class DawgPoundRestHelper {
         DawgRestRequestService dawgRestReqService = new DawgRestRequestService(finalUrl, Method.POST);
 
         // Sending POST request
-        Response response = dawgRestReqService.sendRequest();
+        Response response = dawgRestReqService.sendRequest();     
         return (null != response) && (HttpStatus.SC_OK == response.getStatusCode());
     }
 

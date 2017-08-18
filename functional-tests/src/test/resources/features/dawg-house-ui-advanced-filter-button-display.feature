@@ -3,7 +3,7 @@ Feature: Advanced Filter Overlay button(Add, Search, AND, OR, NOT, DEL, BREAK) d
 
 Background: 
 	Given I am on advanced filter overlay 
-
+@smoke
 Scenario: Verify button display in advanced filter overlay using single filter values 
 	Given I added 1 filter value to advanced filter overlay 	
 	Then I should see filter value added in filter overlay 
@@ -16,7 +16,7 @@ Scenario: Verify button display in advanced filter overlay using single filter v
 		|BREAK   |false    |
 		|Add     |true     | 		
 		|Search  |true     |
-
+@smoke
 Scenario: Verify button display in advanced filter overlay using multiple filter values 
 	Given I added 2 filter values to advanced filter overlay 	
 	Then I should see filter values added in filter overlay 

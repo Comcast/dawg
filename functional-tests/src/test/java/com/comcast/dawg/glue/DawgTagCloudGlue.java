@@ -119,6 +119,7 @@ public class DawgTagCloudGlue {
             List<String> tag2Stbs = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TAG2_WITH_STB_SET2);
             stbLists.addAll(tag1Stbs);
             stbLists.addAll(tag2Stbs);
+           
         } else if (type.contains("delete")) {
             // Get the test STBs added for the test tag delete(to perform delete stb content from tag)
             stbLists = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_DELETE_TAG1_STBS);

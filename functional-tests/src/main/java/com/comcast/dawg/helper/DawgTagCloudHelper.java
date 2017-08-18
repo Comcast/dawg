@@ -23,6 +23,7 @@ import java.util.Map;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -137,12 +138,11 @@ public class DawgTagCloudHelper {
             if (stbCheckbox.isSelected()) {
                 return true;
             }
-            return false;
+
         } catch (NoSuchElementException e) {
             LOGGER.error("Failed verify STB selected or not", e.getMessage());
-            return false;
         }
-
+        return false;
     }
 
     /**
@@ -217,11 +217,11 @@ public class DawgTagCloudHelper {
         try {
             WebElement deleteDivTagElement = DawgIndexPageHelper.getInstance().getTagDeleteDivElement(tagName);
             if (deleteDivTagElement.isDisplayed()) {
-                deleteDivTagElement.click();               
+                deleteDivTagElement.click();
                 return true;
             }
         } catch (NoSuchElementException e) {
-            LOGGER.error("Failed to select delete option in tag", e.getMessage());           
+            LOGGER.error("Failed to select delete option in tag", e.getMessage());
         }
         return false;
     }
@@ -261,6 +261,7 @@ public class DawgTagCloudHelper {
             WebElement bulkTagBtn = driver.findElement(By.id(DawgHousePageElements.BULK_TAG_BTN_ID));
             if (bulkTagBtn.isDisplayed()) {
                 bulkTagBtn.click();
+                SeleniumWaiter.waitTill(3);
                 return true;
             }
         } catch (NoSuchElementException e) {

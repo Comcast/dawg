@@ -201,14 +201,13 @@ public class DawgAdvancedFilterSearchGlue {
      */
 
     @Then("^I should see '(.*)' condition applied for (.*) two values$")
-    public void verifyCondtnApplied(List<String> condition, String pos) {
-        SeleniumImgGrabber.addImage();
+    public void verifyCondtnApplied(List<String> condition, String pos) {       
         // Get the expected filter condition
         String expectedFilter = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_EXPECTED_CONDITION);
         //Verify filter condition applied       
         Assert.assertTrue(DawgAdvancedFilterPageHelper.getInstance().isFilterDisplayed(expectedFilter),
             condition + "condition is not applied to two filter values");
-
+        SeleniumImgGrabber.addImage();
     }
 
     /**

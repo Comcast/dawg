@@ -4,7 +4,7 @@ Feature: Dawg house Log In
 
 Background:
 	Given I am on the Log In page of dawg house portal
-
+@smoke
 Scenario: Login in to dawg house with valid credentials
 	When I enter correct username and password
 	And I select 'Sign In' button

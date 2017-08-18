@@ -4,7 +4,7 @@ Feature: Advanced filter search history
 Background: 
 	Given I am on advanced filter overlay 	
 #new scenario	
-@advanceSearch 
+@advanceSearch @smoke
 Scenario: Verify search history display in advanced filter overlay 
 	Given I added 1 filter value to advanced filter overlay 
 	When I choose filter value to perform search 
@@ -21,7 +21,6 @@ Scenario Outline: Delete single history
 	       |count|
 	       |2    |
 	       |3    |	
-
 Scenario Outline: Delete multiple histories
 	Given I have <count> search history details in advanced filter overlay 
 	When I delete <count> entries from the search history list 
