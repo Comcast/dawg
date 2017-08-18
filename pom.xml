@@ -5,7 +5,7 @@
 
     <groupId>com.comcast.video.dawg</groupId>
     <artifactId>dawg</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2.7</version>
     <packaging>pom</packaging>
     <inceptionYear>2010</inceptionYear>
     <url>https://github.com/Comcast/dawg</url>
