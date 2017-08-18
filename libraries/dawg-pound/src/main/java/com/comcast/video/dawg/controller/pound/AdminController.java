@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.comcast.video.dawg.common.exceptions.DawgNotFoundException;
 import com.comcast.video.dawg.common.exceptions.UserException;
 import com.comcast.video.dawg.common.security.model.DawgUser;
 import com.comcast.video.dawg.common.security.model.DawgUserAndRoles;
@@ -34,7 +35,17 @@ public class AdminController {
     @ResponseBody
     public DawgUserAndRoles getUser(@PathVariable String userId) throws UserException, NoHandlerFoundException {
         if (userService == null) throw new NoHandlerFoundException(RequestMethod.GET.name(), "/user/" + userId, null);
-        return userService.getUser(userId);
+        DawgUserAndRoles user = userService.getUser(userId);
+        if (user == null) throw new DawgNotFoundException("No user found for userId '" + userId + "'");
+        return user;
+    }
+    
+    @RequestMapping(value="/user/exists/{userId}", method = { RequestMethod.GET } )
+    @ResponseBody
+    public Boolean userExists(@PathVariable String userId) throws UserException, NoHandlerFoundException {
+        if (userService == null) throw new NoHandlerFoundException(RequestMethod.GET.name(), "/exists/user/" + userId, null);
+        DawgUserAndRoles dawgUser = userService.getUser(userId);
+        return dawgUser != null;
     }
     
     @RequestMapping(value="/user/{userId}", method = { RequestMethod.POST } )
