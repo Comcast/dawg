@@ -1,15 +1,15 @@
-@uitestI @toggleall
-Feature: Verify Dawg House's toggle all UIbehaviours 
+@uitest @toggleall
+Feature: Toggle all UIbehaviours 
 
 Background: 
 	Given I am on the dawg house home page 
-
+@smoke
 Scenario: Verify the toggle all behaviour when no tags selected 
 	When I select toggle all checkbox 
 	Then I should see all STB checkboxes as checked 
 	And I uncheck toggle all checkbox 
 	Then I should see all STB checkboxes as unchecked 	
-
+@smoke
 Scenario: Verify the toggle all behaviour when single tag selected 
 	Given I selected any tag element in tag cloud	
 	When I select toggle all checkbox 

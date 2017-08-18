@@ -1,15 +1,15 @@
-@uitestI @advanceSearch 
-Feature: Dawg-house Advanced Filter Search behaviours. 
+@uitest @advanceSearch  
+Feature: Advanced Filter Search behaviours. 
 
 Background: 
 	Given I am on advanced filter overlay 
-
+@smoke
 Scenario: Verify the search results using multiple filter values 
 	Given I added 1 filter value to advanced filter overlay 	 
 	Then I should see filter value added in filter overlay 
 	When I select 'Search' button in advanced filter overlay	
 	Then I should see the search results displayed in the filter table 	
-
+@smoke
 Scenario Outline: Verify the search results while selecting condition buttons (AND,OR,NOT) 
 	Given I added 2 filter values to advanced filter overlay 
 	And I should see filter values added in filter overlay 
@@ -31,7 +31,7 @@ Scenario: Verify the search results with singel filter value using NOT condition
 	Then I should see condition 'NOT' applied to filter values 
 	When I select 'Search' button in advanced filter overlay 
 	Then I should see the search results displayed in the filter table
-
+@smoke
 Scenario Outline: Verify the search results using single filter values 
 	Given there is an advanced filter with "<field>", "<option>", "<value>" 
 	When I select 'Add' button in advanced filter overlay 
@@ -49,7 +49,7 @@ Scenario Outline: Verify the search results using single filter values
 		| IR Blaster Type       | contains| TestIrBlasterType   | 
 		| Hardware Revision     | contains| TestHardwareRevision|  
 		| Capabilities          | contains| TestCap             |
-		
+	
 Scenario Outline: Verify the search results using single filter values with NOT condition 
 	Given there is an advanced filter with "<field>", "<option>", "<value>" 
 	When I select 'Add' button in advanced filter overlay
@@ -68,7 +68,7 @@ Scenario Outline: Verify the search results using single filter values with NOT 
 		| IR Blaster Type       | contains| TestIrBlasterType   | 
 		| Hardware Revision     | contains| TestHardwareRevision|  
 		| Capabilities          | contains| TestCap             |
-		| Capabilities          | contains| SomeOtherCapability |			
+					
 
 Scenario Outline: Verify checkbox selection while adding filter values to filter overlay 
 	Given I added <count> filter value/s to advanced filter overlay 	
@@ -79,7 +79,6 @@ Scenario Outline: Verify checkbox selection while adding filter values to filter
 		|1     | 
 		|2     |
 		|3     |	
-
 Scenario: Verify search results by applying filter conditions together (AND and OR) 
 	Given I added 4 filter values to advanced filter overlay 
 	When I apply 'AND' condition to last 2 filter values 
@@ -88,8 +87,7 @@ Scenario: Verify search results by applying filter conditions together (AND and 
 	Then I should see 'OR' condition applied for last two values 	
 	And I select 'Search' button in advanced filter overlay
 	Then I should see the search results displayed in the filter table
-
-#new scenario	
+	
 Scenario Outline: Verify the search results using multiple filter values with conditions(AND, OR, OR NOT, AND NOT)
 	Given I added following filter values to advanced filter overlay 
 		| field                 | option  | value               |
@@ -127,7 +125,7 @@ Scenario Outline: Verify search results by applying group conditions (AND and OR
 		|AND     |		
 		|OR, NOT | 
 		|AND, NOT| 
-
+@smoke
 Scenario: Verify the deletion of single filter value 
 	Given I added 2 filter values to advanced filter overlay 
 	Then I should see filter values added in filter overlay 
@@ -135,8 +133,7 @@ Scenario: Verify the deletion of single filter value
 	When I select 'DEL' button in advanced filter overlay 
 	Then I should see selected filter value removed from filter overlay 
 	And second filter value remains in filter overlay 
-
-#new scenario	
+	
 Scenario Outline: Verify the deletion of filter values 
 	Given I added <count> filter value/s to advanced filter overlay 
 	And I should see filter value/s added in filter overlay 
@@ -147,7 +144,6 @@ Scenario Outline: Verify the deletion of filter values
 		|1    | 
 		|2    |
 		|3    |
-
 Scenario Outline: Break the group conditions with two filter values 
 	Given I added <count> filter values to advanced filter overlay 
 	When I apply '<condition>' condition to <count> filter values 	
@@ -159,8 +155,7 @@ Scenario Outline: Break the group conditions with two filter values
 		|OR       |2    |
 		|AND      |2    |
 		|OR       |3    |
-		|AND      |3    |
-	
+		|AND      |3    |	
 Scenario: Break the group conditions with four filter values 
     Given I added 4 filter values to advanced filter overlay 
 	When I apply 'AND' condition to first 2 filter values 

@@ -1,10 +1,10 @@
-@uitestI
-Feature: Log In
+@uitest
+Feature: Dawg house Log In
 	Verify the log in behaviour of the dawg house portal
 
 Background:
 	Given I am on the Log In page of dawg house portal
-
+@smoke
 Scenario: Login in to dawg house with valid credentials
 	When I enter correct username and password
 	And I select 'Sign In' button

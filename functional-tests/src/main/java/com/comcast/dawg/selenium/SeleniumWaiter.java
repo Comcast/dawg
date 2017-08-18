@@ -61,7 +61,7 @@ public class SeleniumWaiter {
      *
      * @return  false is the element is still attached to the DOM, true otherwise.
      */
-    public boolean waitForStaleness(WebElement element, int timeoutInSec) {
+    public static boolean waitForStaleness(WebElement element, int timeoutInSec) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSec);
 
@@ -73,7 +73,7 @@ public class SeleniumWaiter {
      *
      * @param  timeoutInSec  timeout in seconds.
      */
-    public void waitForAlertPresence(int timeoutInSec) {
+    public static void waitForAlertPresence(int timeoutInSec) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSec);
         wait.until(ExpectedConditions.alertIsPresent());

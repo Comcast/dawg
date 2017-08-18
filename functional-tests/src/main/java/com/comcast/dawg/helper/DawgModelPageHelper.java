@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -61,52 +60,55 @@ public class DawgModelPageHelper {
         return modelPageHelper;
     }
 
-
     /**
      *  Verify model overlay is displayed over model configuration page
-     *  @return true if model overlay displayed, false otherwise     
-     * @throws DawgTestException 
+     *  @return true if model overlay displayed, false otherwise
      */
-    public boolean isModelOverlayDisplayed() throws DawgTestException {
+
+    public boolean isModelOverlayDisplayed() {
         WebElement overlayTable = null;
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
             overlayTable = driver.findElementByClassName(DawgHousePageElements.ADD_CAP_INPUT_IDENTIFIER);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to verify load model overlay displayed", e.getMessage());
         }
         return overlayTable.isDisplayed();
     }
 
     /**
      * Verify model configuration page  is displayed      
-     * @return true if model page is displayed, false otherwise     
-     * @throws DawgTestException 
+     * @return true if model page is displayed, false otherwise 
      */
-    public boolean isModelPageDisplayed() throws DawgTestException {
+    public boolean isModelPageDisplayed() {
+
         WebElement modelConfigTbl = null;
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
             modelConfigTbl = driver.findElementById(DawgHousePageElements.MODEL_CONFIG_TABLE_ID);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to load model page", e.getMessage());
         }
-
         return modelConfigTbl.isDisplayed() && !isModelOverlayDisplayed();
     }
 
     /**
-     * Load the model overlay page to add various models     
-     * @throws DawgTestException 
+     * Load the model overlay page to add various models
      */
-    public void loadModelOverlay() throws DawgTestException {
+    public boolean loadModelOverlay() {
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-            // Clicking on add button.
-            driver.findElementByXPath(DawgHousePageElements.ADD_MODEL_BUTTON_INPUT_XPATH).click();
+            // Clicking on add button.           
+            WebElement modelBtn = driver.findElementByXPath(DawgHousePageElements.ADD_MODEL_BUTTON_INPUT_XPATH);
+            if (modelBtn.isDisplayed()) {
+                modelBtn.click();
+                return true;
+            }
+
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to load model overlay", e.getMessage());
         }
+        return false;
     }
 
     /**
@@ -134,10 +136,11 @@ public class DawgModelPageHelper {
                 propertyList.add(element.getText());
             }
             if (propertyList.isEmpty() || null == propertyList) {
+                LOGGER.error("Failed to find any {} in model configuration page", propertyName);
                 return null;
             }
         } catch (NoSuchElementException e) {
-            return null;
+            LOGGER.error("Failed to inspect Web element :" + e.getMessage());
         }
         return propertyList;
     }
@@ -165,7 +168,7 @@ public class DawgModelPageHelper {
             driver.findElementByXPath(propertyTextFieldXpath).sendKeys(newPropertyToAdd);
             driver.findElementByXPath(propertyBtnXpath).click();
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to add property " + newPropertyToAdd + " to model overlay", e.getMessage());
         }
     }
 
@@ -195,7 +198,7 @@ public class DawgModelPageHelper {
             // Wait for the model details to get saved and config page get refreshed.
             SeleniumWaiter.waitTill(TestConstants.OVERLAY_LOAD_WAIT);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to add properties " + modelName + "," + family + " to model overlay", e.getMessage());
         }
     }
 
@@ -234,35 +237,34 @@ public class DawgModelPageHelper {
                 return true;
             }
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to select capabilties from model overlay", e.getMessage());
         }
+        return false;
     }
 
     /**
      * Verify the specified capability is displayed as checked in model overlay page 
      * @param  capabilityToverify  capability to verify
-     * @return true if the specified capability is selected, false otherwise
-     * @throws DawgTestException 
+     * @return true if the specified capability is selected, false otherwise     
      */
-    public boolean isCapabilitiesSelected(String capabilityToverify) throws DawgTestException {
+    public boolean isCapabilitiesSelected(String capabilityToverify) {
         WebElement checkBoxElemnet = null;
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
             //Select the check box of capability
             checkBoxElemnet = driver.findElementByXPath("//input[@id='" + capabilityToverify + "']");
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to verify capabilities selected in model overlay", e.getMessage());
         }
         return checkBoxElemnet.isSelected();
-
     }
 
     /**
      * Get the list of selected capabilities from model overlay page      
-     * @return List of capabilities that are selected
-     * @throws DawgTestException 
+     * @return List of capabilities that are selected    
      */
-    public List<String> selectedCapablities() throws DawgTestException {
+
+    public List<String> selectedCapablities() {
         List<String> capabilities = new ArrayList<String>();
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
@@ -275,7 +277,7 @@ public class DawgModelPageHelper {
                 }
             }
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to get selected capabilities", e.getMessage());
         }
         return capabilities;
     }
@@ -300,7 +302,7 @@ public class DawgModelPageHelper {
             //Select the family option from drop down list  
             select.selectByVisibleText(FamilyToSelect);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to get selected family from model overlay", e.getMessage());
         }
         // Verify family name selected
         return isFamilyNameSelected(FamilyToSelect);
@@ -309,10 +311,9 @@ public class DawgModelPageHelper {
     /**
      * Verify family name provided is displayed as selected in model overlay page   
      * @param  familyNameSelected 
-     * @return true if family name selected, false otherwise 
-     * @throws DawgTestException 
+     * @return true if family name selected, false otherwise   
      */
-    public boolean isFamilyNameSelected(String familyNameSelected) throws DawgTestException {
+    public boolean isFamilyNameSelected(String familyNameSelected) {
         WebElement option = null;
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
@@ -320,65 +321,51 @@ public class DawgModelPageHelper {
             //Verify the family name is get selected in the dropdown list
             option = select.getFirstSelectedOption();
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to get verify family selected from model overlay", e.getMessage());
+            return false;
         }
         return familyNameSelected.equals(option.getText());
     }
 
     /**
-     * Validates whether the alert message pops up. 
-     * @return  true if alert is present, false otherwise.
-     */
-    public boolean isAlertPresent() {
-        RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-        try {
-            driver.switchTo().alert();
-            return true;
-        } catch (NoAlertPresentException Ex) {
-            LOGGER.error("No alert Message displayed");
-        }
-        return false;
-    }
-
-    /**
      * Return the row element corresponding to the model name passed. 
      * @param   modelName  Name of the model.  
-     * @return  Row element of STB model.
-     * @throws DawgTestException 
+     * @return  Row element of STB model.    
      */
-    public WebElement getModelRowElement(String modelName) throws DawgTestException {
+    public WebElement getModelRowElement(String modelName) {
         WebElement modelRowElement = null;
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
             modelRowElement = driver.findElementByXPath(DawgHousePageElements.STB_MODEL_TR_PAR_XPATH.replace(
                 DawgHousePageElements.REPLACEABLE_ELEMENT, modelName));
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to get model row element", e.getMessage());
         }
         return modelRowElement;
     }
 
     /**
      * Select the specified STB model from model config page
-     * @param   modelName  Name of the model.
-     * @throws DawgTestException 
+     * @param   modelName  Name of the model  
      */
-    public void selectSTBModelFromModelPage(String modelName) throws DawgTestException {
-        WebElement modelRowElement = getModelRowElement(modelName);
-        if (modelRowElement.isDisplayed()) {
-            modelRowElement.click();
-        } else {
-            throw new DawgTestException("Failed to find model row element to select the model" + modelName);
+    public void selectSTBModelFromModelPage(String modelName) {
+        try {
+            WebElement modelRowElement = getModelRowElement(modelName);
+            if (modelRowElement.isDisplayed()) {
+                modelRowElement.click();
+            }
+        } catch (NoSuchElementException e) {
+            LOGGER.error("Failed to select model " + modelName + "from model page", e.getMessage());
         }
     }
 
     /**
      * Get properties ( family/Capability) from the specified STB model from model config page
      * @param modelName
-     * @return Map of family name and capabilities of specified model name
-     * @throws DawgTestException
+     * @return Map of family name and capabilities of specified model name    
      */
-    public Map<String, String> getPropertiesOfStbModel(String modelName) throws DawgTestException {
+
+    public Map<String, String> getPropertiesOfStbModel(String modelName) {
         Map<String, String> getProperties = new HashMap<String, String>();
         try {
             WebElement capabilityElement = getModelRowElement(modelName).findElement(
@@ -389,7 +376,7 @@ public class DawgModelPageHelper {
                 By.className(DawgHousePageElements.MODEL_FAMILY_TD_IDENTIFIER));
             getProperties.put(DawgHouseConstants.FAMILY, familyElement.getText());
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to get " + modelName, e.getMessage());
         }
         return getProperties;
     }
@@ -417,9 +404,8 @@ public class DawgModelPageHelper {
             // Wait for the model details to get saved and config page get refreshed.
             SeleniumWaiter.waitTill(TestConstants.MODEL_CONFIG_PAGE_LOAD_WAIT);
         } catch (NoSuchElementException e) {
-            throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
+            LOGGER.error("Failed to edit model properties " + family + "," + capabilities, e.getMessage());
+
         }
-
     }
-
 }

@@ -74,7 +74,7 @@ public class DawgHouseSTBModelRestGlue {
     public void verifySTBModelAdditionToDawgHouse() throws DawgTestException {
         LOGGER.info("Going to verify added STB model");
         MetaStb modelSTB = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_MODEL);
-        boolean result = DawgHouseRestHelper.getInstance().stbModelExistsInDawg(modelSTB.getId());
+        boolean result = DawgHouseRestHelper.getInstance().stbModelExistsInDawg(modelSTB.getModel().name());
         Assert.assertTrue(result, "Failed to verify presence of STB model in dawg house");
         LOGGER.info("Successfully verified added STB model");
     }
@@ -87,7 +87,7 @@ public class DawgHouseSTBModelRestGlue {
     public void sendGetReqForSTBModel() throws DawgTestException {
         LOGGER.info("Going to send GET request to 'get STB model' with valid model id");
         MetaStb modelSTB = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_MODEL);
-        boolean result = DawgHouseRestHelper.getInstance().sendGetReqForSTBModel(modelSTB.getId());
+        boolean result = DawgHouseRestHelper.getInstance().sendGetReqForSTBModel(modelSTB.getModel().name());
         Assert.assertTrue(result, "Failed to get STB model from dawg house");
         LOGGER.info("Has successfully sent GET request to 'get STB model' with valid model id");
     }
@@ -95,16 +95,16 @@ public class DawgHouseSTBModelRestGlue {
     /**
      * Step defintion to verify 'get STB model' response
      */
-    @And("^I should verify that the response contains expected model id, model name and family name$")
+    @And("^I should verify that the response contains expected model and family name$")
     public void verifyGetSTBModelResponse() {
         LOGGER.info("Going to verify 'get STB model' response");
         Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
-        MetaStb modelSTB = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_MODEL);
-        Assert.assertTrue(response.asString().contains(modelSTB.getId()), "Failed to verify the STB model Id");
+        MetaStb modelSTB = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_MODEL);   
+     
         Assert.assertTrue(response.asString().contains(modelSTB.getModel().name()),
             "Failed to verify the STB model name");
         Assert.assertTrue(response.asString().contains(modelSTB.getFamily().name()),
-            "Failed to verify the STB model family name");
+            "Failed to verify the STB model family name");      
         LOGGER.info("Successfully verified 'get STB model' response");
     }
 
@@ -227,7 +227,7 @@ public class DawgHouseSTBModelRestGlue {
     @And("^I should verify that added STB device contains STB device id (.*), mac address (.*), STB model name (.*), expected model capabilities (.*) and model family (.*)$")
     public void verifyAssignModels(String id, String mac, String expectedModel, String expectedCaps, String expectedFamily) throws DawgTestException {
         LOGGER.info("Going to verify assign models service in dawg house");
-        boolean result = DawgHouseRestHelper.getInstance().stbDeviceExistsInDawg(id);
+        boolean result = DawgHouseRestHelper.getInstance().stbDeviceExistsInDawg(id);       
         Assert.assertTrue(result, "Failed to assign STB models to dawg house");
         Response getModelRes = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
         Assert.assertTrue(getModelRes.asString().contains(expectedModel), "Failed to verify the STB model name");

@@ -24,14 +24,11 @@ public class SauceLabConstants {
     /** Constant to run tests in saucelabs. */
     public static final String SAUCE = "sauce";
 
-    /** Constant to run tests in saucelabs. */
-    public static final String LOCAL = "local";
-
     /** sauce url constant. */
     public static final String SAUCE_URL = "http://ondemand.saucelabs.com:80/wd/hub";
 
     /** Constant for dawg test */
-    public static final String DAWG_TEST = "dawgtest123";
+    public static final String DAWG_TEST = "xDawgTests";
 
     /** Constant for dawg test name for setting sauce capability */
     public static final String DAWG_TEST_INFO = "xDAWG Tests";

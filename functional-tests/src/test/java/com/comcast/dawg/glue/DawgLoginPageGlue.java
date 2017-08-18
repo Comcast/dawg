@@ -68,11 +68,10 @@ public class DawgLoginPageGlue {
 
     /**
      * Enter invalid credentials 
-     * OnZukeStep:"I enter incorrect credentials"    
-     * @throws DawgTestException 
+     * OnZukeStep:"I enter incorrect credentials"
      */
     @When("^I enter incorrect credentials$")
-    public void enterIncorrectCredentails() throws DawgTestException {
+    public void enterIncorrectCredentails() {
         DawgIndexPageHelper.getInstance().enterLoginCredentials(DawgHouseConstants.INVALID_USERNAME,
             DawgHouseConstants.INVALID_PASSWORD);
     }
