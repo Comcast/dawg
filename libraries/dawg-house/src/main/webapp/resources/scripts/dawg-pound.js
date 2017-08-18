@@ -114,5 +114,32 @@ var DAWGPOUND = (function() {
         });
     };
 
+    dawgApi.userExists = function(userId, callback) {
+        var url = DAWG_POUND + 'admin/user/exists/' + userId;
+        $.ajax({
+               type: "GET",
+               url: url,
+               xhrFields: {
+                   withCredentials: true
+               },
+               success: callback
+        });
+    }
+
+    dawgApi.createUser = function(userId, user, callback) {
+        user.roles = user.roles ? (user.roles.constructor === Array ? user.roles : [user.roles]) : null;
+        var url = DAWG_POUND + 'admin/user/' + userId;
+        $.ajax({
+               type: "PUT",
+               url: url,
+               data: JSON.stringify(user),
+               xhrFields: {
+                   withCredentials: true
+               },
+               contentType: "application/json",
+               success: callback
+        });
+    }
+
     return dawgApi;
 }());

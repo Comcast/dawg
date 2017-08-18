@@ -1,0 +1,94 @@
+/**
+ * Copyright 2010 Comcast Cable Communications Management, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+input[type=checkbox], input[type=radio] {
+    margin: 0px 5px 0px 5px;
+}
+
+.user-form {
+	width: 500px;
+	margin: 30px;
+}
+
+.form-full {
+	width: 394px;
+	margin: 3px;
+}
+
+.form-first {
+	width: 192px;
+	margin: 3px;
+}
+
+.form-last {
+	width: 192px;
+	margin: 3;
+}
+
+.role-checkbox-label {
+	width: 100px;
+	font-weight: 200;
+}
+
+.roles-title {
+	width: 300px;
+	text-align: center;
+	border-bottom: 1px solid #dddddd;
+	color: #606060;
+}
+
+.roles-div {
+	width: 300px;
+	border: 1px solid #dddddd;
+	margin-top: 30px;
+}
+
+.create-btn {
+	margin-top: 30px;
+}
+
+.available {
+	width: 75px;
+}
+
+.available-avail {
+	color: green;
+}
+
+.create-user-title {
+	font-size: 40px;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.dawg-logo {
+	display: inline-block;
+	margin-left: 30px;
+}
+
+.available-taken {
+	color: red;
+}
+
+.succ-overlay {
+	background-color: #00b359;
+	border: 2px solid black;
+	color: white;
+	font-size: 25px;
+	margin: 10px;
+	padding: 3px;
+	width: 25%;
+	text-align: center;
+}

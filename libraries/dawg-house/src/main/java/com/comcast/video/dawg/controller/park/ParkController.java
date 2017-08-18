@@ -34,6 +34,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -248,6 +250,15 @@ public class ParkController {
             model.addAttribute("anyReserved", anyReserved);
             model.addAttribute("filterFields", SearchableField.values());
             model.addAttribute("operators", Operator.values());
+            Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+            boolean admin = false;
+            for (SimpleGrantedAuthority auth : authorities) {
+                if ("ROLE_ADMIN".equals(auth.getAuthority())) {
+                    admin = true;
+                    break;
+                }
+            }
+            model.addAttribute("admin", admin);
             return "index";
         } else {
             /** User login token is invalid, so redirects to login page */
@@ -292,6 +303,14 @@ public class ParkController {
             }
         }
         session.setAttribute(SEARCH_CONDITIONS_SESSION_ATTRIBUTE_NAME, searchConditions);
+    }
+
+    @RequestMapping("/admin/view/user")
+    public ModelAndView createUserView(@RequestParam(required=false) String c) {
+        ModelAndView model = new ModelAndView("admin");
+        model.addObject("dawgPoundUrl", config.getDawgPoundUrl());
+        model.addObject("created", c != null);
+        return model;
     }
 
     /**

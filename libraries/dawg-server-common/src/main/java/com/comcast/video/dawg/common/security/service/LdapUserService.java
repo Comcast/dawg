@@ -157,6 +157,8 @@ public class LdapUserService implements UserService {
             connection.delete(userDn(userId));
             changeRoles(userId, null, getUserRoles(userId));
 
+        } catch (LdapNoSuchObjectException e) {
+            /** Ignore, if not there then no need to delete */
         } catch (LdapException e) {
             throw new UserException(e);
         }
