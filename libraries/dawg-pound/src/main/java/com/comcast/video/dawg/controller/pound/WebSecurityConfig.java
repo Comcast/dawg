@@ -2,6 +2,7 @@ package com.comcast.video.dawg.controller.pound;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		    .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class)
 			.csrf().disable()
 			.authorizeRequests()
+			.antMatchers(HttpMethod.OPTIONS).permitAll()
             .antMatchers("/health/**").permitAll()
 			.antMatchers("/admin/**").hasAnyRole("ADMIN")
 			.antMatchers("/**").hasAnyRole("ADMIN", "POUND");

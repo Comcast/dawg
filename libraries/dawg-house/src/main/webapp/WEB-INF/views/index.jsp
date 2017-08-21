@@ -53,10 +53,10 @@
             <i class="icon-user"></i> <span>${token}</span> <input type="text" id="changeUserInput"  />
             <button class="btn" id="changeUserButton">Change User</button>
             <span class="suggestion" id="badlogin">Usernames may only contain alphanumeric keys.</span>
-            <a href="http://sdrv.ms/13iLvJH"><button class="btn" id="feedback">Provide Feedback!</button></a>
             <button class="btn" id="bModel" onclick="window.location='${contextPath}/modelsConfig/'">Configure Models</button>
-            <a  class="notificationRow"  href="FIXME-LINK">Help</a>
-            <a class="notificationRow separator" href="FIXME-LINK" target="_blank">File a bug</a>
+            <c:if test="${admin}">
+            	<button class="btn" id="bAdmin" onclick="window.location='${contextPath}/admin/view/user'">Manage Users</button>
+            </c:if>
         </section>
 
         <header>
