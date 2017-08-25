@@ -242,14 +242,9 @@ public class DawgHouseSTBDeviceRestGlue {
         LOGGER.info("Going to verify presence of STB device id and mac address in response");
         MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
         Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
-        // creating the expected fields in response JSON
-        String stbIdKeyValPair = DawgHouseConstants.STB_ID_KEY_VAL_PAIR.replace(DawgHouseConstants.JSON_RES_FIELD_VALUE,
-            testStb.getId());
-        String stbMacKeyValPair = DawgHouseConstants.STB_MAC_KEY_VAL_PAIR.replace(
-            DawgHouseConstants.JSON_RES_FIELD_VALUE, testStb.getMacAddress());
         // verifying the presence of expected fields in response JSON
         Assert.assertTrue(
-            (response.asString().contains(stbIdKeyValPair)) && (response.asString().contains(stbMacKeyValPair)),
+            (response.asString().contains(testStb.getId())) && (response.asString().contains(testStb.getMacAddress())),
             "Failed to verify presence of STB device id and mac in response");
         LOGGER.info("Successfully verified presence of STB device id and mac address in response");
     }
