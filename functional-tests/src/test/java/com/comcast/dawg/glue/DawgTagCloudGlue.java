@@ -210,7 +210,7 @@ public class DawgTagCloudGlue {
         // Check whether the tag contains same lists of stbs as in first tag
         //Get stbs in first tag selected
         List<String> tag1Stbs = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TAG1_WITH_STB_SET1);
-        Assert.assertTrue(stbLists.equals(tag1Stbs),
+        Assert.assertTrue(stbLists.containsAll(tag1Stbs),
             "STB lists of selected tag is not same as that of stb list in first tag");
     }
 
