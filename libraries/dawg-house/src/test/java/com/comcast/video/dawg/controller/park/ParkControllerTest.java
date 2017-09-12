@@ -15,7 +15,9 @@
  */
 package com.comcast.video.dawg.controller.park;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import org.easymock.EasyMock;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.Model;
 import org.springframework.validation.support.BindingAwareModelMap;
@@ -72,7 +75,14 @@ public class ParkControllerTest {
     @SuppressWarnings("unchecked")
     @Test(dataProvider="testUserFrontWithValidTokenData")
     public void testUserFrontWithValidToken(String token, String tag,String q, String[] sort, String[] otherTagsExp) {
-        ParkController controller = new ParkController();
+        ParkController controller = new ParkController() {
+            @Override
+            protected Collection<SimpleGrantedAuthority> getAuths() {
+                Collection<SimpleGrantedAuthority> auths = new ArrayList<SimpleGrantedAuthority>();
+                auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                return auths;
+            }
+        };
         Map<String, Object>[] filteredStbs = new HashMap[1];
         Map<String, Object>[] allStbs = new HashMap[2];
         Map<String, Object> stb1 = new HashMap<String, Object>();

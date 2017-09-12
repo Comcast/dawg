@@ -63,9 +63,6 @@ import com.comcast.video.dawg.service.park.ParkService;
 @Controller
 public class ParkController {
 
-    /** JSON array separator. */
-    private static final String SEPARATOR_JSON_ARRAY = ",";
-
     /** JSON array end element. */
     private static final String END_ELEMENT_JSON_ARRAY = "]";
 
@@ -250,7 +247,7 @@ public class ParkController {
             model.addAttribute("anyReserved", anyReserved);
             model.addAttribute("filterFields", SearchableField.values());
             model.addAttribute("operators", Operator.values());
-            Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+            Collection<SimpleGrantedAuthority> authorities = getAuths();
             boolean admin = false;
             for (SimpleGrantedAuthority auth : authorities) {
                 if ("ROLE_ADMIN".equals(auth.getAuthority())) {
@@ -265,6 +262,11 @@ public class ParkController {
             return "login";
         }
 
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected Collection<SimpleGrantedAuthority> getAuths() {
+        return (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
     }
 
     @RequestMapping(value = "/filter/store", method = RequestMethod.POST)
