@@ -42,7 +42,11 @@ public enum RestURIConfig {
     MODEL_CONFIG_PAGE_URI(DawgHouseConstants.MODEL_CONFIG,TestConstants.MODEL_CONFIG_URI),
 
     /** Dawg Pound Rest services */
-    RESERVE_STB_URI(DawgHouseConstants.RESERVE_STB, TestConstants.RESERVE_STB_URI);
+    RESERVE_STB_URI(DawgHouseConstants.RESERVE_STB, TestConstants.RESERVE_STB_URI),
+    GET_STB_RESERVATION_LIST_URI(DawgHouseConstants.GET_STB_RESERVATION_LIST, TestConstants.GET_STB_RESERVATION_LIST_URI),
+    GET_STB_RESERVATION_DETAIL_URI(DawgHouseConstants.GET_STB_RESERVATION_DETAIL, TestConstants.GET_STB_RESERVATION_DETAIL_URI),
+    IS_STB_RESERVED_URI(DawgHouseConstants.IS_STB_RESERVED, TestConstants.IS_STB_RESERVED_URI),
+    UNRESERVE_STB_URI(DawgHouseConstants.UNRESERVE_STB, TestConstants.UNRESERVE_STB_URI);
     //@formatter off
 
     /** operations associated with various REST URI */

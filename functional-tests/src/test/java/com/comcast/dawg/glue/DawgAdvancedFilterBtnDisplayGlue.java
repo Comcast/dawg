@@ -27,6 +27,7 @@ import com.comcast.dawg.DawgTestException;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.DawgHousePageElements;
 import com.comcast.dawg.helper.DawgAdvancedFilterPageHelper;
+import com.comcast.dawg.selenium.SeleniumImgGrabber;
 import com.comcast.zucchini.TestContext;
 
 import cucumber.api.java.en.Then;
@@ -58,12 +59,12 @@ public class DawgAdvancedFilterBtnDisplayGlue {
     }
 
     /**
-     * Verify condition button check box selection       
-     * @throws DawgTestException     
+     * Verify condition button check box selection 
      */
     @Then("^I should verify all filter value checkboxes as selected$")
-    public void verifyChkBoxSelected() throws DawgTestException {
+    public void verifyChkBoxSelected() {
         StringBuilder filters = new StringBuilder();
+        SeleniumImgGrabber.addImage();
         //Get the filter conditions with checked status
         Map<String, Boolean> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterCondnWithCheckedStatus();
         Assert.assertTrue(!filterConditions.isEmpty(), "Failed to find filter conditions");
@@ -100,11 +101,10 @@ public class DawgAdvancedFilterBtnDisplayGlue {
     }
 
     /**
-     * Verify filter values removed from the filter overlay       
-     * @throws DawgTestException 
+     * Verify filter values removed from the filter overlay
      */
     @Then("^I should see filter value/s removed from filter overlay$")
-    public void verifyFilterValRemoved() throws DawgTestException {
+    public void verifyFilterValRemoved() {
         StringBuilder filtersNotRemoved = new StringBuilder();
         List<String> addedFilters = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_FILTER_CONDITION);
         List<String> filterConditions = DawgAdvancedFilterPageHelper.getInstance().getFilterConditionList();

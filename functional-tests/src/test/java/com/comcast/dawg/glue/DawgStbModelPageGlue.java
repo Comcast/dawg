@@ -21,23 +21,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+
 import com.comcast.dawg.DawgTestException;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.DawgHousePageElements;
 import com.comcast.dawg.constants.TestConstants.Capability;
 import com.comcast.dawg.constants.TestConstants.Family;
+import com.comcast.dawg.helper.DawgIndexPageHelper;
 import com.comcast.dawg.helper.DawgModelPageHelper;
 import com.comcast.dawg.selenium.SeleniumImgGrabber;
+import com.comcast.dawg.selenium.SeleniumWaiter;
 import com.comcast.dawg.utils.DawgStbModelUIUtils;
 import com.comcast.zucchini.TestContext;
-
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.Select;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -48,15 +48,12 @@ import cucumber.api.java.en.When;
  * @author priyanka.sl 
  */
 public class DawgStbModelPageGlue {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DawgStbModelPageGlue.class);
-
     /**
      * Verify model overlay displayed or not
-     * OnZukeStep:"I am on model overlay page"    
-     * @throws DawgTestException 
+     * OnZukeStep:"I am on model overlay page" 
      */
     @Given("^I am on model overlay$")
-    public void verifyModelOverlay() throws DawgTestException {
+    public void verifyModelOverlay() {
         DawgModelPageHelper.getInstance().loadModelOverlay();
         //Verify model overlay is displayed 
         Assert.assertTrue(DawgModelPageHelper.getInstance().isModelOverlayDisplayed(),
@@ -100,7 +97,7 @@ public class DawgStbModelPageGlue {
         } else if (DawgHouseConstants.CAPABILITY.contains(propertyName)) {
             addProperty = Capability.NEW_TEST_CAP1.name();
         } else {
-            LOGGER.error("Invalid Property {}", propertyName);
+            throw new DawgTestException("Invalid Property " + propertyName);
         }
         // Verifying the new property chosen to add is not available in the corresponding property list
         List<String> propertyList = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_PROPERTY_LIST);
@@ -178,7 +175,7 @@ public class DawgStbModelPageGlue {
         // Validating the new capability/family added available on the model overlay        
         Assert.assertTrue(propertyList.contains(newPropertyAdded),
             "Failed to add new " + property + "  on model overlay page.");
-
+        SeleniumImgGrabber.addImage();
         if (DawgHouseConstants.FAMILY.contains(property)) {
             // Verify family name added get selected in the dropdown list      
             Assert.assertTrue(DawgModelPageHelper.getInstance().isFamilyNameSelected(newPropertyAdded),
@@ -190,8 +187,6 @@ public class DawgStbModelPageGlue {
         } else {
             throw new DawgTestException("Invalid property " + property);
         }
-
-
     }
 
     /**
@@ -216,28 +211,27 @@ public class DawgStbModelPageGlue {
         } else {
             throw new DawgTestException("Invalid property" + property);
         }
+        SeleniumWaiter.waitTill(DawgHousePageElements.DEFAULT_WAIT);
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_ALREADY_EXISTING_PROPERTY, alreadyExistingProperty);
     }
 
     /**
      * verify the alert message while adding an already existing property
-     * OnZukeStep:"I should see the alert message (.*) name added"    
-     * @throws DawgTestException 
+     * OnZukeStep:"I should see the alert message (.*) name added" 
      */
 
-    @Then("^I should see the alert message (.*) name added (.*)$")
-    public void verifyAlertMessage(String property, String alertMessage) throws DawgTestException {
+    @Then("^I should see the alert message (.*) name added '(.*)'$")
+    public void verifyAlertMessage(String property, String alertMessage) {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         String addedProperty = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_ALREADY_EXISTING_PROPERTY);
-        Assert.assertTrue(DawgModelPageHelper.getInstance().isAlertPresent(),
+        Assert.assertTrue(DawgIndexPageHelper.getInstance().isAlertPresent(),
             "No alert message displayed while trying to add a duplicate " + property + " entry.");
         Alert alert = driver.switchTo().alert();
         // Validates the alert message text. 
-        Assert.assertEquals(alert.getText(), addedProperty + " " + alertMessage.replaceAll("\'", "").trim(),
+        Assert.assertEquals(alert.getText(), addedProperty + " " + alertMessage.trim(),
             "Failed to see the expected alert messsage while adding duplicate property  " + property);
         // Accept the alert message to avoid the 'UnhandledAlertException'
         alert.accept();
-
     }
 
     /**
@@ -280,11 +274,10 @@ public class DawgStbModelPageGlue {
 
     /**
      * Verify the added model properties are available in the model config page
-     * OnZukeStep:"I should verify the capabilities and famility name is added to the model page"    
-     * @throws DawgTestException 
+     * OnZukeStep:"I should verify the capabilities and family name is added to the model page" 
      */
     @Then("^I should verify model properties added to the model page$")
-    public void verifyModelAdded() throws DawgTestException {
+    public void verifyModelAdded() {
         String modelAdded = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_NEW_STB_MODEL);
         Map<String, String> contextModelProperties = TestContext.getCurrent().get(
             DawgHouseConstants.CONTEXT_MODEL_PROPERTIES);
@@ -296,19 +289,18 @@ public class DawgStbModelPageGlue {
 
     /**
      * Verify alert message while deleting a model from model config page
-     * OnZukeStep:"an alert message (.*)should be displayed"    
-     * @throws DawgTestException 
+     * OnZukeStep:"an alert message (.*)should be displayed"         
      */
-    @Then("^an alert message (.*)should be displayed$")
+    @Then("^an alert message '(.*)' should be displayed$")
     public void verifyDeleteModel(String message) {
         String modelToRemove = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_MODEL);
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         // Fail the test if no alert message displayed.  
-        Assert.assertTrue(DawgModelPageHelper.getInstance().isAlertPresent(),
+        Assert.assertTrue(DawgIndexPageHelper.getInstance().isAlertPresent(),
             "No alert message displayed on clicking on delete model button.");
         Alert deleteAlert = driver.switchTo().alert();
         // Validates the alert message.
-        Assert.assertEquals(deleteAlert.getText(), message.replaceAll("\'", "").trim() + " '" + modelToRemove + "'?",
+        Assert.assertEquals(deleteAlert.getText(), message.trim() + " '" + modelToRemove + "'?",
             "The alert message on deletion of model is different from what expected.");
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_ALERT, deleteAlert);
     }
@@ -333,11 +325,10 @@ public class DawgStbModelPageGlue {
 
     /**
      * Verify the selected model removed from model config page
-     * OnZukeStep:"the model will be removed from the configuration page"    
-     * @throws DawgTestException 
+     * OnZukeStep:"the model will be removed from the configuration page"
      */
     @Then("^the model will be removed from the configuration page$")
-    public void verifyModelRemoved() throws DawgTestException {
+    public void verifyModelRemoved() {
         RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
         String modelRemoved = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_MODEL);
         SeleniumImgGrabber.addImage();
@@ -345,8 +336,7 @@ public class DawgStbModelPageGlue {
         boolean isModelRemoved = modelListElements.isEmpty() ? true : !(modelListElements.contains(modelRemoved));
 
         // Verify model removed from model config page       
-        Assert.assertTrue(isModelRemoved,
-            String.format("Model(%s)is not deleted from model config page", modelRemoved));
+        Assert.assertTrue(isModelRemoved, String.format("Model(%s)is not deleted from model config page", modelRemoved));
     }
 
     /**
@@ -376,8 +366,8 @@ public class DawgStbModelPageGlue {
         // Verify model name field is disabled;
         try {
             RemoteWebDriver driver = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_WEB_DRIVER);
-            WebElement modelNameInputElement = driver.findElementByXPath(
-                DawgHousePageElements.MODEL_NAME_TEXT_INPUT_XPATH);
+            SeleniumImgGrabber.addImage();
+            WebElement modelNameInputElement = driver.findElementByXPath(DawgHousePageElements.MODEL_NAME_TEXT_INPUT_XPATH);
             Assert.assertTrue(modelNameInputElement.isDisplayed(), "Model name text field is enabled state");
         } catch (NoSuchElementException e) {
             throw new DawgTestException("Failed to inspect Web element :" + e.getMessage());
@@ -423,36 +413,36 @@ public class DawgStbModelPageGlue {
 
     /**
      *  Verify model overlay page is displayed
-     * OnZukeStep:"model overlay page is displayed"    
-     * @throws DawgTestException 
+     * OnZukeStep:"model overlay page is displayed" 
      */
     @Then("^model overlay page is displayed$")
-    public void verifyModelOverlayPage() throws DawgTestException {
+    public void verifyModelOverlayPage() {
         //Verify model overlay is displayed 
+        SeleniumImgGrabber.addImage();
         Assert.assertTrue(DawgModelPageHelper.getInstance().isModelOverlayDisplayed(),
             "Failed to load add model overlay page");
     }
 
     /**
      *  Verify the model properties (capability and family)are displayed as selected 
-     * OnZukeStep:"I should see model properties are displayed as selected"
-     * @throws DawgTestException 
+     * OnZukeStep:"I should see model properties are displayed as selected"     
      */
     @Then("^I should see model properties are displayed as selected$")
-    public void verifyCapabilitiesChecked() throws DawgTestException {
+    public void verifyCapabilitiesChecked() {
         // Verify the model properties (capability and family)are displayed as checked      
         Map<String, String> properties = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_MODEL_PROPERTIES);
-
-        // Verify family name is displayed as checked
+        // Verify family name is displayed as selected
         String familyName = properties.get(DawgHouseConstants.FAMILY);
         Assert.assertTrue(DawgModelPageHelper.getInstance().isFamilyNameSelected(familyName),
             "Family name" + familyName + "is not displayed as selected in model overlay");
         // Verify capabilities as selected   
         StringBuilder caps = new StringBuilder();
         // cap list from model overlay     
-        List<String> capabilitiesInModelPage = Arrays.asList(
-            properties.get(DawgHouseConstants.CAPABILITY).split(DawgHouseConstants.SPLIT_REGEX));
+        List<String> capabilitiesInModelPage = Arrays.asList(properties.get(DawgHouseConstants.CAPABILITY).split(
+            DawgHouseConstants.SPLIT_REGEX));
         List<String> checkedCapabiities = DawgModelPageHelper.getInstance().selectedCapablities();
+        SeleniumImgGrabber.addImage();
+        Assert.assertTrue(!checkedCapabiities.isEmpty(), "Failed to get selected capabilities");
         for (String capability : capabilitiesInModelPage) {
             if (!checkedCapabiities.contains(capability)) {
                 caps.append(capability).append(",");
@@ -464,12 +454,10 @@ public class DawgStbModelPageGlue {
 
     /**
      *  Verify the modified fields get reflected in model overlay 
-     * OnZukeStep:"I should see the modified fields get reflected in the model page"
-     * @throws DawgTestException 
+     * OnZukeStep:"I should see the modified fields get reflected in the model page"    
      */
-
     @Then("^I should see the modified fields get reflected in the model page$")
-    public void verifyPropertiesUpdated() throws DawgTestException {
+    public void verifyPropertiesUpdated() {
         String modelEdited = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STB_MODEL);
         Map<String, String> contextModelProperties = TestContext.getCurrent().get(
             DawgHouseConstants.CONTEXT_MODEL_PROPERTIES);
@@ -477,16 +465,13 @@ public class DawgStbModelPageGlue {
         Map<String, String> modelProperties = DawgModelPageHelper.getInstance().getPropertiesOfStbModel(modelEdited);
 
         // cap list from model overlay
-        List<String> capabilities = Arrays.asList(
-            modelProperties.get(DawgHouseConstants.CAPABILITY).split(DawgHouseConstants.SPLIT_REGEX));
-
+        List<String> capabilities = Arrays.asList(modelProperties.get(DawgHouseConstants.CAPABILITY).split(
+            DawgHouseConstants.SPLIT_REGEX));
+        SeleniumImgGrabber.addImage();
         String familyNameInUI = modelProperties.get(DawgHouseConstants.FAMILY);
         Assert.assertTrue(capabilities.contains(contextModelProperties.get(DawgHouseConstants.CAPABILITY)),
             "Failed to update the capability for model " + modelEdited);
         Assert.assertTrue(familyNameInUI.equals(contextModelProperties.get(DawgHouseConstants.FAMILY)),
             "Failed to update the family name for model " + modelEdited);
-
     }
-
-
 }

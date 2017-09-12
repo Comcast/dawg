@@ -15,18 +15,19 @@
  */
 package com.comcast.dawg.glue;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.comcast.dawg.DawgTestException;
+import com.comcast.dawg.MetaStbBuilder;
+
+import com.comcast.dawg.config.TestServerConfig;
 import com.comcast.dawg.constants.DawgHouseConstants;
 import com.comcast.dawg.constants.TestConstants;
 import com.comcast.dawg.helper.DawgHouseRestHelper;
 import com.comcast.dawg.helper.DawgPoundRestHelper;
 import com.comcast.video.dawg.common.MetaStb;
-import com.comcast.dawg.MetaStbBuilder;
 import com.comcast.video.dawg.house.Reservation;
 import com.comcast.zucchini.TestContext;
 import com.jayway.restassured.response.Response;
@@ -62,9 +63,9 @@ public class DawgHouseSTBDeviceRestGlue {
      * @throws DawgTestException 
      */
     @When("^I send PUT request to 'add an STB' with device id (.*) and mac address (.*)$")
-    public void addSTBDeviceToDawgViaPutReq(String deviceId, String mac) throws DawgTestException {
-        LOGGER.info("Going to add an STB to dawg house with device id {} mac address {}", deviceId, mac);
-        boolean result = DawgHouseRestHelper.getInstance().addStbToDawg(deviceId, mac, null, null, null, null,
+    public void addSTBDeviceToDawgViaPutReq(String deviceId, String macAddress) throws DawgTestException {
+        LOGGER.info("Going to add an STB to dawg house with device id {} mac address {}", deviceId, macAddress);
+        boolean result = DawgHouseRestHelper.getInstance().addStbToDawg(deviceId, macAddress, null, null, null, null,
             TestConstants.RestReqType.BRIEF_STB_DEVICE_PARAM);
         Assert.assertTrue(result, "Failed to add STB to dawg house");
         LOGGER.info("Has successfully sent PUT request to 'add an STB' to dawg house");
@@ -75,10 +76,10 @@ public class DawgHouseSTBDeviceRestGlue {
      * @throws DawgTestException
      */
     @And("^I should verify all the STB devices added are available in the dawg house$")
-    public void verifyAddedStbs() throws DawgTestException {
+    public void verifyAddedStbsInDawg() throws DawgTestException {
         LOGGER.info("Going to verify presence of added STBs in dawg house");
         ArrayList<String> stbsAdded = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_TEST_STBS);
-        boolean result = DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList();
+        boolean result = DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getHouse());
         Assert.assertTrue(result, "Failed to get list of stbs from dawg house");
         Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
         for (String stbId : stbsAdded) {
@@ -88,67 +89,81 @@ public class DawgHouseSTBDeviceRestGlue {
     }
 
     /**
-     * Step definition to 'delete STB' from dawg house with invalid device id via GET request
-     * @throws DawgTestException
-     */
-    @When("^I send GET request to 'delete STB' with invalid device id as query param$")
-    public void removeSTBwithInvalidIdAsQuery() throws DawgTestException {
-        LOGGER.info("Going to remove STB with invalid device id via GET request");
-        boolean result = DawgHouseRestHelper.getInstance().removeSTBFromDawgByQuery(
-            DawgHouseConstants.INVALID_STB_DEVICE_ID);
-        Assert.assertFalse(result, "Failed to check remove STB with invalid device id");
-        LOGGER.info("Successfully sent GET request to remove STB with invalid device id");
-    }
-
-    /**
-     * Step definition to perform (get STB/delete STB/retrieve STB) from dawg house with invalid device id
+     * Step definition to perform (get/delete/retrieve STB) from dawg house with (invalid/valid) device id passed as (path/query) param
      * @param httpMethod
      *          (GET/DELETE/POST)
      * @param restMethod
      *          dawg house rest request 
+     * @param validity
+     *          Whether STB device id is valid or not
+     * @param paramPassAs
+     *          Whether parameter is passed as (path/query) param
      * @throws DawgTestException
-     * @throws UnsupportedEncodingException 
      */
-    @When("^I send (.*) request to '(.*) STB' with invalid device id$")
-    public void sendGetOrDeleteStbReq(String httpMethod, String restMethod) throws DawgTestException {
-        LOGGER.info("Going to send {} request to {} with invalid device id", httpMethod, restMethod);
+    @When("^I send (.*) request to '(.*) STB' with (invalid|valid)? device id( as query param)?$")
+    public void sendVarReqsForStb(String httpMethod, String restMethod, String validity, String paramPassAs) throws DawgTestException {
+        LOGGER.info("Going to send {} request to {} STB with {} device id", httpMethod, restMethod, validity);
+        MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
         boolean result = false;
+        String deviceId = null;
+        if ("valid".equalsIgnoreCase(validity)) {
+            deviceId = testStb.getId();
+        } else if ("invalid".equalsIgnoreCase(validity)) {
+            deviceId = DawgHouseConstants.INVALID_STB_DEVICE_ID;
+        }
         switch (restMethod) {
             case "get":
-                result = DawgHouseRestHelper.getInstance().stbDeviceExistsInDawg(
-                    DawgHouseConstants.INVALID_STB_DEVICE_ID);
+                // Sending GET request to 'get an STB'
+                result = DawgHouseRestHelper.getInstance().stbDeviceExistsInDawg(deviceId);
                 break;
             case "delete":
-                result = DawgHouseRestHelper.getInstance().removeStbFromDawg(DawgHouseConstants.INVALID_STB_DEVICE_ID);
+                // Sending (DELETE/GET) request to 'delete STB' by passing param as (path/query)
+                DawgHouseRestHelper restHelper = DawgHouseRestHelper.getInstance();
+                result = null!= paramPassAs && paramPassAs.contains("query") ? restHelper.removeSTBFromDawgByQuery(
+                    deviceId) : restHelper.removeStbFromDawg(deviceId);                
                 break;
             case "retrieve":
-                result = DawgHouseRestHelper.getInstance().sendPostReqToRetrieveSTB(
-                    DawgHouseConstants.INVALID_STB_DEVICE_ID);
+                // Sending POST request to 'retrieve STB'
+                result = DawgHouseRestHelper.getInstance().sendPostReqToRetrieveSTB(deviceId);
                 break;
             default:
-                LOGGER.error("Received invalid Rest request " + restMethod);
-        }
-        Assert.assertFalse(result, "Failed to check " + restMethod + "with invalid device id");
-        LOGGER.info("Successfully sent {} request to {} with invalid device id", httpMethod, restMethod);
+                throw new DawgTestException("Received invalid Rest request " + restMethod);
+        }     
+        Assert.assertTrue(("valid".equalsIgnoreCase(validity)) ? result : !result,
+            "Failed to check " + restMethod + " with " + validity + " device id");
+        LOGGER.info("Successfully sent {} request to {} STB with {} device id", httpMethod, restMethod, validity);
     }
 
     /**
      * Step definition to 'add an STB' to dawg house via PUT request
-     * @param data
+     * @param stbDetails
      *          DataTable with STB device details
      * @throws DawgTestException
      */
     @Given("^I send PUT request to 'add an STB' with following details$")
-    public void sendPutReqToAddSTBDevice(DataTable data) throws DawgTestException {
-        LOGGER.info("Going to send PUT request to 'add an STB' with details {}", data.raw().get(1));
-        List<String> stbParam = data.raw().get(1);
-        MetaStb stbDevice = new MetaStbBuilder().id(stbParam.get(0)).model(stbParam.get(1)).stb();
-
+    public void sendPutReqToAddSTBDevice(DataTable stbDetails) throws DawgTestException {
+        LOGGER.info("Going to send PUT request to 'add an STB' with details {}", stbDetails.raw().get(1));
+        List<String> stbParamVal = stbDetails.raw().get(1);
+        List<String> stbParamKey = stbDetails.raw().get(0);
+        String stbDeviceId = stbParamVal.get(0);
+        MetaStb stbDevice = null;
+        boolean result = false;
+        if (DawgHouseConstants.MODEL.equalsIgnoreCase(stbParamKey.get(1))) {
+            // Setting id and model for the STB
+            String stbModel = stbParamVal.get(1);
+            stbDevice = new MetaStbBuilder().id(stbDeviceId).model(stbModel).stb();
+            result = DawgHouseRestHelper.getInstance().addStbToDawg(stbDeviceId, null, stbModel, null, null,
+                stbDevice.getMake(), TestConstants.RestReqType.BRIEF_STB_DEVICE_PARAM);
+        } else if (DawgHouseConstants.MAC.equalsIgnoreCase(stbParamKey.get(1))) {
+            // Setting id and MAC for the STB
+            String macAddress = stbParamVal.get(1);
+            stbDevice = new MetaStbBuilder().id(stbDeviceId).mac(macAddress).stb();
+            result = DawgHouseRestHelper.getInstance().addStbToDawg(stbDeviceId, macAddress, null, null, null,
+                stbDevice.getMake(), TestConstants.RestReqType.BRIEF_STB_DEVICE_PARAM);
+        }
         TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_STB_DEVICE, stbDevice);
-        boolean result = DawgHouseRestHelper.getInstance().addStbToDawg(stbParam.get(0), null, stbParam.get(1), null,
-            null, stbDevice.getMake(), TestConstants.RestReqType.BRIEF_STB_DEVICE_PARAM);
         Assert.assertTrue(result, "Failed to add STB device to dawg house");
-        LOGGER.info("Has successfully sent PUT request to 'add an STB' with details {}", data.raw().get(1));
+        LOGGER.info("Has successfully sent PUT request to 'add an STB' with details {}", stbParamVal);
     }
 
     /**
@@ -194,7 +209,7 @@ public class DawgHouseSTBDeviceRestGlue {
             Assert.assertTrue(result, "Failed to get STB by passing model name as query from dawg house");
         } else if ("invalid".equalsIgnoreCase(modelType) || "illegal".equalsIgnoreCase(modelType)) {
             Assert.assertFalse(result,
-                "Failed to get STB by passing " + modelType + " model name as query from dawg house");
+                "Failed to get STB by passing " + modelName + " model name as query from dawg house");
         }
         LOGGER.info("Has successfully sent GET request to 'get STB' with {} model name {}", modelType, modelName);
     }
@@ -216,6 +231,22 @@ public class DawgHouseSTBDeviceRestGlue {
         }
         Assert.assertTrue(result, "Failed to send POST request to populate STB ");
         LOGGER.info("Successfully sent POST request to populate STB with {} client token", clientTokenType);
+    }
+    
+    /**
+     * Step definition to verify the presence of STB device id and MAC address 
+     * in 'get STB device list' response
+     */
+    @And("^I should verify that the response contains expected STB device id and MAC address$")
+    public void verifyStbDevListPropVal() {
+        LOGGER.info("Going to verify presence of STB device id and mac address in response");
+        MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
+        Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
+        // verifying the presence of expected fields in response JSON
+        Assert.assertTrue(
+            (response.asString().contains(testStb.getId())) && (response.asString().contains(testStb.getMacAddress())),
+            "Failed to verify presence of STB device id and mac in response");
+        LOGGER.info("Successfully verified presence of STB device id and mac address in response");
     }
 
     /**
@@ -264,9 +295,120 @@ public class DawgHouseSTBDeviceRestGlue {
         LOGGER.info("Going to update already existing STB parameters in dawg house");
         MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
         testStb.setMake(DawgHouseConstants.STB_MAKE);
-        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_STB_DEVICE, testStb);
         boolean result = DawgHouseRestHelper.getInstance().updateStbInDawg(testStb);
         Assert.assertTrue(result, "Failed to update STB parameters in dawg house");
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_STB_DEVICE, testStb);
         LOGGER.info("Successfully updated already existing STB parameters in dawg house");
+    } 
+
+    /**
+     * Step definition to verify removal of STB with given device id from dawg house 
+     * @throws DawgTestException 
+     */
+    @And("^I should verify that STB device is removed from dawg house$")
+    public void verifyStbRemovalFmDawg() throws DawgTestException {
+        LOGGER.info("Going to verify removal of STB from dawg house");
+        MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
+        DawgHouseRestHelper.getInstance().sendGetReqForSTBDeviceList(TestServerConfig.getHouse());       
+        Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
+        Assert.assertFalse(response.asString().contains(testStb.getId()),
+            "Failed to verify removal of STB " + testStb.getId());
+        LOGGER.info("Successfully verified removal of STB from dawg house");
+    }
+
+    /**
+     * Step definition to add tags to STB via POST request 
+     * @param stbDetails
+     *          DataTable with STB device details
+     * @throws DawgTestException
+     */
+    @When("^I send POST request to 'add tag to STB' with below details$")
+    public void sendPostReqForTagAdd(DataTable stbDetails) throws DawgTestException {
+        LOGGER.info("Going to add tag for STB in dawg");
+        List<String> stbParams = stbDetails.raw().get(1);
+        String stbTags = stbParams.get(1);
+        String stbDeviceId = stbParams.get(0);
+        boolean result = DawgHouseRestHelper.getInstance().sendPostReqToAddStbTags(stbTags, stbDeviceId);
+        Assert.assertTrue(result, "Failed to add tag for given STB");
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_STB_TAGS, stbTags);
+        LOGGER.info("Successfully added tag for STB in dawg");
+    }
+
+    /**
+     * Step definition to verify whether tags are (added/removed/updated) or not 
+     * @param tagOperation
+     *          Whether tag is added/removed/updated
+     * @throws DawgTestException
+     */
+    @And("^I should verify that tags are (added|updated|removed) for the same STB$")
+    public void verifySTBTagging(String tagOperation) throws DawgTestException {
+        LOGGER.info("Going to verify that tags are {} for STB in dawg", tagOperation);
+        MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
+        boolean result = DawgHouseRestHelper.getInstance().stbDeviceExistsInDawg(testStb.getId());
+        Assert.assertTrue(result, "Failed to verify presence of STB in dawg");
+        Response response = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_REST_RESPONSE);
+        String responseStr = response.asString();
+        String expTag = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_TAGS);
+        switch (tagOperation) {
+            case "added":
+                Assert.assertTrue(responseStr.contains(expTag),
+                    "Failed to verify addition of expected tag " + expTag + " in STB");
+                break;
+            case "updated":
+                String[] existingTags = expTag.split(",");
+                StringBuilder stbTags = new StringBuilder();
+                for (String stbTag : existingTags) {
+                    if (!responseStr.contains(stbTag)) {
+                        stbTags.append(stbTag).append(",");
+                    }
+                }
+                Assert.assertTrue((0 == stbTags.toString().trim().length()),
+                    "Failed to update tag/s " + stbTags + " for given stb " + testStb.getId());
+                break;
+            case "removed":
+                Assert.assertFalse(responseStr.contains(expTag), "Failed to verify tag removal from given STB");
+                break;
+            default:
+                throw new DawgTestException("Invalid tag operation " + tagOperation + "passed");
+        }
+        LOGGER.info("Successfully verified that tags are {} for STB in dawg", tagOperation);
+    }
+
+    /**
+     * Step definition to remove tags from STB via POST request 
+     * @throws DawgTestException
+     */
+    @When("^I send POST request to 'remove tag from STB' with same STB device id and tag name$")
+    public void sendPostReqForTagRemoval() throws DawgTestException {
+        LOGGER.info("Going to remove tag from STB in dawg");
+        MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
+        String testTag = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_TAGS);
+        boolean result = DawgHouseRestHelper.getInstance().sendPostReqToRemoveStbTags(testTag, testStb.getId());
+        Assert.assertTrue(result, "Failed to remove tag from STB" + testStb.getId());
+        LOGGER.info("Successfully removed tag for STB in dawg");
+    }
+
+    /**
+     * Step definition to update tags for existing STB via POST request 
+     * @param stbDetails
+     *          DataTable with STB device details
+     * @throws DawgTestException
+     */
+    @When("^I send POST request to 'add tag to same STB' with below details$")
+    public void sendPostReqToUpdateStbTag(DataTable stbDetails) throws DawgTestException {
+        LOGGER.info("Going to update STB tag in dawg");
+        List<String> stbParams = stbDetails.asList(String.class);
+        MetaStb testStb = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_DEVICE);
+        String testTag = TestContext.getCurrent().get(DawgHouseConstants.CONTEXT_STB_TAGS);
+        // Storing the already existing STB tags
+        StringBuilder stbTags = new StringBuilder();
+        String tagsToUPdate = stbParams.get(1);
+        stbTags.append(testTag).append(",");
+        boolean result = DawgHouseRestHelper.getInstance().sendPostReqToAddStbTags(tagsToUPdate, testStb.getId());
+        Assert.assertTrue(result, "Failed to update tag for given STB");
+        // Appending the updated tag to existing tags
+        stbTags.append(tagsToUPdate);
+        TestContext.getCurrent().set(DawgHouseConstants.CONTEXT_STB_TAGS, stbTags.toString());
+        LOGGER.info("Successfully updated STB tag in dawg");
     }
 }

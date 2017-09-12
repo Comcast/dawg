@@ -13,14 +13,12 @@ import java.io.IOException;
 import java.util.List;
 
 import com.comcast.dawg.constants.DawgHouseConstants;
-import com.comcast.dawg.glue.ZukeHook;
 import com.comcast.dawg.utils.DawgCommonUIUtils;
 import com.comcast.dawg.utils.DawgDriverController;
 import com.comcast.zucchini.AbstractZucchiniTest;
 import com.comcast.zucchini.TestContext;
 
 import org.apache.log4j.Logger;
-
 import cucumber.api.CucumberOptions;
 
 /**
@@ -32,8 +30,7 @@ import cucumber.api.CucumberOptions;
 public class DawgHouseUITest extends AbstractZucchiniTest {
 
     /** Logger for the DawgHouseTest class. */
-    private static final Logger LOGGER = Logger.getLogger(DawgHouseUITest.class);
-
+    private static final Logger LOGGER = Logger.getLogger(DawgHouseUITest.class);   
     @Override
     public List<TestContext> getTestContexts() {
 
@@ -46,16 +43,18 @@ public class DawgHouseUITest extends AbstractZucchiniTest {
     }
 
     /**
-     * Terminates the Web driver processes at the end of the test
+     * Terminates the Web driver processes/delete test STBs or Tags at the end of the test
      */
     @Override
     public void cleanup(TestContext context) {
         DawgDriverController.shutdown();
         try {
-            new ZukeHook().clearAddedTagsandSTBs();
-            DawgCommonUIUtils.getInstance().deleteSTBsOrModelsFromList(DawgHouseConstants.CONTEXT_TEST_STB_MODELS);
+            DawgCommonUIUtils.getInstance().removeAllTagsAddedInTest();
+            DawgCommonUIUtils.getInstance().deleteTestSTBsOrModels(DawgHouseConstants.CONTEXT_TEST_STBS);
+            DawgCommonUIUtils.getInstance().deleteTestSTBsOrModels(DawgHouseConstants.CONTEXT_TEST_STB_MODELS);
         } catch (DawgTestException e) {
-            LOGGER.error("Failed to delete test STBs or STB models or Tags using rest request" + e.getMessage());
+            LOGGER.error("Failed to delete test Tags or STBs. Reason: " + e.getMessage());
         }
+
     }
 }
