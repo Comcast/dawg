@@ -5,6 +5,7 @@ QUIET ?= @
 
 NAME=comcast/dawg-base
 VERSION=latest
+PASSWORD=tsacmoc1
 _NAME_VERSION=$(NAME):$(VERSION)
 
 build: copy-dependencies
