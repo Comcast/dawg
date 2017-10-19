@@ -2,10 +2,10 @@
     <parent>
         <groupId>com.comcast.video.dawg</groupId>
         <artifactId>libraries</artifactId>
-        <version>2.2-SNAPSHOT</version>
+        <version>2.2.12</version>
     </parent>
     <artifactId>dawg-pound</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2.12</version>
     <name>(Comcast) ${project.artifactId}</name>
     <description>dawg-pound is a reservation system used in association with dawg-house.</description>
     <packaging>war</packaging>
@@ -27,12 +27,12 @@
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-common</artifactId>
-            <version>2.2-SNAPSHOT</version>
+            <version>2.2.12</version>
         </dependency>
         <dependency>
             <groupId>com.comcast.video.dawg</groupId>
             <artifactId>dawg-server-common</artifactId>
-            <version>2.2-SNAPSHOT</version>
+            <version>2.2.12</version>
         </dependency>
         
         <dependency>
