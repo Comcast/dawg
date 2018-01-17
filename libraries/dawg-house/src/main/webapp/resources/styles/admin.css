@@ -92,3 +92,17 @@ input[type=checkbox], input[type=radio] {
 	width: 25%;
 	text-align: center;
 }
+
+.heading {
+	margin-top: 20px;
+}
+.heading .heading-text {
+	font-size: 40px;
+	display: inline-block;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+.stb-form {
+	max-width: 500px;
+	margin: 30px auto 0 auto
+}

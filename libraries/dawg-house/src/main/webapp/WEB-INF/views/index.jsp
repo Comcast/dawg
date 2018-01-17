@@ -57,6 +57,9 @@
             <c:if test="${admin}">
             	<button class="btn" id="bAdmin" onclick="window.location='${contextPath}/admin/view/user'">Manage Users</button>
             </c:if>
+            <c:if test="${admin}">
+            <button class="btn" id="bStb" onclick="window.location='${contextPath}/admin/view/stb'">Add Stb</button>
+            </c:if>
         </section>
 
         <header>

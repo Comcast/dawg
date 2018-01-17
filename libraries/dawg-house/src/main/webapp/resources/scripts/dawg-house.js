@@ -189,5 +189,19 @@ var DAWGHOUSE = (function() {
         $('.stbTableHead', content).css('margin-left', margin + 12.67); // adds size of expand icon subtracts size of scroll bar
     }
 
+    dawgApi.addStb = function(id, data, callback) {
+        var url = CXT_PATH + "/devices/id/" + id;
+        $.ajax({
+            type: "PUT",
+            url: url,
+            data: JSON.stringify(data),
+            xhrFields: {
+                withCredentials: true
+            },
+            contentType: "application/json",
+            success: callback
+        });
+    }
+
     return dawgApi;
 }());
