@@ -17,16 +17,7 @@ var AddStb = (function() {
 
     var module = {};
 
-    var idLength = 12;
     var defaultRemoteType = "XR2";
-
-    function makeid() {
-        var id = "";
-        var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-        for (var i = 0; i < idLength; i++)
-            id += possible.charAt(Math.floor(Math.random() * possible.length));
-        return id;
-    }
 
     function isValidName(val) {
         return $.trim(val) !== '';
@@ -43,7 +34,7 @@ var AddStb = (function() {
             e.preventDefault();
             $('#submit-btn').button('loading');
             var data = formUI.serializeObject();
-            var id = makeid();
+            var id = data.macAddress.replace(/:/g, '').toLowerCase();
             data.id = id;
             data.remoteType = defaultRemoteType;
             DAWGHOUSE.addStb(id, data, function() {
