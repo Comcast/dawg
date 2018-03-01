@@ -315,6 +315,11 @@ public class ParkController {
         return model;
     }
 
+    @RequestMapping("/admin/view/stb")
+    public ModelAndView addStbView() {
+        return new ModelAndView("stb");
+    }
+
     /**
      * Method add the new search condition to the advance search list present in the session. Before adding to the list
      * it removes any duplicate entry present in the list.
