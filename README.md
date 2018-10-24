@@ -1,3 +1,5 @@
+### Important note: this project is no longer actively maintained. 
+
 Dawg
 ====
 [![Build Status](https://travis-ci.org/Comcast/dawg.svg)](https://travis-ci.org/Comcast/dawg)
